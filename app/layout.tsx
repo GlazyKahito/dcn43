@@ -26,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark scroll-smooth w-full overflow-x-hidden">
+    <html lang="en" className="dark w-full overflow-x-hidden">
       <head>
         <link rel="icon" type="image/png" href="/somaiya-logo.png" />
         <link rel="shortcut icon" href="/somaiya-logo.png" />

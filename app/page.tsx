@@ -5,6 +5,7 @@ import { Aim } from '../components/Aim';
 import { Theory } from '../components/Theory';
 import { PreTestCallout } from '../components/PreTestCallout';
 import { InteractiveLab } from '../components/InteractiveLab';
+import { MiniGameSection } from '../components/MiniGameSection';
 import { PostTestCallout } from '../components/PostTestCallout';
 import { Conclusion } from '../components/Conclusion';
 
@@ -28,13 +29,16 @@ export default function HomePage() {
         {/* 5. Pre-Test (10 MCQs in modal) */}
         <PreTestCallout />
 
-        {/* 6. Interactive Lab (Simulations 1, 2, 3) */}
+        {/* 6. Interactive Lab (Simulations 1, 2, 3, 4) */}
         <InteractiveLab />
 
-        {/* 7. Post-Test (10 Harder MCQs in modal) */}
+        {/* 7. Featured Vintage Arcade Mini-Game Section (Packet X-Flow) */}
+        <MiniGameSection />
+
+        {/* 8. Post-Test (10 Harder MCQs in modal) */}
         <PostTestCallout />
 
-        {/* 8. Conclusion */}
+        {/* 9. Conclusion */}
         <Conclusion />
       </main>
     </div>
