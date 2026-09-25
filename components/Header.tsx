@@ -305,6 +305,14 @@ export function Header() {
               </div>
 
               <a
+                href="#minigame"
+                className="px-3 py-1.5 rounded-xl text-xs font-medium text-[#c8b27a] hover:text-white bg-[#c8b27a]/10 hover:bg-[#c8b27a]/20 border border-[#c8b27a]/30 transition-all flex items-center gap-1.5 cursor-pointer shadow-[0_0_12px_rgba(200,178,122,0.15)]"
+              >
+                <Gamepad2 className="w-3.5 h-3.5 text-[#c8b27a]" />
+                <span>Mini-Game</span>
+              </a>
+
+              <a
                 href="#conclusion"
                 className="px-3.5 py-1.5 rounded-xl text-xs font-medium text-neutral-300 hover:text-white hover:bg-white/[0.05] transition-all"
               >
@@ -363,6 +371,13 @@ export function Header() {
                 className="block py-2 text-xs font-medium text-[#34d399]"
               >
                 Interactive Simulations
+              </a>
+              <a
+                href="#minigame"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block py-2 text-xs font-medium text-[#c8b27a] font-bold"
+              >
+                🎮 Packet X-Flow Mini-Game
               </a>
               <a
                 href="#post-test"

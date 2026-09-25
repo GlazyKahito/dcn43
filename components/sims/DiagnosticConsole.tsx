@@ -97,6 +97,7 @@ export function DiagnosticConsole({
       {/* Log Feed */}
       <div
         ref={scrollRef}
+        data-lenis-prevent
         className="flex-1 overflow-y-auto p-4 sm:p-5 font-mono text-[11px] leading-relaxed space-y-2 min-h-[140px] max-h-[220px] select-text bg-[#070c09]/90 [scrollbar-width:thin] [scrollbar-color:#1a2e22_transparent]"
       >
         {logs.length === 0 ? (

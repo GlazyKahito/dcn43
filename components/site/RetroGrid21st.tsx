@@ -25,11 +25,11 @@ export function RetroGrid21st({
       aria-hidden="true"
     >
       {/* 3D Perspective Plane */}
-      <div className="absolute inset-0 [transform-origin:50%_0%] overflow-hidden w-full max-w-full h-full">
+      <div className="absolute inset-0 [transform-origin:50%_0%] [transform:rotateX(60deg)] overflow-hidden w-full max-w-full h-full pointer-events-none">
         <div
-          className="absolute -top-[50%] left-[-50%] w-[200%] h-[200%] animate-grid [background-repeat:repeat] [background-size:60px_60px] [transform:rotateX(60deg)] [transform-origin:50%_0%]"
+          className="absolute -top-[50%] left-[-50%] w-[200%] h-[200%] animate-grid [background-repeat:repeat] [background-size:60px_60px]"
           style={{
-            backgroundImage: `linear-gradient(to right, rgba(52, 211, 153, 0.25) 1px, transparent 0), linear-gradient(to bottom, rgba(31, 122, 77, 0.2) 1px, transparent 0)`,
+            backgroundImage: `linear-gradient(to right, rgba(52, 211, 153, 0.28) 1px, transparent 0), linear-gradient(to bottom, rgba(31, 122, 77, 0.22) 1px, transparent 0)`,
             opacity,
           }}
         />

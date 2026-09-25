@@ -18,6 +18,7 @@ import {
   Check,
   Zap,
   RotateCcw,
+  Gamepad2,
 } from 'lucide-react';
 
 export function Hero() {
@@ -155,6 +156,14 @@ export function Hero() {
             >
               <RollText text="Launch Simulator Suite" />
               <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
+            </a>
+
+            <a
+              href="#minigame"
+              className="inline-flex items-center gap-2 px-5 py-3.5 rounded-xl bg-[#c8b27a]/15 hover:bg-[#c8b27a] text-[#c8b27a] hover:text-[#050807] text-xs sm:text-sm font-sans font-semibold tracking-wide border border-[#c8b27a]/40 shadow-[0_0_20px_rgba(200,178,122,0.2)] transition-all active:scale-95 group cursor-pointer"
+            >
+              <Gamepad2 className="w-4 h-4 text-[#c8b27a] group-hover:text-[#050807] transition-colors" />
+              <span>Play Arcade Mini-Game</span>
             </a>
 
             <a

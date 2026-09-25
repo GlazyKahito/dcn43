@@ -46,7 +46,7 @@ const config: Config = {
         homevideo: ["HomeVideo", "monospace"],
         display: ["HomeVideo", "monospace"],
         vintage: ["HomeVideo", "monospace"],
-        sans: ["'Space Grotesk'", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
+        sans: ["HomeVideo", "'Space Grotesk'", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
         mono: [
           "'JetBrains Mono'",
           "ui-monospace",

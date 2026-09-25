@@ -6,7 +6,8 @@
 
 @font-face {
   font-family: 'HomeVideo';
-  src: url('/fonts/HomeVideo-Regular.ttf') format('truetype');
+  src: url('/fonts/HomeVideo-Regular.otf') format('opentype'),
+       url('/fonts/HomeVideo-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -14,7 +15,8 @@
 
 @font-face {
   font-family: 'HomeVideo';
-  src: url('/fonts/HomeVideo-Bold.ttf') format('truetype');
+  src: url('/fonts/HomeVideo-Bold.otf') format('opentype'),
+       url('/fonts/HomeVideo-Bold.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -36,17 +38,17 @@ html {
 body {
   background-color: #050807;
   color: #f0f6f2;
-  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: 'HomeVideo', 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   width: 100%;
   max-width: 100vw;
   overflow-x: hidden;
   position: relative;
 }
 
-/* Home Video font on all headings, titles, buttons, badges for vintage aesthetic */
-h1, h2, h3, h4, h5, h6, .font-display, .font-vintage, .font-homevideo {
+/* Home Video font on all headings, titles, buttons, badges, and display text */
+h1, h2, h3, h4, h5, h6, .font-display, .font-vintage, .font-homevideo, .font-sans, button {
   font-family: 'HomeVideo', monospace !important;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
 }
 
 /* Vintage CRT & Phosphor aesthetics */

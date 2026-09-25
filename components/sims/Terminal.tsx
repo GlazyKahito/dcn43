@@ -283,7 +283,7 @@ export function Terminal({
               <X className="w-4 h-4" />
             </button>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 max-h-48 overflow-y-auto pr-1">
+          <div data-lenis-prevent className="grid grid-cols-1 md:grid-cols-2 gap-2.5 max-h-48 overflow-y-auto pr-1">
             {COMMAND_CHEAT_SHEET.map((item, idx) => (
               <div
                 key={idx}
@@ -305,7 +305,7 @@ export function Terminal({
       )}
 
       {/* Terminal Output Body */}
-      <div className="flex-1 p-5 sm:p-6 overflow-y-auto min-h-[300px] max-h-[460px] space-y-4 select-text leading-relaxed [scrollbar-width:thin] [scrollbar-color:#1a2e22_transparent]">
+      <div data-lenis-prevent className="flex-1 p-5 sm:p-6 overflow-y-auto min-h-[300px] max-h-[460px] space-y-4 select-text leading-relaxed [scrollbar-width:thin] [scrollbar-color:#1a2e22_transparent]">
         {/* Welcome message */}
         {history.length === 0 && activeStreamingLines.length === 0 && (
           <div className="text-[#78b496]/60 space-y-1.5 py-2 font-mono text-xs">
