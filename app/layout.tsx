@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: 'Network Troubleshooting & Simulator · Experiment 8 · Somaiya Virtual Labs',
   description:
     'Interactive network laboratory: inject faults into a five-node topology, diagnose them with ping, tracert, ipconfig, nslookup, arp and netstat, repair the network and verify recovery.',
-  icons: { icon: '/somaiya-logo.png', apple: '/somaiya-logo.png' },
+  icons: { icon: [{ url: '/somaiya-emblem.png', type: 'image/png', sizes: '32x32' }], shortcut: '/favicon.ico', apple: '/somaiya-emblem.png' },
 };
 
 export const viewport: Viewport = {
