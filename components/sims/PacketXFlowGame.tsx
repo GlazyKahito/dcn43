@@ -393,7 +393,7 @@ export function PacketXFlowGame() {
             </span>
           </div>
 
-          <div className="flex items-center gap-5 text-[11px] font-mono">
+          <div className="flex items-center gap-3 sm:gap-5 text-[11px] font-mono">
             <div>
               <span className="text-[#78b496]/70 uppercase">Score: </span>
               <span className="text-white font-bold text-sm crt-phosphor">{score}</span>
@@ -406,6 +406,30 @@ export function PacketXFlowGame() {
               <span className="text-[#78b496]/70 uppercase">High: </span>
               <span className="text-[#c8b27a] font-bold crt-amber">{highScore}</span>
             </div>
+
+            {/* In-Monitor Direct Start / Abort Action */}
+            {!isPlaying ? (
+              <button
+                onClick={startGame}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#34d399] hover:bg-white text-[#050807] font-display font-bold text-xs shadow-[0_0_15px_rgba(52,211,153,0.45)] transition-all active:scale-95 cursor-pointer uppercase tracking-wider"
+              >
+                <Play className="w-3 h-3 fill-current" />
+                <span>START</span>
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  setIsPlaying(false);
+                  setGameOver(true);
+                  setActiveAlert('MISSION ABORTED // STANDBY');
+                  playRetroSound('alert');
+                }}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f87171]/20 hover:bg-[#f87171]/30 border border-[#f87171]/40 text-[#f87171] font-display font-bold text-xs transition-colors cursor-pointer uppercase tracking-wider"
+              >
+                <RotateCcw className="w-3 h-3" />
+                <span>ABORT</span>
+              </button>
+            )}
           </div>
         </div>
 
@@ -438,7 +462,7 @@ export function PacketXFlowGame() {
         </div>
 
         {/* Main X-Flow Visual SVG Canvas */}
-        <div className="relative z-10 w-full aspect-[800/360] max-h-[380px] my-4 select-none">
+        <div className="relative z-10 w-full aspect-[800/360] min-h-[290px] max-h-[390px] my-4 select-none overflow-hidden rounded-2xl border border-[#78b496]/20 bg-[#070c09]">
           <svg viewBox="0 0 800 360" className="w-full h-full overflow-visible">
             <defs>
               <filter id="glow-phosphor" x="-30%" y="-30%" width="160%" height="160%">
@@ -636,6 +660,49 @@ export function PacketXFlowGame() {
               );
             })}
           </svg>
+
+          {/* In-Screen Retro Arcade Mission Start Overlay */}
+          {!isPlaying && (
+            <div className="absolute inset-0 bg-[#050807]/88 backdrop-blur-[3px] rounded-2xl flex flex-col items-center justify-center p-6 text-center z-30 space-y-4 animate-in fade-in duration-200">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#34d399]/15 border border-[#34d399]/40 text-[#34d399] text-[11px] font-display uppercase tracking-widest animate-pulse">
+                <Radio className="w-3.5 h-3.5" />
+                <span>DEC VT-220 // SOMAIYA DISPATCHER</span>
+              </div>
+
+              <div className="space-y-1.5 max-w-lg">
+                <h4 className="text-2xl sm:text-4xl font-display font-bold text-white crt-phosphor tracking-wider">
+                  {gameOver ? 'DEFENSE COLLAPSED' : 'SOMAIYA NETFLOW DISPATCHER'}
+                </h4>
+                <p className="text-xs sm:text-sm text-[#c9dccf]/85 font-mono leading-relaxed">
+                  {gameOver
+                    ? `Final Score: ${score} pts • Highest Streak: ${streak}x. System integrity was exhausted.`
+                    : 'Prevent campus outage! Solder severed copper cables, redirect overloaded gateway routes, and activate the Firewall ACL to block rogue SYN floods.'}
+                </p>
+              </div>
+
+              {/* Big Glowing Arcade Start Button */}
+              <button
+                type="button"
+                onClick={startGame}
+                className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-[#34d399] hover:bg-white text-[#050807] font-display text-sm sm:text-base font-bold uppercase tracking-widest shadow-[0_0_35px_rgba(52,211,153,0.6)] transition-all transform hover:scale-105 active:scale-95 cursor-pointer crt-phosphor"
+              >
+                <Play className="w-5 h-5 fill-current" />
+                <span>{gameOver ? 'INSERT COIN / RETRY MISSION' : 'START NETFLOW MISSION'}</span>
+              </button>
+
+              <div className="flex flex-wrap items-center justify-center gap-3 text-[10px] font-mono text-[#78b496]/70 pt-2">
+                <span className="px-2.5 py-1 rounded bg-[#101713] border border-[#78b496]/20">
+                  ⚡ SOLDER CUT WIRES
+                </span>
+                <span className="px-2.5 py-1 rounded bg-[#101713] border border-[#78b496]/20">
+                  🛡️ BLOCK RED ROGUES
+                </span>
+                <span className="px-2.5 py-1 rounded bg-[#101713] border border-[#78b496]/20">
+                  🔄 DIVERGE GATEWAY
+                </span>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Vintage Interactive Command Switches Panel */}
