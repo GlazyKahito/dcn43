@@ -124,7 +124,7 @@ export function LandingHero({ initialIndex, onLaunch }: Props) {
             <span className="h-px w-8 bg-signal/60" />
             Experiment 10
           </p>
-          <h1 className="mt-5 font-display text-[clamp(40px,5vw,86px)] font-semibold uppercase leading-[0.84] tracking-[-0.015em] text-paper">
+          <h1 className="mt-5 font-display text-[clamp(38px,4.3vw,74px)] font-semibold uppercase leading-[0.84] tracking-[-0.015em] text-paper">
             Network
             <br />
             Troubleshooting

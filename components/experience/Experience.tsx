@@ -7,7 +7,7 @@ import { detectFaults } from '@/lib/sim/faults';
 import { NetworkField } from '@/components/atmosphere/NetworkField';
 import { LabProvider, useLab } from '@/lib/sim/store';
 import { LandingHero } from '@/components/landing/LandingHero';
-import { BootSequence } from './BootSequence';
+import { LampIntro } from './LampIntro';
 import { Site } from './Site';
 
 type Phase = 'boot' | 'landing' | 'site';
@@ -33,27 +33,10 @@ function Shell() {
   const [landingIndex, setLandingIndex] = useState(0);
 
   useEffect(() => {
-    let seen = false;
-    try {
-      seen = sessionStorage.getItem('svl-exp10-boot') === '1';
-    } catch {
-      /* storage unavailable: show the boot */
-    }
-    if (seen) setPhase('landing');
-  }, []);
-
-  useEffect(() => {
     document.documentElement.dataset.phase = surface ? 'transition' : phase;
   }, [phase, surface]);
 
-  const bootDone = useCallback(() => {
-    try {
-      sessionStorage.setItem('svl-exp10-boot', '1');
-    } catch {
-      /* ignore */
-    }
-    setPhase((p) => (p === 'boot' ? 'landing' : p));
-  }, []);
+  const bootDone = useCallback(() => setPhase((p) => (p === 'boot' ? 'landing' : p)), []);
 
   const launch = useCallback((module: LabModule, r: DOMRect) => {
     setLandingIndex(MODULES.indexOf(module));
@@ -75,8 +58,8 @@ function Shell() {
   return (
     <>
       <NetworkField faults={faultCount} pulse={state.flight?.id ?? 0} dim={phase === 'site'} />
-      {phase === 'boot' && <BootSequence onDone={bootDone} />}
-      {phase === 'landing' && <LandingHero initialIndex={landingIndex} onLaunch={launch} />}
+      <AnimatePresence>{phase === 'boot' && <LampIntro key="intro" onDone={bootDone} />}</AnimatePresence>
+      {(phase === 'boot' || phase === 'landing') && <LandingHero initialIndex={landingIndex} onLaunch={launch} />}
       {phase === 'site' && <Site initialSection={section} onWorks={toLanding} />}
 
       <AnimatePresence>
