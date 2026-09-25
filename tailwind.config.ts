@@ -1,105 +1,39 @@
-import type { Config } from "tailwindcss";
+import type { Config } from 'tailwindcss';
 
 const config: Config = {
-  darkMode: "class",
-  content: [
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./lib/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
+  content: ['./app/**/*.{ts,tsx}', './components/**/*.{ts,tsx}', './lib/**/*.{ts,tsx}'],
   theme: {
     extend: {
       colors: {
-        background: "#050807",
-        foreground: "#f0f6f2",
-        primary: {
-          DEFAULT: "#34d399",
-          foreground: "#050807",
-        },
-        secondary: {
-          DEFAULT: "#101713",
-          foreground: "#f0f6f2",
-        },
-        destructive: {
-          DEFAULT: "#ff453a",
-          foreground: "#ffffff",
-        },
-        muted: {
-          DEFAULT: "#78b496",
-          foreground: "#78b496",
-        },
-        accent: {
-          DEFAULT: "#1f7a4d",
-          foreground: "#ffffff",
-        },
-        input: "rgba(120, 180, 150, 0.2)",
-        ring: "#34d399",
-        surface: "#0a0f0d",
-        card: "#101713",
-        "card-elevated": "#141e18",
-        hairline: "rgba(120, 180, 150, 0.14)",
-        "hairline-bright": "rgba(52, 211, 153, 0.3)",
-        emerald: {
-          solid: "#1f7a4d",
-          hover: "#25935c",
-          glow: "#34d399",
-          bright: "#10b981",
-          deep: "#0b2519",
-          tint: "rgba(52, 211, 153, 0.08)",
-        },
-        paper: {
-          bg: "#c9dccf",
-          fg: "#050807",
-          border: "#a8c0af",
-        },
-        gold: {
-          from: "#c8b27a",
-          to: "#8a7440",
-          fg: "#1a1505",
-        },
-        status: {
-          red: "#ff453a",
-          amber: "#ff9f0a",
-          green: "#34d399",
-          blue: "#38bdf8",
-        },
+        ink: '#0a0b0c',
+        graphite: '#121416',
+        gunmetal: '#1a1d20',
+        steel: '#262a2e',
+        silver: '#b9bcbd',
+        paper: '#e8e4da',
+        muted: '#a09e97',
+        dim: '#6f6f6a',
+        hair: 'rgba(232, 228, 218, 0.1)',
+        'hair-strong': 'rgba(232, 228, 218, 0.2)',
+        signal: { DEFAULT: '#5fae8a', deep: '#123126', soft: 'rgba(95, 174, 138, 0.12)' },
+        amber: { DEFAULT: '#d6a24e', soft: 'rgba(214, 162, 78, 0.12)' },
+        alarm: { DEFAULT: '#d0584b', soft: 'rgba(208, 88, 75, 0.12)' },
       },
       fontFamily: {
-        homevideo: ["HomeVideo", "monospace"],
-        display: ["HomeVideo", "monospace"],
-        vintage: ["HomeVideo", "monospace"],
-        sans: ["HomeVideo", "'Space Grotesk'", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
-        mono: [
-          "'JetBrains Mono'",
-          "ui-monospace",
-          "SFMono-Regular",
-          "Menlo",
-          "Consolas",
-          "monospace",
-        ],
+        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-mono)', 'ui-monospace', 'Menlo', 'Consolas', 'monospace'],
+        display: ['var(--font-display)', 'var(--font-sans)', 'sans-serif'],
+      },
+      letterSpacing: {
+        label: '0.18em',
       },
       keyframes: {
-        grid: {
-          "0%": { transform: "translateY(-50%)" },
-          "100%": { transform: "translateY(0)" },
-        },
-        beamFlow: {
-          "0%": { strokeDashoffset: "100" },
-          "100%": { strokeDashoffset: "0" },
-        },
-        pulseGlow: {
-          "0%, 100%": { opacity: "0.4", transform: "scale(1)" },
-          "50%": { opacity: "0.9", transform: "scale(1.08)" },
-        },
+        blink: { '0%, 49%': { opacity: '1' }, '50%, 100%': { opacity: '0' } },
+        sweep: { from: { transform: 'translateX(-100%)' }, to: { transform: 'translateX(100%)' } },
       },
       animation: {
-        grid: "grid 20s linear infinite",
-        "beam-flow": "beamFlow 2s linear infinite",
-        "pulse-glow": "pulseGlow 3s ease-in-out infinite",
-      },
-      backgroundImage: {
-        "gradient-conic": "conic-gradient(var(--conic-position, from 180deg at 50% 50%), var(--tw-gradient-stops))",
+        blink: 'blink 1.1s steps(1) infinite',
+        sweep: 'sweep 2.4s cubic-bezier(0.6, 0, 0.4, 1) infinite',
       },
     },
   },

@@ -1,6 +1,5 @@
-import React from 'react';
-import { NetworkLabApp } from '../components/Lab/NetworkLabApp';
+import { Experience } from '@/components/experience/Experience';
 
-export default function HomePage() {
-  return <NetworkLabApp />;
+export default function Page() {
+  return <Experience />;
 }
