@@ -25,6 +25,19 @@
 :root {
   --background: #050807;
   --foreground: #f0f6f2;
+  --primary: #34d399;
+  --primary-foreground: #050807;
+  --secondary: #101713;
+  --secondary-foreground: #f0f6f2;
+  --muted: #78b496;
+  --muted-foreground: #78b496;
+  --accent: #1f7a4d;
+  --accent-foreground: #ffffff;
+  --destructive: #ff453a;
+  --destructive-foreground: #ffffff;
+  --border: rgba(120, 180, 150, 0.2);
+  --input: rgba(120, 180, 150, 0.2);
+  --ring: #34d399;
 }
 
 html {

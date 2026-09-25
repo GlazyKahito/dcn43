@@ -12,6 +12,29 @@ const config: Config = {
     extend: {
       colors: {
         background: "#050807",
+        foreground: "#f0f6f2",
+        primary: {
+          DEFAULT: "#34d399",
+          foreground: "#050807",
+        },
+        secondary: {
+          DEFAULT: "#101713",
+          foreground: "#f0f6f2",
+        },
+        destructive: {
+          DEFAULT: "#ff453a",
+          foreground: "#ffffff",
+        },
+        muted: {
+          DEFAULT: "#78b496",
+          foreground: "#78b496",
+        },
+        accent: {
+          DEFAULT: "#1f7a4d",
+          foreground: "#ffffff",
+        },
+        input: "rgba(120, 180, 150, 0.2)",
+        ring: "#34d399",
         surface: "#0a0f0d",
         card: "#101713",
         "card-elevated": "#141e18",
