@@ -9,10 +9,10 @@ export function Aim() {
       <div className="bg-[#0a0f0d]/65 backdrop-blur-2xl border border-white/10 rounded-3xl py-12 px-6 sm:px-12 flex flex-col items-center text-center space-y-5 relative shadow-[0_8px_32px_rgba(0,0,0,0.5),inset_0_1px_0_0_rgba(255,255,255,0.08)]">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(52,211,153,0.06)_0%,transparent_70%)] pointer-events-none" />
 
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-tint border border-emerald-glow/30">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-400/30">
           <Target className="w-3.5 h-3.5 text-[#34d399]" />
-          <span className="text-[11px] font-homevideo uppercase tracking-widest text-[#34d399]">
-            EXPERIMENT AIM
+          <span className="text-[11px] font-mono uppercase tracking-widest text-[#34d399]">
+            Laboratory Objective
           </span>
         </div>
 

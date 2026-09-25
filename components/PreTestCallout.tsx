@@ -19,11 +19,11 @@ export function PreTestCallout() {
           <div className="absolute top-0 right-0 w-64 h-64 bg-[#34d399]/5 rounded-full blur-3xl pointer-events-none -mr-16 -mt-16" />
 
           <div className="space-y-1.5 z-10">
-            <span className="text-[11px] font-display uppercase tracking-widest text-[#34d399] font-bold">
-              PHASE 1 // BASELINE ASSESSMENT
+            <span className="text-[11px] font-mono uppercase tracking-widest text-[#34d399] font-semibold">
+              Assessment Phase I &bull; Diagnostic Fundamentals
             </span>
             <h3 className="text-xl sm:text-2xl font-sans font-semibold tracking-tight text-white group-hover:text-white transition-colors">
-              Pre-Test: Foundational Diagnostics
+              Pre-Test Assessment: Foundational Concepts
             </h3>
             <p className="text-sm text-[#78b496]/80 max-w-xl leading-relaxed font-sans">
               Assess your baseline understanding of ping ICMP mechanisms, traceroute TTL decrements, 169.254.x.x APIPA addresses, and bottom-up OSI diagnosis before starting the interactive lab.

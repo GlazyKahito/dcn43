@@ -75,17 +75,24 @@ export function Header() {
                   priority
                 />
               </div>
-              <a href="#" className="flex items-center gap-1.5 font-mono text-sm tracking-tight text-white group">
-                <span className="font-bold text-white tracking-wider">&gt;_ vlab</span>
-                <span className="text-[#34d399] font-medium">.troubleshoot</span>
-                <span className="ml-1.5 px-2 py-0.5 rounded text-[10px] font-homevideo font-normal bg-emerald-solid/30 border border-emerald-glow/30 text-[#34d399] tracking-wider">
-                  EXP {LAB_CONFIG.experimentNumber}
+              <a href="#" className="flex items-center gap-2 font-sans text-sm tracking-tight text-white group">
+                <span className="font-semibold text-white tracking-wide">Somaiya Virtual Labs</span>
+                <span className="hidden sm:inline text-neutral-400 font-light">|</span>
+                <span className="hidden sm:inline text-[#34d399] font-medium text-xs">Network Diagnostics</span>
+                <span className="ml-1 px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-emerald-500/15 border border-emerald-400/30 text-[#34d399]">
+                  Exp {LAB_CONFIG.experimentNumber}
                 </span>
               </a>
             </div>
 
             {/* Desktop Center Nav with Interactive Dropdowns */}
             <nav className="hidden lg:flex items-center gap-1">
+              <a
+                href="#works"
+                className="px-3.5 py-1.5 rounded-xl text-xs font-medium text-neutral-300 hover:text-white hover:bg-white/[0.05] transition-all"
+              >
+                <RollText text="Works" />
+              </a>
               <a
                 href="#aim"
                 className="px-3.5 py-1.5 rounded-xl text-xs font-medium text-neutral-300 hover:text-white hover:bg-white/[0.05] transition-all"

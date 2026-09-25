@@ -275,11 +275,11 @@ def parse_ping_output(raw_output: str) -> dict:
     <div id="theory" className="scroll-mt-24 max-w-6xl mx-auto px-4 sm:px-6 py-12 space-y-16">
       {/* Pinned Scroll-Story Header (lab0.ai style) */}
       <div className="space-y-4">
-        <span className="text-[11px] font-homevideo uppercase tracking-widest text-[#34d399] font-bold block">
-          THEORETICAL METHODOLOGY & REFERENCE
+        <span className="text-[11px] font-mono uppercase tracking-widest text-[#34d399] font-semibold block">
+          Theoretical Principles &bull; Diagnostic Methodology
         </span>
         <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-white">
-          Watch engineers isolate the network.
+          Systematic Network Troubleshooting
         </h2>
         <p className="text-sm sm:text-base text-neutral-400 max-w-2xl leading-relaxed">
           Four interconnected modules detailing the layered bottom-up approach, diagnostic utility internals, the common fault matrix, and algorithmic implementations.

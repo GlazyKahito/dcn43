@@ -107,7 +107,7 @@ export function Hero() {
 
             <div className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#101713] border border-[#78b496]/20 text-[10px] font-mono text-[#78b496]">
               <span className="w-2 h-2 rounded-full bg-[#34d399] animate-pulse shadow-[0_0_8px_#34d399]" />
-              <span>LIVE VLAB KERNEL // IN-MEMORY ENGINE</span>
+              <span>Diagnostic Console &bull; Live Kernel</span>
             </div>
           </div>
 
@@ -236,18 +236,18 @@ export function Hero() {
                 <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]/90 border border-[#ff5f56]" />
                 <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]/90 border border-[#ffbd2e]" />
                 <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f]/90 border border-[#27c93f]" />
-                <span className="text-[10px] font-display text-[#78b496] ml-2 tracking-wider">
-                  TELEMETRY // LIVE HUD
+                <span className="text-[10px] font-mono text-[#78b496] ml-2 tracking-wider">
+                  Live Telemetry Monitor
                 </span>
               </div>
               <span
-                className={`px-2 py-0.5 rounded text-[9px] font-display font-bold uppercase tracking-wider ${
+                className={`px-2.5 py-0.5 rounded text-[9px] font-mono font-semibold uppercase tracking-wider ${
                   linkBroken
                     ? 'bg-[#f87171]/20 text-[#f87171] border border-[#f87171]/40'
                     : 'bg-[#1f7a4d]/20 text-[#34d399] border border-[#34d399]/30'
                 }`}
               >
-                {linkBroken ? 'LINK SEVERED' : 'CARRIER NOMINAL'}
+                {linkBroken ? 'Carrier Dropped' : 'Carrier Link Active'}
               </span>
             </div>
 

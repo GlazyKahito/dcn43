@@ -25,8 +25,8 @@ export function Conclusion() {
             <div className="w-9 h-9 rounded-2xl bg-[#1f7a4d]/20 border border-[#34d399]/30 flex items-center justify-center text-[#34d399] shadow-[0_0_12px_rgba(52,211,153,0.25)]">
               <CheckCircle2 className="w-5 h-5" />
             </div>
-            <span className="text-[11px] font-display uppercase tracking-widest text-[#34d399] font-bold">
-              LAB OUTCOME // SYNTHESIS
+            <span className="text-[11px] font-mono uppercase tracking-widest text-[#34d399] font-semibold">
+              Laboratory Findings &bull; Synthesis
             </span>
           </div>
 
@@ -49,9 +49,9 @@ export function Conclusion() {
         <div className="flex flex-col items-center justify-center text-center space-y-4 pt-4">
           <DotMatrixCube className="mx-auto" />
 
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1f7a4d]/20 border border-[#34d399]/40 text-[#34d399] text-xs font-display tracking-widest uppercase shadow-[0_0_20px_rgba(52,211,153,0.2)]">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1f7a4d]/20 border border-[#34d399]/40 text-[#34d399] text-xs font-mono tracking-widest uppercase shadow-[0_0_20px_rgba(52,211,153,0.2)]">
             <span className="w-2 h-2 rounded-full bg-[#34d399] animate-pulse shadow-[0_0_8px_#34d399]" />
-            EXPERIMENT 10 // VERIFIED COMPLETE
+            Experiment 10 &bull; Laboratory Complete
           </div>
           <h4 className="text-xl sm:text-2xl font-sans font-semibold text-white tracking-tight">
             Network Diagnostic Session Concluded
@@ -66,8 +66,8 @@ export function Conclusion() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pb-10">
             {/* Col 1: LAB */}
             <div className="space-y-3">
-              <span className="text-[11px] font-display uppercase tracking-widest text-[#34d399] block font-bold">
-                01 // VLAB SPECIFICATION
+              <span className="text-[11px] font-mono uppercase tracking-widest text-[#34d399] block font-semibold">
+                01 &bull; Laboratory Specification
               </span>
               <h5 className="text-sm font-sans font-semibold text-white">
                 {LAB_CONFIG.experimentTitle}
@@ -82,8 +82,8 @@ export function Conclusion() {
 
             {/* Col 2: RESOURCES */}
             <div className="space-y-3">
-              <span className="text-[11px] font-display uppercase tracking-widest text-[#34d399] block font-bold">
-                02 // REFERENCE STANDARDS
+              <span className="text-[11px] font-mono uppercase tracking-widest text-[#34d399] block font-semibold">
+                02 &bull; Standards &amp; RFCs
               </span>
               <ul className="space-y-2 text-xs font-mono text-[#c9dccf]">
                 <li className="flex items-center gap-1.5 hover:text-[#34d399] transition-colors">
@@ -107,8 +107,8 @@ export function Conclusion() {
 
             {/* Col 3: INSTITUTE */}
             <div className="space-y-3">
-              <span className="text-[11px] font-display uppercase tracking-widest text-[#34d399] block font-bold">
-                03 // INSTITUTION
+              <span className="text-[11px] font-mono uppercase tracking-widest text-[#34d399] block font-semibold">
+                03 &bull; Academic Department
               </span>
               <div className="text-xs text-[#c9dccf] space-y-1 font-sans">
                 <div className="font-semibold text-white">{LAB_CONFIG.institution}</div>
@@ -134,9 +134,9 @@ export function Conclusion() {
               &copy; {new Date().getFullYear()} {LAB_CONFIG.institutionShort}. Built for Virtual Lab curriculum.
             </div>
             <div className="flex items-center gap-4">
-              <span>ZERO_CONFIG_DEPLOY</span>
+              <span>Interactive Simulator</span>
               <span>&bull;</span>
-              <span>100% IN_MEMORY</span>
+              <span>Client-Side Execution</span>
             </div>
           </div>
         </div>
