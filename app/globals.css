@@ -140,3 +140,14 @@ html[data-phase='site'] .atmo-veil {
 .wheel-enter {
   animation: wheel-in 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
+
+/* Border beam: a short light travelling the border (see components/fx/BorderBeam). */
+@keyframes border-beam {
+  to {
+    offset-distance: 100%;
+  }
+}
+.border-beam {
+  offset-distance: 0%;
+  animation: border-beam linear infinite;
+}

@@ -5,6 +5,7 @@ import { Section } from '@/components/chrome/Section';
 import { Led } from '@/components/chrome/Led';
 import { QUESTIONS, type Question, type QuestionKind } from '@/data/assessment';
 import { useProgress } from '@/lib/progress';
+import { NumberTicker } from '@/components/fx/NumberTicker';
 
 const KIND_LABEL: Record<QuestionKind, string> = { mcq: 'Concept', scenario: 'Scenario', diagnostic: 'Diagnostic' };
 const BEST_KEY = 'svl-exp10-assessment-best';
@@ -71,8 +72,8 @@ export function AssessmentsSection() {
   return (
     <Section
       id="assessments"
-      no="06"
-      kicker="Assessments · Learning check"
+      no="04"
+      kicker="Test · Assessment"
       title={
         <>
           Test the
@@ -239,7 +240,9 @@ function Results({ items, answers, best, onRetry, onRetryMissed }: { items: Item
     <div className="grid gap-4 lg:grid-cols-[320px_1fr]">
       <div className="panel p-6">
         <p className="label">Result</p>
-        <p className="mt-2 font-display text-7xl font-light text-paper">{pct}%</p>
+        <p className="mt-2 font-display text-7xl font-light text-paper">
+          <NumberTicker value={pct} duration={1.2} />%
+        </p>
         <p className="mt-1 font-mono text-[12px] text-muted">
           {right.length} of {items.length} correct{best !== null && items.length === QUESTIONS.length ? ` · best ${best}%` : ''}
         </p>

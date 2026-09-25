@@ -1,6 +1,6 @@
 # Network Troubleshooting & Simulator
 
-Somaiya Virtual Labs · Experiment 10 · K J Somaiya School of Engineering
+Somaiya Virtual Labs · Experiment 8 · K J Somaiya School of Engineering
 
 An interactive network laboratory. Students inject faults into a five-node topology, diagnose them with standard utilities, repair the network and verify recovery end to end.
 
@@ -13,20 +13,15 @@ PC2 ─┘
 
 ## Modules
 
-The Works Wheel on the landing page launches each module:
+The landing page runs the lab network live and lists the modules on a progress panel. Progress is tracked from real activity; nothing is locked.
 
 | # | Module | What it does |
 |---|---|---|
-| 01 | Network Troubleshooting | The lab loop, shown against the live network |
-| 02 | Aim | Laboratory objective and learning outcomes |
-| 03 | Theory | 16 reference cards with diagrams (OSI, ARP, DNS, DHCP, routing, ICMP, firewall…) |
-| 04 | Simulator | Topology, packet animation, device/link inspector, fault injection, terminal, telemetry |
-| 05 | Diagnostics | 10 ticketed scenarios: symptoms → hypotheses → probes → evidence → root cause → fix → verification |
-| 06 | Assessments | 24 concept, scenario and diagnostic questions with feedback and retry |
-| 07 | Mini-game | Network Fault Repair: timed, scored, three difficulty levels |
-| 08 | Experiment 10 | Objective, scope, tools, modules, outcomes |
-| 09 | Conclusion | Laboratory findings and synthesis |
-| 10 | Launch Lab | Goes straight to the simulator |
+| 01 | Theory | Aim and learning outcomes, then five cards: layers, addressing, services, routing, method |
+| 02 | Simulation | Live topology, fault injection, terminal, telemetry, and ten ticketed troubleshooting scenarios |
+| 03 | Mini-game | Network Incident: a walkable lab where you investigate, diagnose, repair and verify a hidden fault |
+| 04 | Test | 24 concept, scenario and diagnostic questions with feedback and retry |
+| 05 | Conclusion | Findings and the Experiment 8 summary |
 
 ## Simulation engine (`lib/sim`)
 

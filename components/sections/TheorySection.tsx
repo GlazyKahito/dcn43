@@ -46,8 +46,8 @@ export function TheorySection() {
   return (
     <Section
       id="theory"
-      no="03"
-      kicker="Theory · Reference"
+      no="01"
+      kicker="Theory · Aim and principles"
       title={
         <>
           The protocols
@@ -55,8 +55,36 @@ export function TheorySection() {
           behind the faults
         </>
       }
-      lede="Sixteen short reference cards. Each one uses this lab’s own addressing and ends with a way to observe it in the simulator."
+      lede="Start with the aim, then five short cards. Each uses this lab’s own addresses and ends with a way to see it happen in the simulation."
     >
+      <div className="panel mb-10 grid gap-6 p-6 lg:grid-cols-[1fr_1fr] lg:gap-10">
+        <div>
+          <p className="label text-signal">Aim</p>
+          <p className="mt-3 text-[16px] leading-relaxed text-paper">
+            To understand systematic network troubleshooting, use standard diagnostic utilities to isolate faults in a simulated network, and verify connectivity after each repair.
+          </p>
+          <p className="mt-3 text-[13.5px] leading-relaxed text-muted">
+            Faults are found from evidence only: carrier, addressing, gateway, path, name resolution and service state. A repair counts only when end-to-end tests pass again.
+          </p>
+        </div>
+        <div>
+          <p className="label">Learning outcomes</p>
+          <ol className="mt-3 space-y-2">
+            {[
+              'Relate a reported symptom to the layer most likely at fault.',
+              'Read the output of ping, tracert, ipconfig, nslookup, arp and netstat.',
+              'Tell link, addressing, routing, service and filtering faults apart.',
+              'Repair a fault and prove recovery with objective tests.',
+            ].map((o, i) => (
+              <li key={o} className="grid grid-cols-[34px_1fr] text-[14px] leading-snug text-paper">
+                <span className="font-mono text-[11px] text-signal">LO{i + 1}</span>
+                {o}
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+
       <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
         <ol className="border-t border-hair lg:sticky lg:top-20 lg:self-start">
           {THEORY.map((t) => {

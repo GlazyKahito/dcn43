@@ -2,10 +2,9 @@
 
 import { motion, useReducedMotion } from 'framer-motion';
 import type { ReactNode } from 'react';
-import type { SectionId } from '@/data/modules';
 
 interface SectionProps {
-  id: SectionId;
+  id: string;
   no: string;
   kicker: string;
   title: ReactNode;
@@ -33,7 +32,9 @@ export function Section({ id, no, kicker, title, lede, children, aside }: Sectio
           </div>
           {aside}
         </Reveal>
-        <div className="mt-12 sm:mt-16">{children}</div>
+        <Reveal delay={0.18} className="mt-12 sm:mt-16">
+          {children}
+        </Reveal>
       </div>
     </section>
   );
@@ -68,13 +69,20 @@ export function Reveal({ children, delay = 0, className }: { children: ReactNode
 
 /** Small titled instrument panel. */
 export function Panel({ title, meta, children, className = '', bodyClass = 'p-4' }: { title: string; meta?: ReactNode; children: ReactNode; className?: string; bodyClass?: string }) {
+  const reduced = useReducedMotion();
   return (
-    <div className={`panel flex min-w-0 flex-col ${className}`}>
+    <motion.div
+      className={`panel flex min-w-0 flex-col ${className}`}
+      initial={reduced ? false : { opacity: 0, y: 14 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '0px 0px -8% 0px' }}
+      transition={{ duration: 0.6, ease: [0.2, 0.7, 0.2, 1] }}
+    >
       <div className="flex items-center justify-between gap-3 border-b border-hair px-4 py-2.5">
         <h3 className="label text-muted">{title}</h3>
         {meta && <div className="flex items-center gap-2">{meta}</div>}
       </div>
       <div className={`min-h-0 flex-1 ${bodyClass}`}>{children}</div>
-    </div>
+    </motion.div>
   );
 }

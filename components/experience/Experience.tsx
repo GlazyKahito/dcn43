@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { type LabModule, type ModuleId } from '@/data/modules';
+import { MODULES, type LabModule, type ModuleId } from '@/data/modules';
 import { detectFaults } from '@/lib/sim/faults';
 import { NetworkField } from '@/components/atmosphere/NetworkField';
 import { LabProvider, useLab } from '@/lib/sim/store';
@@ -32,7 +32,8 @@ function Shell() {
   const { state } = useLab();
   const [phase, setPhase] = useState<Phase>('boot');
   const [surface, setSurface] = useState<Surface | null>(null);
-  const [moduleId, setModuleId] = useState<ModuleId>('troubleshooting');
+  const [moduleId, setModuleId] = useState<ModuleId>('theory');
+  const [anchor, setAnchor] = useState<string | undefined>();
 
   useEffect(() => {
     document.documentElement.dataset.phase = surface ? 'transition' : phase;
@@ -40,8 +41,9 @@ function Shell() {
 
   const bootDone = useCallback(() => setPhase((p) => (p === 'boot' ? 'landing' : p)), []);
 
-  const launch = useCallback((module: LabModule, r: DOMRect) => {
+  const launch = useCallback((module: LabModule, r: DOMRect, target?: string) => {
     setModuleId(module.id);
+    setAnchor(target);
     setSurface({ module, rect: { top: r.top, left: r.left, width: r.width, height: r.height } });
   }, []);
 
@@ -57,7 +59,7 @@ function Shell() {
       <NetworkField faults={faultCount} pulse={state.flight?.id ?? 0} dim={phase === 'site'} />
       <AnimatePresence>{phase === 'boot' && <LampIntro key="intro" onDone={bootDone} />}</AnimatePresence>
       {(phase === 'boot' || phase === 'landing') && <LandingHero revealed={phase === 'landing'} onLaunch={launch} />}
-      {phase === 'site' && <Site initialModule={moduleId} onIndex={toPanel} />}
+      {phase === 'site' && <Site initialModule={moduleId} initialAnchor={anchor} onIndex={toPanel} />}
 
       {/* Card-to-page transition: the selected card becomes the surface and its number takes the screen. */}
       <AnimatePresence>
@@ -93,7 +95,7 @@ function Shell() {
                   {surface.module.title}
                 </motion.p>
                 <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35, duration: 0.3 }} className="label mt-3">
-                  {surface.module.no} / 10 · {surface.module.role}
+                  {surface.module.no} / {String(MODULES.length).padStart(2, '0')} · {surface.module.role}
                 </motion.p>
               </div>
             </div>

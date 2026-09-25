@@ -113,7 +113,7 @@ export function LampIntro({ onDone }: { onDone: () => void }) {
           animate={{ opacity: t >= T.title - 150 || reduced ? 1 : 0, y: t >= T.title - 150 || reduced ? 0 : 10 }}
           transition={{ duration: 0.5 }}
         >
-          Somaiya Virtual Labs · Experiment 10
+          Somaiya Virtual Labs · Experiment 8
         </motion.p>
         <motion.h1
           className="mt-4 bg-gradient-to-br from-[#f1ede4] to-[#8d918f] bg-clip-text py-2 font-display text-[clamp(38px,6.4vw,92px)] font-semibold uppercase leading-[0.9] tracking-[-0.01em] text-transparent"

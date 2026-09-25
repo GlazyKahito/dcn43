@@ -11,11 +11,16 @@ import type { Proto } from '@/lib/sim/types';
 import { Led, type LedTone } from '@/components/chrome/Led';
 import { TopologyView, type Selection } from '@/components/network/TopologyView';
 import { Glyph } from './Glyph';
+import { TextEffect } from '@/components/fx/TextEffect';
+import { BorderBeam } from '@/components/fx/BorderBeam';
+import { NumberTicker } from '@/components/fx/NumberTicker';
+import { AnimatePresence } from 'framer-motion';
+import { StartPrompt, Walkthrough, WALKTHROUGH_KEY } from './Walkthrough';
 
 interface Props {
   /** False while the lamp intro is still on screen; the landing powers up when it turns true. */
   revealed: boolean;
-  onLaunch: (module: LabModule, rect: DOMRect) => void;
+  onLaunch: (module: LabModule, rect: DOMRect, target?: string) => void;
 }
 
 const STATE_LABEL: Record<ModuleState, string> = {
@@ -25,6 +30,8 @@ const STATE_LABEL: Record<ModuleState, string> = {
   available: 'Anytime',
   upcoming: 'Upcoming',
 };
+
+const SIM = MODULES.findIndex((m) => m.id === 'simulator');
 
 const CYCLE: { proto: Proto; target: string; label: string }[] = [
   { proto: 'icmp', target: '172.16.0.10', label: 'ICMP' },
@@ -57,6 +64,30 @@ export function LandingHero({ revealed, onLaunch }: Props) {
     `transition-[opacity,transform,filter] duration-[900ms] ease-[cubic-bezier(0.2,0.7,0.2,1)] ${revealed ? 'translate-y-0 opacity-100 blur-0' : 'translate-y-3 opacity-0 blur-[3px]'}`;
   const delay = (ms: number) => ({ transitionDelay: revealed && !settled ? `${ms}ms` : '0ms' });
   const [launching, setLaunching] = useState<number | null>(null);
+  const [prompt, setPrompt] = useState(false);
+  const [touring, setTouring] = useState(false);
+
+  // “Let’s start” appears once the landing is up, unless it was already dismissed or completed.
+  useEffect(() => {
+    if (!revealed) return;
+    let seen = false;
+    try {
+      seen = !!localStorage.getItem(WALKTHROUGH_KEY);
+    } catch {
+      /* storage unavailable: offer it */
+    }
+    if (seen) return;
+    const t = window.setTimeout(() => setPrompt(true), 1100);
+    return () => window.clearTimeout(t);
+  }, [revealed]);
+
+  const remember = (value: string) => {
+    try {
+      localStorage.setItem(WALKTHROUGH_KEY, value);
+    } catch {
+      /* ignore */
+    }
+  };
   const [readings, setReadings] = useState<Reading[]>([]);
   const [selection, setSelection] = useState<Selection>(null);
   const portRefs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -86,11 +117,11 @@ export function LandingHero({ revealed, onLaunch }: Props) {
   }, [revealed]);
 
   const launch = useCallback(
-    (i: number) => {
+    (i: number, target?: string, from?: HTMLElement | null) => {
       if (launching !== null) return;
       setLaunching(i);
-      const el = portRefs.current[i];
-      window.setTimeout(() => el && onLaunch(MODULES[i], el.getBoundingClientRect()), 180);
+      const el = from ?? portRefs.current[i];
+      window.setTimeout(() => el && onLaunch(MODULES[i], el.getBoundingClientRect(), target), 180);
     },
     [launching, onLaunch],
   );
@@ -126,8 +157,6 @@ export function LandingHero({ revealed, onLaunch }: Props) {
     setSelection(s);
   };
 
-  const current = MODULES[focus];
-
   return (
     <section aria-label="Laboratory landing" className="relative flex min-h-[100svh] w-full flex-col px-4 pb-5 pt-4 sm:px-8 sm:pt-6">
       <header className={`flex items-start justify-between gap-4 ${reveal()}`} style={delay(0)}>
@@ -138,6 +167,13 @@ export function LandingHero({ revealed, onLaunch }: Props) {
         <div className="flex items-center gap-2 font-mono text-[10.5px] uppercase tracking-[0.16em] text-muted">
           <Led tone={tone} pulse={tone !== 'ok'} />
           Lab network {health.status}
+          <button type="button" className="ml-3 border-l border-hair pl-3 text-muted transition-colors hover:text-paper" onClick={() => {
+              setPrompt(false);
+              setTouring(true);
+            }}
+          >
+            Walkthrough
+          </button>
         </div>
       </header>
 
@@ -145,30 +181,27 @@ export function LandingHero({ revealed, onLaunch }: Props) {
         <div className={`lg:col-span-5 ${reveal()}`} style={delay(120)}>
           <p className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-label text-signal">
             <span className="h-px w-8 bg-signal/60" />
-            Experiment 10
+            Experiment 8
           </p>
           <h1 className="mt-5 font-display text-[clamp(38px,4.3vw,74px)] font-semibold uppercase leading-[0.84] tracking-[-0.015em] text-paper">
-            Network
-            <br />
-            Troubleshooting
-            <br />
-            <span className="font-light text-silver">&amp; Simulator</span>
+            <TextEffect lines={['Network', 'Troubleshooting', '& Simulator']} lineClass={['', '', 'font-light text-silver']} play={revealed} delay={0.2} />
           </h1>
           <p className="mt-6 max-w-md text-[15.5px] leading-relaxed text-muted">
             A working network, running live on this page. Cut a cable on the panel, watch the packets fail at the break, then diagnose it with ping, tracert and nslookup and prove the repair.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <button type="button" className="btn-primary px-5 py-3" onClick={() => launch(MODULES.findIndex((m) => m.id === 'launch'))}>
+          <div data-tour="actions" className="mt-8 flex flex-wrap gap-3">
+            <button type="button" className="btn-primary relative px-5 py-3" onClick={(e) => launch(SIM, undefined, e.currentTarget)}>
+              <BorderBeam size={46} duration={5} />
               Launch lab <span aria-hidden>→</span>
             </button>
-            <button type="button" className="btn px-5 py-3" onClick={() => launch(MODULES.findIndex((m) => m.id === 'diagnostics'))}>
+            <button type="button" className="btn px-5 py-3" onClick={(e) => launch(SIM, 'diagnostics', e.currentTarget)}>
               Work a scenario
             </button>
           </div>
         </div>
 
         <div className={`lg:col-span-7 ${reveal()}`} style={delay(240)}>
-          <div className="panel overflow-hidden">
+          <div data-tour="network" className="panel overflow-hidden">
             <div className="flex items-center justify-between gap-3 border-b border-hair px-4 py-2.5">
               <p className="label flex items-center gap-2 text-muted">
                 <span className="relative flex h-2 w-2">
@@ -183,7 +216,7 @@ export function LandingHero({ revealed, onLaunch }: Props) {
               <TopologyView net={state.net} flight={state.flight} selection={selection} onSelect={onSelect} label="Live laboratory network — click a cable to cut or restore it" />
             </div>
             <div className="grid border-t border-hair sm:grid-cols-[1fr_auto]">
-              <ol className="min-h-[92px] space-y-1 px-4 py-3 font-mono text-[11.5px]" aria-live="polite" aria-label="Live probe readings">
+              <ol data-tour="readings" className="min-h-[92px] space-y-1 px-4 py-3 font-mono text-[11.5px]" aria-live="polite" aria-label="Live probe readings">
                 {readings.length === 0 && <li className="text-dim">Waiting for first probe…</li>}
                 {readings.map((r, i) => (
                   <li key={`${r.text}-${i}`} className={`flex items-center gap-2 ${i === 0 ? '' : 'opacity-50'}`}>
@@ -198,7 +231,7 @@ export function LandingHero({ revealed, onLaunch }: Props) {
                   <>
                     <p className="font-mono text-[11px] text-alarm">{faults.length} fault{faults.length > 1 ? 's' : ''} on the network</p>
                     <div className="flex gap-2">
-                      <button type="button" className="btn-primary py-1.5" onClick={() => launch(MODULES.findIndex((m) => m.id === 'launch'))}>
+                      <button type="button" className="btn-primary py-1.5" onClick={(e) => launch(SIM, undefined, e.currentTarget)}>
                         Diagnose it →
                       </button>
                       <button type="button" className="btn py-1.5" onClick={reset}>
@@ -218,57 +251,92 @@ export function LandingHero({ revealed, onLaunch }: Props) {
       </div>
 
       <nav aria-label="Laboratory modules" className={reveal()} style={delay(350)}>
-        <div className="mb-2 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+        <div className="mb-2.5 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
           <p className="label">
-            Patch panel · 10 modules <span className="text-muted">· {pg.completed}/10 verified</span>
-          </p>
-          <p className="label hidden lg:block">
-            {current.no} · {current.title} — {current.line}
+            Lab progress <span className="text-muted">· <NumberTicker value={pg.completed} /> of {MODULES.length} verified</span>
           </p>
           {nextIdx >= 0 && (
-            <button type="button" className="btn-ghost text-signal hover:text-paper" onClick={() => launch(nextIdx)}>
-              {pg.completed === 0 && !pg.current ? 'Begin at 01' : `Continue · ${MODULES[nextIdx].no} ${MODULES[nextIdx].title}`} →
+            <button type="button" data-tour="continue" className="btn-ghost text-signal hover:text-paper" onClick={() => launch(nextIdx)}>
+              {pg.completed === 0 && !pg.current ? 'Begin with 01 Theory' : `Continue · ${MODULES[nextIdx].no} ${MODULES[nextIdx].title}`} <span aria-hidden>→</span>
             </button>
           )}
         </div>
-        <div className="panel p-2">
-          <ul className="grid grid-cols-2 gap-1.5 sm:grid-cols-5 xl:grid-cols-10">
+
+        <div data-tour="progress" className="panel overflow-hidden">
+          {/* recommended path: a trace with one node per bay */}
+          <div aria-hidden className="relative hidden h-5 border-b border-hair md:block">
+            <div className="absolute inset-x-0 top-1/2 grid -translate-y-1/2 grid-cols-5">
+              {MODULES.map((m, i) => {
+                const lit = states[i] === 'complete';
+                return (
+                  <span key={m.id} className="relative flex items-center">
+                    <span className={`h-px flex-1 ${i === 0 ? 'bg-transparent' : lit || states[i - 1] === 'complete' ? 'bg-signal/60' : 'bg-hair-strong'}`} />
+                    <span
+                      className={`h-2 w-2 rounded-full border transition-colors ${
+                        lit ? 'border-signal bg-signal shadow-[0_0_6px_rgba(95,174,138,0.7)]' : states[i] === 'active' ? 'border-paper bg-paper' : states[i] === 'next' ? 'border-silver/70 bg-ink' : 'border-hair-strong bg-ink'
+                      }`}
+                    />
+                    <span className={`h-px flex-1 ${i === MODULES.length - 1 ? 'bg-transparent' : lit ? 'bg-signal/60' : 'bg-hair-strong'}`} />
+                  </span>
+                );
+              })}
+            </div>
+          </div>
+
+          <ul className="grid divide-y divide-hair md:grid-cols-5 md:divide-x md:divide-y-0">
             {MODULES.map((m, i) => {
               const on = focus === i;
               const st = states[i];
               const lamps = Math.round(pg.progress[m.id].value * 5);
+              const lit = st === 'complete' || st === 'active';
               return (
-                <li key={m.id} className={reveal()} style={delay(450 + i * 70)}>
+                <li key={m.id} className={reveal()} style={delay(450 + i * 90)}>
                   <button
                     type="button"
                     ref={(n) => void (portRefs.current[i] = n)}
                     onClick={() => launch(i)}
                     onMouseEnter={() => setFocus(i)}
                     onFocus={() => setFocus(i)}
+                    onMouseMove={(e) => {
+                      const r = e.currentTarget.getBoundingClientRect();
+                      e.currentTarget.style.setProperty('--mx', `${e.clientX - r.left}px`);
+                      e.currentTarget.style.setProperty('--my', `${e.clientY - r.top}px`);
+                    }}
                     aria-label={`${m.no} ${m.title}: ${m.line} ${STATE_LABEL[st]}. ${pg.progress[m.id].detail}.`}
-                    className={`group relative flex h-full w-full flex-col rounded-[2px] border bg-ink/60 px-2.5 pb-2.5 pt-2 text-left transition-[border-color,background-color,transform,opacity] duration-200 hover:-translate-y-0.5 hover:opacity-100 ${
-                      launching === i ? 'border-signal bg-signal-soft' : on ? 'border-silver/45 bg-gunmetal' : st === 'complete' ? 'border-signal/30' : st === 'active' ? 'border-silver/35' : 'border-hair'
-                    } ${st === 'upcoming' && !on ? 'opacity-70' : ''}`}
+                    className={`group relative grid h-full w-full grid-cols-[auto_1fr_auto] items-center gap-x-4 px-4 py-3.5 text-left transition-colors duration-200 md:grid-cols-1 md:gap-y-3 md:px-5 md:py-5 ${
+                      launching === i ? 'bg-signal-soft' : on ? 'bg-gunmetal/80' : 'hover:bg-gunmetal/60'
+                    }`}
                   >
-                    {st === 'active' && <span aria-hidden className="absolute inset-y-2 left-0 w-[2px] bg-signal" />}
-                    <span className="flex items-center justify-between">
-                      <span className={`font-mono text-[10px] ${st === 'complete' ? 'text-signal' : st === 'active' ? 'text-paper' : 'text-dim'}`}>{m.no}</span>
-                      <Led tone={st === 'complete' ? 'ok' : on || launching === i || st === 'active' ? 'ok' : 'off'} pulse={st === 'active'} />
-                    </span>
+                    {/* cursor spotlight, after Aceternity's card spotlight (MIT) */}
                     <span
-                      className={`mt-1.5 flex h-9 items-center justify-center transition-colors ${on || st === 'active' ? 'text-silver' : 'text-dim'}`}
-                      style={{ ['--glyph-accent' as string]: st === 'complete' || st === 'active' ? '#5fae8a' : '#8a8b86' }}
-                    >
-                      <Glyph id={m.glyph} className="h-full" />
+                      aria-hidden
+                      className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                      style={{ background: 'radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), rgba(232,228,218,0.07), transparent 60%)' }}
+                    />
+                    {st === 'active' && <span aria-hidden className="absolute inset-y-0 left-0 w-[2px] bg-signal md:inset-x-0 md:bottom-auto md:top-0 md:h-[2px] md:w-auto" />}
+                    {st === 'active' && <BorderBeam size={70} duration={7} />}
+                    <span className="flex items-center gap-3 md:justify-between">
+                      <span className={`font-display text-[28px] font-light leading-none md:text-[34px] ${st === 'complete' ? 'text-signal' : lit || on ? 'text-paper' : 'text-silver/70'}`}>{m.no}</span>
+                      <span
+                        className={`h-9 w-14 transition-colors md:h-10 md:w-16 ${lit || on ? 'text-silver' : 'text-dim'}`}
+                        style={{ ['--glyph-accent' as string]: lit || on ? '#5fae8a' : '#6f6f6a' }}
+                      >
+                        <Glyph id={m.glyph} className="h-full w-full" />
+                      </span>
                     </span>
-                    <span className={`mt-1.5 font-display text-[12.5px] font-medium uppercase leading-tight tracking-wide ${on || st === 'active' ? 'text-paper' : 'text-muted'}`}>{m.title}</span>
-                    <span className="mt-1.5 flex items-center justify-between gap-1">
-                      <span className={`font-mono text-[9px] uppercase tracking-[0.12em] ${st === 'complete' ? 'text-signal' : st === 'active' || st === 'next' ? 'text-silver' : 'text-dim'}`}>
+                    <span className="min-w-0">
+                      <span className={`block font-display text-[17px] font-medium uppercase leading-tight tracking-wide ${lit || on ? 'text-paper' : 'text-muted'}`}>{m.title}</span>
+                      <span className="mt-0.5 block font-mono text-[10px] uppercase tracking-[0.14em] text-dim">{m.role}</span>
+                      <span className="mt-2 hidden text-[12.5px] leading-snug text-muted md:block">{m.line}</span>
+                    </span>
+                    <span className="flex flex-col items-end gap-1.5 md:flex-row md:items-center md:justify-between">
+                      <span className={`flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] ${st === 'complete' ? 'text-signal' : st === 'active' || st === 'next' ? 'text-paper' : 'text-dim'}`}>
+                        {st === 'active' && <Led tone="ok" pulse />}
                         {STATE_LABEL[st]}
                       </span>
-                      <span aria-hidden className="flex gap-[2px]">
+                      <span aria-hidden className="flex gap-[3px]">
                         {Array.from({ length: 5 }, (_, k) => (
-                          <span key={k} className={`h-[4px] w-[6px] ${k < lamps ? (st === 'complete' ? 'bg-signal' : 'bg-silver/80') : 'bg-steel'}`} />
+                          <span key={k} className={`h-[4px] w-[8px] ${k < lamps ? (st === 'complete' ? 'bg-signal' : 'bg-silver/80') : 'bg-steel'}`} />
                         ))}
                       </span>
                     </span>
@@ -277,18 +345,36 @@ export function LandingHero({ revealed, onLaunch }: Props) {
               );
             })}
           </ul>
-          {/* the recommended path, 01 → 10, as a trace under the ports */}
-          <div aria-hidden className="mt-2 hidden grid-cols-10 gap-1.5 xl:grid">
-            {MODULES.map((m, i) => (
-              <span key={m.id} className="relative flex h-2 items-center">
-                <span className={`h-px flex-1 ${states[i] === 'complete' ? 'bg-signal/70' : 'bg-hair-strong'}`} />
-                <span className={`h-1.5 w-1.5 rounded-full border ${states[i] === 'complete' ? 'border-signal bg-signal' : states[i] === 'active' ? 'border-paper bg-paper' : states[i] === 'next' ? 'border-silver/70' : 'border-hair-strong'}`} />
-                <span className={`h-px flex-1 ${states[i] === 'complete' ? 'bg-signal/70' : 'bg-hair-strong'}`} />
-              </span>
-            ))}
-          </div>
         </div>
       </nav>
+
+      <AnimatePresence>
+        {prompt && !touring && (
+          <StartPrompt
+            onStart={() => {
+              setPrompt(false);
+              setTouring(true);
+            }}
+            onClose={() => {
+              setPrompt(false);
+              remember('dismissed');
+            }}
+          />
+        )}
+      </AnimatePresence>
+      {touring && (
+        <Walkthrough
+          onFinish={() => {
+            setTouring(false);
+            remember('done');
+          }}
+          onBegin={() => {
+            setTouring(false);
+            remember('done');
+            launch(0);
+          }}
+        />
+      )}
     </section>
   );
 }

@@ -17,7 +17,7 @@ export function SiteNav({ current, onOpen, onIndex }: Props) {
   const [open, setOpen] = useState(false);
   const { state } = useLab();
   const faults = detectFaults(state.net).length;
-  const activeNav: ModuleId = current === 'launch' ? 'simulator' : current;
+  const activeNav: ModuleId = current;
 
   useEffect(() => {
     if (!open) return;
@@ -36,11 +36,11 @@ export function SiteNav({ current, onOpen, onIndex }: Props) {
     <header className="fixed inset-x-0 top-0 z-[200] border-b border-hair bg-ink/85 backdrop-blur-md">
       <div className="mx-auto flex h-14 max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-6">
         <button type="button" onClick={() => go('index')} className="flex min-w-0 items-center gap-3 text-left" aria-label="Return to patch panel">
-          <span className="grid h-7 w-7 shrink-0 place-items-center border border-hair-strong font-mono text-[10px] text-silver">10</span>
+          <span className="grid h-7 w-7 shrink-0 place-items-center border border-hair-strong font-mono text-[10px] text-silver">08</span>
           <span className="min-w-0 leading-tight">
             <span className="block truncate font-mono text-[10px] uppercase tracking-[0.18em] text-dim">Somaiya Virtual Labs</span>
             <span className="block truncate font-display text-[13px] font-medium uppercase tracking-wider text-paper">
-              Network Troubleshooting <span className="text-dim">· Exp 10</span>
+              Network Troubleshooting <span className="text-dim">· Exp 8</span>
             </span>
           </span>
         </button>
@@ -71,7 +71,7 @@ export function SiteNav({ current, onOpen, onIndex }: Props) {
             <Led tone={faults ? 'err' : 'ok'} pulse={faults > 0} />
             {faults ? `${faults} fault${faults > 1 ? 's' : ''}` : 'Nominal'}
           </span>
-          <button type="button" onClick={() => go('launch')} className="btn-primary hidden py-1.5 sm:inline-flex">
+          <button type="button" onClick={() => go('simulator')} className="btn-primary hidden py-1.5 sm:inline-flex">
             Launch Lab
           </button>
           <button type="button" className="btn py-1.5 xl:hidden" aria-expanded={open} aria-controls="nav-drawer" onClick={() => setOpen((o) => !o)}>
@@ -98,7 +98,7 @@ export function SiteNav({ current, onOpen, onIndex }: Props) {
               </li>
             ))}
             <li>
-              <button type="button" onClick={() => go('launch')} className="btn-primary mt-3 w-full">
+              <button type="button" onClick={() => go('simulator')} className="btn-primary mt-3 w-full">
                 Launch Lab →
               </button>
             </li>
@@ -109,7 +109,7 @@ export function SiteNav({ current, onOpen, onIndex }: Props) {
   );
 }
 
-/** “LAB PROGRESS 01 ━ 02 ━ [04] ━ 05 …  04 / 10 SIMULATOR” — where the student is on the recommended path. */
+/** “LAB PROGRESS 01 ━ [02] ━ 03 ━ 04 ━ 05   02 / 05 SIMULATION” — where the student is on the recommended path. */
 function ProgressRail({ current, onOpen }: { current: ModuleId; onOpen: (id: ModuleId) => void }) {
   const pg = useProgress();
   const mod = moduleById(current);
@@ -140,7 +140,7 @@ function ProgressRail({ current, onOpen }: { current: ModuleId; onOpen: (id: Mod
           })}
         </ol>
         <span className="hidden shrink-0 font-mono text-[10px] uppercase tracking-[0.14em] text-muted sm:inline">
-          <span className="text-paper">{mod.no}</span> / 10 · {mod.title}
+          <span className="text-paper">{mod.no}</span> / {String(MODULES.length).padStart(2, '0')} · {mod.title}
         </span>
       </div>
     </div>

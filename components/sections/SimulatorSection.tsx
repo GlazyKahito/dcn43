@@ -18,8 +18,8 @@ export function SimulatorSection() {
   return (
     <Section
       id="simulator"
-      no="04"
-      kicker="Simulator · Launch Lab"
+      no="02"
+      kicker="Simulation · Launch lab"
       title={
         <>
           Interactive
