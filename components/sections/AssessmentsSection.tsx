@@ -81,7 +81,7 @@ export function AssessmentsSection() {
           diagnosis, not recall
         </>
       }
-      lede="Twenty-four questions drawn from the theory cards and the simulator’s actual outputs: concept checks, ticketed scenarios with terminal evidence, and next-step diagnostic decisions."
+      lede="24 questions: concepts, real terminal evidence, next-step decisions."
     >
       {!items ? (
         <Intro best={best} onStart={() => start(QUESTIONS)} />

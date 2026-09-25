@@ -116,7 +116,7 @@ export function LampIntro({ onDone }: { onDone: () => void }) {
           Somaiya Virtual Labs · Experiment 8
         </motion.p>
         <motion.h1
-          className="mt-4 bg-gradient-to-br from-[#f1ede4] to-[#8d918f] bg-clip-text py-2 font-display text-[clamp(38px,6.4vw,92px)] font-semibold uppercase leading-[0.9] tracking-[-0.01em] text-transparent"
+          className="mt-4 bg-gradient-to-br from-[#f1ede4] to-[#8d918f] bg-clip-text py-2 font-display text-[clamp(38px,6.4vw,92px)] font-extrabold uppercase leading-[0.9] tracking-[-0.01em] text-transparent"
           initial={{ opacity: 0.2, y: 80 }}
           animate={{ opacity: t >= T.title || reduced ? 1 : 0.2, y: t >= T.title || reduced ? 0 : 80 }}
           transition={{ duration: 0.8, ease: 'easeInOut' }}

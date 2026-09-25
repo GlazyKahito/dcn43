@@ -56,7 +56,7 @@ export function StartPrompt({ onStart, onClose }: { onStart: () => void; onClose
         ×
       </button>
       <p className="label text-signal">Let’s start</p>
-      <p id="start-title" className="mt-2 font-display text-xl font-medium uppercase tracking-wide text-paper">
+      <p id="start-title" className="mt-2 font-display text-xl font-bold uppercase tracking-tight text-paper">
         First time in the lab?
       </p>
       <p className="mt-2 text-[13.5px] leading-relaxed text-muted">A one-minute walkthrough of the live network, the two ways in, and how progress works.</p>
@@ -162,7 +162,7 @@ export function Walkthrough({ onFinish, onBegin }: { onFinish: () => void; onBeg
               Skip
             </button>
           </div>
-          <p id="tour-title" className="mt-2 font-display text-lg font-medium uppercase tracking-wide text-paper">
+          <p id="tour-title" className="mt-2 font-display text-lg font-bold uppercase tracking-tight text-paper">
             {step.title}
           </p>
           <p className="mt-1.5 text-[13.5px] leading-relaxed text-muted">{step.body}</p>

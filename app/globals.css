@@ -16,7 +16,7 @@ html {
 body {
   background: #0a0b0c;
   color: #e8e4da;
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
   font-feature-settings: 'ss01', 'tnum';
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
@@ -150,4 +150,9 @@ html[data-phase='site'] .atmo-veil {
 .border-beam {
   offset-distance: 0%;
   animation: border-beam linear infinite;
+}
+
+/* Tight-tracked display type keeps readable gaps between words. */
+.font-display {
+  word-spacing: 0.12em;
 }

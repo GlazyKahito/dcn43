@@ -91,7 +91,7 @@ function Shell() {
                 >
                   {surface.module.no}
                 </motion.p>
-                <motion.p initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25, duration: 0.3 }} className="mt-2 font-display text-2xl font-medium uppercase tracking-wide text-paper sm:text-4xl">
+                <motion.p initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25, duration: 0.3 }} className="mt-2 font-display text-2xl font-bold uppercase tracking-tight text-paper sm:text-4xl">
                   {surface.module.title}
                 </motion.p>
                 <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35, duration: 0.3 }} className="label mt-3">

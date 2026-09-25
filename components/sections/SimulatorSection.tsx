@@ -27,7 +27,7 @@ export function SimulatorSection() {
           network environment
         </>
       }
-      lede="PC1 → SW1 → R1 → FW1 → SRV1. Every control here changes the same network the terminal, the diagnostics console and the telemetry read from. Cut a cable and the next ping fails exactly where the cable was."
+      lede="One live network. Cut a cable and the next ping fails where it was cut."
     >
       {scenario && (
         <div className="mb-4 flex flex-wrap items-center gap-3 rounded-[3px] border border-alarm/40 bg-alarm-soft px-4 py-2.5">

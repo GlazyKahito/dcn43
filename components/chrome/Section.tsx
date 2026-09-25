@@ -25,7 +25,7 @@ export function Section({ id, no, kicker, title, lede, children, aside }: Sectio
             <Calibration />
           </div>
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.8fr)] lg:items-end">
-            <h2 id={`${id}-title`} className="font-display text-[clamp(34px,5vw,68px)] font-medium uppercase leading-[0.92] tracking-[-0.005em] text-paper">
+            <h2 id={`${id}-title`} className="font-display text-[clamp(34px,5vw,68px)] font-bold uppercase leading-[0.92] tracking-[-0.005em] text-paper">
               {title}
             </h2>
             {lede && <p className="max-w-xl text-[15px] leading-relaxed text-muted lg:justify-self-end">{lede}</p>}

@@ -48,7 +48,7 @@ function DeviceInspector({ id }: { id: DeviceId }) {
     <div className="space-y-4">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="font-display text-lg font-medium uppercase tracking-wide text-paper">{d.label}</p>
+          <p className="font-display text-lg font-bold uppercase tracking-tight text-paper">{d.label}</p>
           <p className="label mt-0.5">{d.model}</p>
         </div>
         <button
@@ -218,7 +218,7 @@ function LinkInspector({ id }: { id: LinkId }) {
     <div className="space-y-4">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="font-display text-lg font-medium uppercase tracking-wide text-paper">Link {id}</p>
+          <p className="font-display text-lg font-bold uppercase tracking-tight text-paper">Link {id}</p>
           <p className="label mt-0.5">{link.medium}</p>
         </div>
         <button

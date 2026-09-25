@@ -9,7 +9,7 @@ export function Diagram({ d }: { d: D }) {
           {d.layers.map((l, i) => (
             <li key={l.label} className="grid grid-cols-[28px_1fr] gap-x-3 border-b border-hair px-3 py-2 last:border-0 sm:grid-cols-[28px_150px_1fr_120px]">
               <span className="font-mono text-[11px] text-dim">{d.layers.length - i}</span>
-              <span className="font-display text-[14px] uppercase tracking-wide text-paper">{l.label}</span>
+              <span className="font-display text-[14px] uppercase tracking-tight text-paper">{l.label}</span>
               <span className="col-start-2 text-[12.5px] text-muted sm:col-start-auto">
                 {l.detail}
                 {l.tools && <span className="block font-mono text-[10.5px] text-dim">{l.tools}</span>}
@@ -108,7 +108,7 @@ export function Diagram({ d }: { d: D }) {
           {d.steps.map((s, i) => (
             <li key={s.label} className="bg-graphite p-3">
               <p className="font-mono text-[10px] text-signal">{String(i + 1).padStart(2, '0')} →</p>
-              <p className="mt-1 font-display text-[14px] uppercase tracking-wide text-paper">{s.label}</p>
+              <p className="mt-1 font-display text-[14px] uppercase tracking-tight text-paper">{s.label}</p>
               <p className="mt-1 text-[12px] leading-snug text-muted">{s.detail}</p>
             </li>
           ))}
