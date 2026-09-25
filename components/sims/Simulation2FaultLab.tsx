@@ -25,6 +25,7 @@ import {
   ChevronRight,
   ShieldAlert,
 } from 'lucide-react';
+import { LiquidButton, MetalButton } from '../ui/liquid-glass-button';
 
 export function Simulation2FaultLab() {
   const [activeScenarioIndex, setActiveScenarioIndex] = useState<number>(0);
@@ -567,13 +568,16 @@ export function Simulation2FaultLab() {
               </div>
             )}
 
-            <button
+            <LiquidButton
               onClick={handleVerifyFix}
-              className="w-full py-3.5 rounded-xl bg-[#1f7a4d] hover:bg-[#34d399] text-white hover:text-[#050807] font-bold text-xs tracking-wider uppercase transition-all cursor-pointer flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(52,211,153,0.25)]"
+              size="lg"
+              className="w-full text-white hover:text-[#34d399] font-bold text-xs tracking-wider uppercase cursor-pointer"
             >
-              <CheckCircle2 className="w-4 h-4" />
-              <span>Verify Fix & Test Path</span>
-            </button>
+              <span className="flex items-center justify-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-[#34d399]" />
+                <span>Verify Fix & Test Path</span>
+              </span>
+            </LiquidButton>
           </div>
         </div>
       </div>

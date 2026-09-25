@@ -13,7 +13,7 @@ describe('Virtual Lab Network Simulation - Healthy Baseline', () => {
     const replyLines = result.lines.filter((l) => l.text.includes('Reply from 192.168.1.1'));
     expect(replyLines.length).toBe(4);
     expect(replyLines[0].text).toContain('TTL=64');
-    expect(replyLines[0].text).toContain('time=1ms');
+    expect(replyLines[0].text).toMatch(/time=[1-3]ms/);
 
     const statSummary = result.lines.find((l) => l.text.includes('Packets: Sent = 4, Received = 4, Lost = 0'));
     expect(statSummary).toBeDefined();

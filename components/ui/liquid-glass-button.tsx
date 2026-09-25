@@ -93,18 +93,13 @@ function LiquidButton({
   className,
   variant,
   size,
-  asChild = false,
   children,
   ...props
 }: React.ComponentProps<"button"> &
-  VariantProps<typeof liquidbuttonVariants> & {
-    asChild?: boolean
-  }) {
-  const Comp = asChild ? Slot : "button"
-
+  VariantProps<typeof liquidbuttonVariants>) {
   return (
     <>
-      <Comp
+      <button
         data-slot="button"
         className={cn(
           "relative",
@@ -125,7 +120,7 @@ function LiquidButton({
           {children}
         </div>
         <GlassFilter />
-      </Comp>
+      </button>
     </>
   )
 }
@@ -315,11 +310,11 @@ export const MetalButton = React.forwardRef<
   const [isPressed, setIsPressed] = React.useState(false);
   const [isHovered, setIsHovered] = React.useState(false);
   const [isTouchDevice, setIsTouchDevice] = React.useState(false);
- 
+
   React.useEffect(() => {
     setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
   }, []);
- 
+
   const buttonText = children || "Button";
   const variants = metalButtonVariants(
     variant,
@@ -327,7 +322,7 @@ export const MetalButton = React.forwardRef<
     isHovered,
     isTouchDevice,
   );
- 
+
   const handleInternalMouseDown = () => {
     setIsPressed(true);
   };
@@ -352,7 +347,7 @@ export const MetalButton = React.forwardRef<
   const handleInternalTouchCancel = () => {
     setIsPressed(false);
   };
- 
+
   return (
     <div className={variants.wrapper} style={variants.wrapperStyle}>
       <div className={variants.inner} style={variants.innerStyle}></div>

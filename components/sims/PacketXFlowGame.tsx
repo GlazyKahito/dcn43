@@ -16,6 +16,7 @@ import {
   CheckCircle2,
   Radio,
 } from 'lucide-react';
+import { LiquidButton, MetalButton } from '../ui/liquid-glass-button';
 
 interface FlowNode {
   id: string;
@@ -357,24 +358,30 @@ export function PacketXFlowGame() {
           </button>
 
           {!isPlaying ? (
-            <button
+            <LiquidButton
               onClick={startGame}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#1f7a4d] hover:bg-[#34d399] text-white hover:text-[#050807] text-xs font-display tracking-wider font-bold transition-all shadow-[0_0_20px_rgba(52,211,153,0.3)] cursor-pointer"
+              size="default"
+              className="text-white hover:text-[#34d399] font-display text-xs"
             >
-              <Play className="w-4 h-4 fill-current" />
-              <span>{gameOver ? 'RETRY DEFENSE' : 'START SIMULATION'}</span>
-            </button>
+              <span className="flex items-center gap-2">
+                <Play className="w-4 h-4 fill-current text-[#34d399]" />
+                <span>{gameOver ? 'RETRY DEFENSE' : 'START SIMULATION'}</span>
+              </span>
+            </LiquidButton>
           ) : (
-            <button
+            <MetalButton
+              variant="error"
               onClick={() => {
                 setIsPlaying(false);
                 setGameOver(true);
               }}
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#f87171]/20 border border-[#f87171]/40 text-[#f87171] hover:bg-[#f87171]/30 text-xs font-display font-bold transition-colors cursor-pointer"
+              className="font-display text-xs font-bold h-9 px-4"
             >
-              <RotateCcw className="w-3.5 h-3.5" />
-              <span>ABORT</span>
-            </button>
+              <span className="flex items-center gap-1.5">
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>ABORT</span>
+              </span>
+            </MetalButton>
           )}
         </div>
       </div>
@@ -680,15 +687,18 @@ export function PacketXFlowGame() {
                 </p>
               </div>
 
-              {/* Big Glowing Arcade Start Button */}
-              <button
+              {/* Big Glowing Arcade Start Button with Liquid Glass */}
+              <LiquidButton
                 type="button"
+                size="xl"
                 onClick={startGame}
-                className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-[#34d399] hover:bg-white text-[#050807] font-display text-sm sm:text-base font-bold uppercase tracking-widest shadow-[0_0_35px_rgba(52,211,153,0.6)] transition-all transform hover:scale-105 active:scale-95 cursor-pointer crt-phosphor"
+                className="text-white hover:text-[#34d399] font-display text-sm sm:text-base font-bold uppercase tracking-widest cursor-pointer crt-phosphor"
               >
-                <Play className="w-5 h-5 fill-current" />
-                <span>{gameOver ? 'INSERT COIN / RETRY MISSION' : 'START NETFLOW MISSION'}</span>
-              </button>
+                <span className="flex items-center gap-3">
+                  <Play className="w-5 h-5 fill-current text-[#34d399]" />
+                  <span>{gameOver ? 'INSERT COIN / RETRY MISSION' : 'START NETFLOW MISSION'}</span>
+                </span>
+              </LiquidButton>
 
               <div className="flex flex-wrap items-center justify-center gap-3 text-[10px] font-mono text-[#78b496]/70 pt-2">
                 <span className="px-2.5 py-1 rounded bg-[#101713] border border-[#78b496]/20">

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { POST_TEST_QUESTIONS } from '../data/quiz';
 import { QuizModal } from './quiz/QuizModal';
 import { ChevronRight } from 'lucide-react';
+import { LiquidButton } from './ui/liquid-glass-button';
 
 export function PostTestCallout() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -29,17 +30,20 @@ export function PostTestCallout() {
             </p>
           </div>
 
-          <button
+          <LiquidButton
             type="button"
+            size="lg"
             onClick={(e) => {
               e.stopPropagation();
               setModalOpen(true);
             }}
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#1f7a4d] hover:bg-[#34d399] text-white hover:text-[#050807] text-xs sm:text-sm font-bold active:scale-95 transition-all shadow-[0_0_20px_rgba(52,211,153,0.25)] shrink-0 self-start sm:self-auto cursor-pointer z-10 font-sans"
+            className="text-white hover:text-[#34d399] font-sans shrink-0 self-start sm:self-auto cursor-pointer z-10"
           >
-            <span>Take Post-Test (10 MCQs)</span>
-            <ChevronRight className="w-4 h-4" />
-          </button>
+            <span className="flex items-center gap-2">
+              <span>Take Post-Test (10 MCQs)</span>
+              <ChevronRight className="w-4 h-4 text-[#34d399]" />
+            </span>
+          </LiquidButton>
         </div>
       </div>
 

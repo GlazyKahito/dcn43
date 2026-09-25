@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SilkRibbon } from './site/SilkRibbon';
 import { RollText } from './site/RollText';
+import { LiquidButton, MetalButton, Button } from './ui/liquid-glass-button';
 import { LAB_CONFIG } from '../lib/config';
 import {
   ArrowRight,
@@ -129,9 +130,11 @@ export function Hero() {
               </span>
             </div>
 
-            <button
+            <Button
+              variant="cool"
+              size="sm"
               onClick={copyCommand}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#101713] border border-[#78b496]/20 text-[#78b496] hover:text-white hover:border-[#34d399]/40 text-xs font-mono transition-all shrink-0 cursor-pointer"
+              className="inline-flex items-center gap-1.5 shrink-0 cursor-pointer font-mono text-xs text-[#34d399]"
               title="Copy test command"
             >
               {copied ? (
@@ -145,26 +148,39 @@ export function Hero() {
                   <span>Copy</span>
                 </>
               )}
-            </button>
+            </Button>
           </div>
 
-          {/* Action CTAs */}
+          {/* Action CTAs with Liquid Glass & Metal Buttons */}
           <div className="flex flex-wrap items-center gap-4 pt-1">
-            <a
-              href="#simulation"
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-[#1f7a4d] hover:bg-[#34d399] text-white hover:text-[#050807] text-xs sm:text-sm font-sans font-semibold tracking-wide border border-[#34d399]/40 shadow-[0_0_25px_rgba(52,211,153,0.3)] transition-all active:scale-95 group cursor-pointer"
+            <LiquidButton
+              type="button"
+              size="xl"
+              onClick={() => {
+                const el = document.getElementById('simulation');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="text-white hover:text-[#34d399] font-display cursor-pointer"
             >
-              <RollText text="Launch Simulator Suite" />
-              <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
-            </a>
+              <span className="flex items-center gap-2.5">
+                <span>Launch Simulator Suite</span>
+                <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1 text-[#34d399]" />
+              </span>
+            </LiquidButton>
 
-            <a
-              href="#minigame"
-              className="inline-flex items-center gap-2 px-5 py-3.5 rounded-xl bg-[#c8b27a]/15 hover:bg-[#c8b27a] text-[#c8b27a] hover:text-[#050807] text-xs sm:text-sm font-sans font-semibold tracking-wide border border-[#c8b27a]/40 shadow-[0_0_20px_rgba(200,178,122,0.2)] transition-all active:scale-95 group cursor-pointer"
+            <MetalButton
+              variant="gold"
+              onClick={() => {
+                const el = document.getElementById('minigame');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="cursor-pointer"
             >
-              <Gamepad2 className="w-4 h-4 text-[#c8b27a] group-hover:text-[#050807] transition-colors" />
-              <span>Play Arcade Mini-Game</span>
-            </a>
+              <span className="flex items-center gap-2 font-display text-xs">
+                <Gamepad2 className="w-4 h-4 text-[#c8b27a]" />
+                <span>Play Arcade Mini-Game</span>
+              </span>
+            </MetalButton>
 
             <a
               href="#theory"
@@ -309,14 +325,11 @@ export function Hero() {
                 </span>
               </div>
 
-              <button
+              <MetalButton
                 type="button"
+                variant={linkBroken ? "success" : "error"}
                 onClick={() => setLinkBroken(!linkBroken)}
-                className={`px-3 py-1.5 rounded-xl font-mono text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-sm ${
-                  linkBroken
-                    ? 'bg-[#1f7a4d] hover:bg-[#34d399] text-white hover:text-[#050807]'
-                    : 'bg-[#f87171]/20 border border-[#f87171]/40 text-[#f87171] hover:bg-[#f87171]/30'
-                }`}
+                className="font-mono text-xs font-bold flex items-center gap-1.5 h-8 px-3"
               >
                 {linkBroken ? (
                   <>
@@ -329,7 +342,7 @@ export function Hero() {
                     <span>Sever Cable</span>
                   </>
                 )}
-              </button>
+              </MetalButton>
             </div>
 
             {/* Live Packet Telemetry Stream */}

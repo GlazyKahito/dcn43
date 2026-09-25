@@ -19,6 +19,7 @@ import {
   ShieldCheck,
   ShieldAlert,
 } from 'lucide-react';
+import { LiquidButton, MetalButton } from '../ui/liquid-glass-button';
 
 interface OsiLayerCheck {
   layerNumber: number;
@@ -459,14 +460,17 @@ export function Simulation3OsiWalkthrough() {
               </button>
             </div>
 
-            <button
+            <LiquidButton
               onClick={stepForward}
               disabled={haltedAtFailure || currentStepIndex >= osiChecks.length - 1}
-              className="px-5 py-2 rounded-xl bg-[#1f7a4d] hover:bg-[#34d399] text-white hover:text-[#050807] text-xs font-bold transition-all disabled:opacity-40 cursor-pointer flex items-center gap-1.5 shadow-[0_0_15px_rgba(52,211,153,0.25)]"
+              size="default"
+              className="text-white hover:text-[#34d399] text-xs font-bold transition-all disabled:opacity-40 cursor-pointer"
             >
-              <span>Next Step</span>
-              <ChevronRight className="w-4 h-4" />
-            </button>
+              <span className="flex items-center gap-1.5">
+                <span>Next Step</span>
+                <ChevronRight className="w-4 h-4 text-[#34d399]" />
+              </span>
+            </LiquidButton>
           </div>
 
           {/* Speed slider */}

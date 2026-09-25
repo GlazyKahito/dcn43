@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { LAB_CONFIG } from '../lib/config';
 import { RollText } from './site/RollText';
+import { LiquidButton } from './ui/liquid-glass-button';
 import {
   ArrowRight,
   ChevronDown,
@@ -313,13 +314,6 @@ export function Header() {
               </a>
 
               <a
-                href="#ui-showcase"
-                className="px-3 py-1.5 rounded-xl text-xs font-medium text-[#34d399] hover:text-white bg-[#1f7a4d]/20 hover:bg-[#1f7a4d]/40 border border-[#34d399]/30 transition-all flex items-center gap-1.5 cursor-pointer"
-              >
-                <span>UI Showcase</span>
-              </a>
-
-              <a
                 href="#conclusion"
                 className="px-3.5 py-1.5 rounded-xl text-xs font-medium text-neutral-300 hover:text-white hover:bg-white/[0.05] transition-all"
               >
@@ -327,15 +321,22 @@ export function Header() {
               </a>
             </nav>
 
-            {/* Right Action Button */}
+            {/* Right Action Button with Liquid Glass */}
             <div className="flex items-center gap-3">
-              <a
-                href="#simulation"
-                className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-solid hover:bg-emerald-hover text-white text-xs font-semibold tracking-wide border border-emerald-glow/40 shadow-[0_0_15px_rgba(52,211,153,0.25)] transition-all active:scale-95 group cursor-pointer"
+              <LiquidButton
+                type="button"
+                onClick={() => {
+                  const el = document.getElementById('simulation');
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }}
+                size="default"
+                className="hidden sm:inline-flex text-white font-display text-xs cursor-pointer group"
               >
-                <span>Launch Lab</span>
-                <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
-              </a>
+                <span className="inline-flex items-center gap-2">
+                  <span>Launch Lab</span>
+                  <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5 text-[#34d399]" />
+                </span>
+              </LiquidButton>
 
               {/* Mobile menu trigger */}
               <button
@@ -385,13 +386,6 @@ export function Header() {
                 className="block py-2 text-xs font-medium text-[#c8b27a] font-bold"
               >
                 🎮 Packet X-Flow Mini-Game
-              </a>
-              <a
-                href="#ui-showcase"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block py-2 text-xs font-medium text-[#34d399]"
-              >
-                ✨ Liquid & Metal Buttons Showcase
               </a>
               <a
                 href="#post-test"

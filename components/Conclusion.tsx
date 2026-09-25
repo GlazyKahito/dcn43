@@ -4,6 +4,7 @@ import React from 'react';
 import { CheckCircle2, Check, ArrowUp, ExternalLink, ShieldCheck } from 'lucide-react';
 import { DotMatrixCube } from './site/DotMatrixCube';
 import { LAB_CONFIG } from '../lib/config';
+import { MetalButton } from './ui/liquid-glass-button';
 
 export function Conclusion() {
   const scrollToTop = () => {
@@ -115,13 +116,14 @@ export function Conclusion() {
                 <div className="text-[#78b496]/60 text-[11px]">Vidyavihar (East), Mumbai - 400 077, India</div>
               </div>
               <div className="pt-2">
-                <button
+                <MetalButton
+                  variant="success"
                   onClick={scrollToTop}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#101713] border border-[#78b496]/20 text-[#34d399] hover:text-white hover:border-[#34d399]/40 text-xs font-mono transition-colors cursor-pointer"
+                  className="font-mono text-xs h-8 px-3.5 flex items-center gap-2"
                 >
                   <ArrowUp className="w-3.5 h-3.5" />
                   <span>Back to Top</span>
-                </button>
+                </MetalButton>
               </div>
             </div>
           </div>
