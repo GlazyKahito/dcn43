@@ -14,9 +14,6 @@ import {
   Square,
   BookOpen,
   X,
-  ChevronDown,
-  RotateCcw,
-  Sparkles,
 } from 'lucide-react';
 
 interface TerminalProps {
@@ -141,7 +138,7 @@ export function Terminal({
         onHopActive?.(line.highlightDeviceId);
       }
 
-      const delay = Math.min(line.delayMs || 40, 350);
+      const delay = Math.min(line.delayMs || 35, 300);
       await new Promise((r) => setTimeout(r, delay));
     }
 
@@ -208,36 +205,36 @@ export function Terminal({
   return (
     <div
       onClick={focusInput}
-      className={`relative bg-[#0d0d0f] border border-neutral-800 rounded-[2rem] flex flex-col overflow-hidden shadow-2xl font-mono text-xs sm:text-sm ${className}`}
+      className={`relative bg-[#070c09] border border-[#78b496]/20 rounded-[2rem] flex flex-col overflow-hidden shadow-2xl font-mono text-xs sm:text-sm ${className}`}
     >
       {/* Terminal Title Bar */}
-      <div className="px-5 py-3.5 border-b border-neutral-800/90 flex flex-wrap items-center justify-between gap-3 bg-[#161617]/90 backdrop-blur-md select-none">
+      <div className="px-5 py-3 border-b border-[#78b496]/15 flex flex-wrap items-center justify-between gap-3 bg-[#0a0f0d]/90 backdrop-blur-md select-none">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5">
-            <span className="w-3 h-3 rounded-full bg-[#ff5f56] inline-block" />
-            <span className="w-3 h-3 rounded-full bg-[#ffbd2e] inline-block" />
-            <span className="w-3 h-3 rounded-full bg-[#27c93f] inline-block" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]/90 inline-block border border-[#ff5f56]" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]/90 inline-block border border-[#ffbd2e]" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f]/90 inline-block border border-[#27c93f]" />
           </div>
-          <div className="flex items-center gap-2 pl-2 border-l border-neutral-700/60 text-neutral-400 font-semibold text-xs">
-            <TerminalIcon className="w-3.5 h-3.5 text-[#2997ff]" />
-            <span>Virtual Terminal</span>
+          <div className="flex items-center gap-2 pl-2 border-l border-[#78b496]/20 text-[#78b496] font-display text-xs">
+            <TerminalIcon className="w-3.5 h-3.5 text-[#34d399]" />
+            <span>TERMINAL // EMULATOR</span>
           </div>
         </div>
 
         {/* Device Selector & Controls */}
         <div className="flex items-center gap-2 sm:gap-3">
           {allowDeviceSelect && (
-            <div className="flex items-center gap-1.5 bg-neutral-900 border border-neutral-800 px-2.5 py-1 rounded-xl">
-              <span className="text-[10px] uppercase font-bold text-neutral-500">From:</span>
+            <div className="flex items-center gap-1.5 bg-[#101713] border border-[#78b496]/20 px-2.5 py-1 rounded-xl">
+              <span className="text-[10px] uppercase font-bold text-[#78b496]/70">Node:</span>
               <select
                 value={currentDevice}
                 onChange={(e) => handleDeviceChange(e.target.value)}
-                className="bg-transparent text-white font-mono text-xs focus:outline-none cursor-pointer"
+                className="bg-transparent text-[#e8f2ec] font-mono text-xs focus:outline-none cursor-pointer"
               >
-                <option value="PC1" className="bg-[#161617] text-white">PC1 (192.168.1.10)</option>
-                <option value="PC2" className="bg-[#161617] text-white">PC2 (192.168.1.11)</option>
-                <option value="R1" className="bg-[#161617] text-white">R1 (Gateway)</option>
-                <option value="WEB" className="bg-[#161617] text-white">WEB (172.16.0.80)</option>
+                <option value="PC1" className="bg-[#0a0f0d] text-[#e8f2ec]">PC1 (192.168.1.10)</option>
+                <option value="PC2" className="bg-[#0a0f0d] text-[#e8f2ec]">PC2 (192.168.1.11)</option>
+                <option value="R1" className="bg-[#0a0f0d] text-[#e8f2ec]">R1 (Gateway)</option>
+                <option value="WEB" className="bg-[#0a0f0d] text-[#e8f2ec]">WEB (172.16.0.80)</option>
               </select>
             </div>
           )}
@@ -249,7 +246,7 @@ export function Terminal({
                 e.stopPropagation();
                 handleStop();
               }}
-              className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[#ff453a]/20 border border-[#ff453a]/40 text-[#ff453a] hover:bg-[#ff453a]/30 transition-colors text-xs font-semibold cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[#f87171]/20 border border-[#f87171]/40 text-[#f87171] hover:bg-[#f87171]/30 transition-colors text-xs font-semibold cursor-pointer"
             >
               <Square className="w-3 h-3 fill-current" />
               <span>Stop</span>
@@ -260,7 +257,7 @@ export function Terminal({
                 e.stopPropagation();
                 setShowCheatSheet(!showCheatSheet);
               }}
-              className="flex items-center gap-1 px-3 py-1 rounded-xl bg-neutral-800/60 border border-neutral-700 text-neutral-300 hover:text-white hover:bg-neutral-700 transition-colors text-xs cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[#1f7a4d]/20 border border-[#34d399]/30 text-[#34d399] hover:text-white hover:bg-[#1f7a4d]/40 transition-colors text-xs cursor-pointer font-sans"
             >
               <BookOpen className="w-3.5 h-3.5" />
               <span>Cheat Sheet</span>
@@ -273,15 +270,15 @@ export function Terminal({
       {showCheatSheet && (
         <div
           onClick={(e) => e.stopPropagation()}
-          className="bg-[#161617] border-b border-neutral-800 p-4 sm:p-5 text-xs select-text animate-in slide-in-from-top duration-200"
+          className="bg-[#0a0f0d] border-b border-[#78b496]/20 p-4 sm:p-5 text-xs select-text animate-in slide-in-from-top duration-200"
         >
           <div className="flex items-center justify-between mb-3">
-            <span className="font-bold text-[#2997ff] uppercase tracking-wider text-[11px]">
-              Command Quick Reference & Troubleshooting Guide
+            <span className="font-display text-[#34d399] uppercase tracking-wider text-[11px]">
+              Command Quick Reference & Diagnostics
             </span>
             <button
               onClick={() => setShowCheatSheet(false)}
-              className="text-neutral-400 hover:text-white p-1"
+              className="text-[#78b496]/70 hover:text-white p-1"
             >
               <X className="w-4 h-4" />
             </button>
@@ -294,13 +291,13 @@ export function Terminal({
                   setInputValue(item.example);
                   focusInput();
                 }}
-                className="p-2.5 rounded-xl border border-neutral-800 bg-neutral-900/60 hover:border-[#2997ff]/40 hover:bg-neutral-800/40 cursor-pointer transition-all"
+                className="p-2.5 rounded-xl border border-[#78b496]/15 bg-[#101713]/80 hover:border-[#34d399]/40 hover:bg-[#13231a] cursor-pointer transition-all"
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-white text-xs text-[#2997ff]">{item.cmd}</span>
-                  <span className="text-[10px] text-neutral-500 underline">Insert</span>
+                  <span className="font-bold text-[#34d399] text-xs font-mono">{item.cmd}</span>
+                  <span className="text-[10px] text-[#78b496]/60 underline">Insert</span>
                 </div>
-                <p className="text-[11px] text-neutral-400 mt-1 leading-snug">{item.question}</p>
+                <p className="text-[11px] text-[#78b496]/80 mt-1 leading-snug">{item.question}</p>
               </div>
             ))}
           </div>
@@ -308,14 +305,14 @@ export function Terminal({
       )}
 
       {/* Terminal Output Body */}
-      <div className="flex-1 p-5 sm:p-6 overflow-y-auto min-h-[300px] max-h-[460px] space-y-4 select-text leading-relaxed [scrollbar-width:thin] [scrollbar-color:#333_transparent]">
+      <div className="flex-1 p-5 sm:p-6 overflow-y-auto min-h-[300px] max-h-[460px] space-y-4 select-text leading-relaxed [scrollbar-width:thin] [scrollbar-color:#1a2e22_transparent]">
         {/* Welcome message */}
         {history.length === 0 && activeStreamingLines.length === 0 && (
-          <div className="text-neutral-500 space-y-1.5 py-2 font-mono text-xs">
-            <div>Microsoft Windows [Version 10.0.19045.3803]</div>
-            <div>(c) Network Diagnostics & Simulation Lab. All rights reserved.</div>
-            <div className="pt-2 text-neutral-400">
-              Type <span className="text-[#2997ff] font-bold">help</span> to view all commands, or click commands from the cheat sheet.
+          <div className="text-[#78b496]/60 space-y-1.5 py-2 font-mono text-xs">
+            <div>Somaiya Virtual Diagnostics Kernel [Version 10.0.19045]</div>
+            <div>(c) Network Diagnostics & Simulation Lab. Department of Computer Engineering.</div>
+            <div className="pt-2 text-[#78b496]/80">
+              Type <span className="text-[#34d399] font-bold">help</span> to view all commands, or click commands from the cheat sheet.
             </div>
           </div>
         )}
@@ -323,8 +320,8 @@ export function Terminal({
         {/* Prior history entries */}
         {history.map((entry) => (
           <div key={entry.id} className="space-y-1.5">
-            <div className="flex items-center gap-1.5 text-neutral-400">
-              <span className="text-[#2997ff] font-semibold">{entry.prompt}</span>
+            <div className="flex items-center gap-1.5 text-[#78b496]">
+              <span className="text-[#34d399] font-semibold">{entry.prompt}</span>
               <span className="text-white font-bold">{entry.input}</span>
             </div>
             <div className="space-y-0.5 pl-2 sm:pl-3">
@@ -333,16 +330,16 @@ export function Terminal({
                   key={lIdx}
                   className={`${
                     l.type === 'error'
-                      ? 'text-[#ff453a]'
+                      ? 'text-[#f87171]'
                       : l.type === 'success'
-                      ? 'text-[#30d158]'
+                      ? 'text-[#34d399]'
                       : l.type === 'warning'
-                      ? 'text-[#ff9f0a]'
+                      ? 'text-[#c8b27a]'
                       : l.type === 'header'
                       ? 'text-white font-semibold'
                       : l.type === 'info'
-                      ? 'text-[#2997ff]'
-                      : 'text-neutral-300'
+                      ? 'text-[#78b496]'
+                      : 'text-[#c9dccf]'
                   }`}
                 >
                   {l.text || '\u00A0'}
@@ -355,8 +352,8 @@ export function Terminal({
         {/* Currently streaming active command lines */}
         {isRunning && (
           <div className="space-y-1.5">
-            <div className="flex items-center gap-1.5 text-neutral-400">
-              <span className="text-[#2997ff] font-semibold">{getPrompt(currentDevice)}</span>
+            <div className="flex items-center gap-1.5 text-[#78b496]">
+              <span className="text-[#34d399] font-semibold">{getPrompt(currentDevice)}</span>
               <span className="text-white font-bold">{inputValue}</span>
             </div>
             <div className="space-y-0.5 pl-2 sm:pl-3">
@@ -365,16 +362,16 @@ export function Terminal({
                   key={lIdx}
                   className={`${
                     l.type === 'error'
-                      ? 'text-[#ff453a]'
+                      ? 'text-[#f87171]'
                       : l.type === 'success'
-                      ? 'text-[#30d158]'
+                      ? 'text-[#34d399]'
                       : l.type === 'warning'
-                      ? 'text-[#ff9f0a]'
+                      ? 'text-[#c8b27a]'
                       : l.type === 'header'
                       ? 'text-white font-semibold'
                       : l.type === 'info'
-                      ? 'text-[#2997ff]'
-                      : 'text-neutral-300'
+                      ? 'text-[#78b496]'
+                      : 'text-[#c9dccf]'
                   }`}
                 >
                   {l.text || '\u00A0'}
@@ -387,7 +384,7 @@ export function Terminal({
         {/* Active command line input prompt */}
         {!isRunning && (
           <div className="flex items-center gap-1.5 pt-1">
-            <span className="text-[#2997ff] font-semibold select-none">
+            <span className="text-[#34d399] font-semibold select-none">
               {getPrompt(currentDevice)}
             </span>
             <input

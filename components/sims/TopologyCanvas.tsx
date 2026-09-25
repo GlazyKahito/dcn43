@@ -7,11 +7,6 @@ import {
   Server,
   Network,
   Router,
-  WifiOff,
-  CheckCircle2,
-  AlertTriangle,
-  XCircle,
-  Settings,
   Globe,
   Radio,
 } from 'lucide-react';
@@ -65,51 +60,51 @@ export function TopologyCanvas({
   };
 
   const getDeviceStatusColor = (dev: Device) => {
-    if (dev.status === 'down') return { ring: 'border-[#ff453a] shadow-[0_0_15px_rgba(255,69,58,0.4)]', text: 'text-[#ff453a]' };
-    if (dev.status === 'misconfigured') return { ring: 'border-[#ff9f0a] shadow-[0_0_15px_rgba(255,159,10,0.4)]', text: 'text-[#ff9f0a]' };
-    return { ring: 'border-[#2997ff]/60 group-hover:border-[#2997ff] shadow-[0_0_15px_rgba(41,151,255,0.2)]', text: 'text-[#2997ff]' };
+    if (dev.status === 'down') return { ring: 'border-[#f87171] shadow-[0_0_15px_rgba(248,113,113,0.4)]', text: 'text-[#f87171]' };
+    if (dev.status === 'misconfigured') return { ring: 'border-[#c8b27a] shadow-[0_0_15px_rgba(200,178,122,0.4)]', text: 'text-[#c8b27a]' };
+    return { ring: 'border-[#34d399]/50 group-hover:border-[#34d399] shadow-[0_0_15px_rgba(52,211,153,0.2)]', text: 'text-[#34d399]' };
   };
 
   return (
-    <div className={`relative w-full bg-[#161617] border border-neutral-800 rounded-[2rem] p-4 sm:p-6 shadow-2xl overflow-hidden select-none ${className}`}>
-      {/* Subtle grid background */}
+    <div className={`relative w-full bg-[#0a0f0d] border border-[#78b496]/20 rounded-[2rem] p-4 sm:p-6 shadow-2xl overflow-hidden select-none ${className}`}>
+      {/* Subtle emerald grid background */}
       <div
         className="absolute inset-0 opacity-[0.04] pointer-events-none"
         style={{
           backgroundImage:
-            'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)',
-          backgroundSize: '32px 32px',
+            'linear-gradient(#34d399 1px, transparent 1px), linear-gradient(90deg, #34d399 1px, transparent 1px)',
+          backgroundSize: '28px 28px',
         }}
       />
 
       {/* Header bar of topology canvas */}
-      <div className="relative z-10 flex flex-wrap items-center justify-between gap-3 mb-2 px-2">
+      <div className="relative z-10 flex flex-wrap items-center justify-between gap-3 mb-2 px-1">
         <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-xl bg-[#2997ff]/10 border border-[#2997ff]/20 flex items-center justify-center text-[#2997ff]">
+          <div className="w-7 h-7 rounded-xl bg-[#1f7a4d]/20 border border-[#34d399]/30 flex items-center justify-center text-[#34d399]">
             <Radio className="w-4 h-4 animate-pulse" />
           </div>
           <div>
-            <h3 className="text-xs sm:text-sm font-semibold text-white tracking-tight">
+            <h3 className="text-xs sm:text-sm font-sans font-semibold text-[#e8f2ec] tracking-tight">
               Interactive Topology Map
             </h3>
-            <p className="text-[10px] font-mono text-neutral-400">
+            <p className="text-[10px] font-mono text-[#78b496]/80">
               LAN 192.168.1.0/24 &bull; WAN 10.0.0.0/30 &bull; Server DMZ 172.16.0.0/24
             </p>
           </div>
         </div>
 
         {/* Legend */}
-        <div className="flex items-center gap-3 text-[10px] font-mono text-neutral-400">
+        <div className="flex items-center gap-3 text-[10px] font-mono text-[#78b496]/80">
           <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-[#2997ff]"></span>
+            <span className="w-2 h-2 rounded-full bg-[#34d399] shadow-[0_0_6px_#34d399]"></span>
             <span>Online</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-[#ff9f0a]"></span>
+            <span className="w-2 h-2 rounded-full bg-[#c8b27a] shadow-[0_0_6px_#c8b27a]"></span>
             <span>Misconfigured</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-[#ff453a]"></span>
+            <span className="w-2 h-2 rounded-full bg-[#f87171] shadow-[0_0_6px_#f87171]"></span>
             <span>Down / Cut</span>
           </div>
         </div>
@@ -128,13 +123,13 @@ export function TopologyCanvas({
               <feComposite in="SourceGraphic" in2="blur" operator="over" />
             </filter>
             {/* Linear Gradients */}
-            <linearGradient id="link-grad-blue" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#2997ff" stopOpacity="0.8" />
-              <stop offset="100%" stopColor="#2997ff" stopOpacity="0.4" />
+            <linearGradient id="link-grad-emerald" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#34d399" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="#1f7a4d" stopOpacity="0.5" />
             </linearGradient>
             <linearGradient id="link-grad-red" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#ff453a" stopOpacity="0.9" />
-              <stop offset="100%" stopColor="#ff453a" stopOpacity="0.4" />
+              <stop offset="0%" stopColor="#f87171" stopOpacity="0.9" />
+              <stop offset="100%" stopColor="#b91c1c" stopOpacity="0.4" />
             </linearGradient>
           </defs>
 
@@ -177,12 +172,12 @@ export function TopologyCanvas({
                   y2={posB.y}
                   stroke={
                     isLinkDown
-                      ? '#ff453a'
+                      ? '#f87171'
                       : isLinkHighlighted
-                      ? '#30d158'
+                      ? '#34d399'
                       : isHovered
-                      ? '#2997ff'
-                      : '#262626'
+                      ? '#78b496'
+                      : '#1a2e22'
                   }
                   strokeWidth={isLinkHighlighted || isHovered ? '3.5' : '2'}
                   strokeDasharray={isLinkDown ? '6 6' : undefined}
@@ -193,7 +188,7 @@ export function TopologyCanvas({
                 {!isLinkDown && (
                   <circle
                     r="3.5"
-                    fill={isLinkHighlighted ? '#30d158' : '#2997ff'}
+                    fill={isLinkHighlighted ? '#34d399' : '#10b981'}
                     filter="url(#packet-glow)"
                   >
                     <animateMotion
@@ -208,7 +203,7 @@ export function TopologyCanvas({
                 {!isLinkDown && (
                   <circle
                     r="2.5"
-                    fill={isLinkHighlighted ? '#30d158' : '#2997ff'}
+                    fill={isLinkHighlighted ? '#34d399' : '#10b981'}
                     opacity="0.8"
                   >
                     <animateMotion
@@ -226,12 +221,12 @@ export function TopologyCanvas({
                       (posA.y + posB.y) / 2
                     })`}
                   >
-                    <circle r="12" fill="#ff453a" opacity="0.2" className="animate-ping" />
-                    <circle r="10" fill="#161617" stroke="#ff453a" strokeWidth="1.5" />
+                    <circle r="12" fill="#f87171" opacity="0.2" className="animate-ping" />
+                    <circle r="10" fill="#101713" stroke="#f87171" strokeWidth="1.5" />
                     <text
                       textAnchor="middle"
                       dy="3.5"
-                      fill="#ff453a"
+                      fill="#f87171"
                       fontSize="9"
                       fontWeight="bold"
                       fontFamily="monospace"
@@ -247,10 +242,10 @@ export function TopologyCanvas({
                     x={(posA.x + posB.x) / 2}
                     y={(posA.y + posB.y) / 2 - 12}
                     textAnchor="middle"
-                    fill="#fff"
+                    fill="#e8f2ec"
                     fontSize="9"
                     fontFamily="monospace"
-                    className="bg-black px-1"
+                    className="bg-[#050807] px-1"
                   >
                     {isLinkDown ? 'Click to Re-connect' : 'Click to Unplug Cable'}
                   </text>
@@ -264,7 +259,8 @@ export function TopologyCanvas({
             x="175"
             y="370"
             textAnchor="middle"
-            fill="#525252"
+            fill="#78b496"
+            opacity="0.5"
             fontSize="10"
             fontFamily="monospace"
             letterSpacing="0.15em"
@@ -275,7 +271,8 @@ export function TopologyCanvas({
             x="490"
             y="245"
             textAnchor="middle"
-            fill="#525252"
+            fill="#78b496"
+            opacity="0.5"
             fontSize="10"
             fontFamily="monospace"
             letterSpacing="0.15em"
@@ -286,7 +283,8 @@ export function TopologyCanvas({
             x="720"
             y="370"
             textAnchor="middle"
-            fill="#525252"
+            fill="#78b496"
+            opacity="0.5"
             fontSize="10"
             fontFamily="monospace"
             letterSpacing="0.15em"
@@ -326,17 +324,17 @@ export function TopologyCanvas({
             >
               {/* Outer pulsing ring for active hop */}
               {isActiveHop && (
-                <div className="absolute -inset-2.5 rounded-2xl sm:rounded-3xl border-2 border-[#30d158] animate-ping opacity-60 pointer-events-none" />
+                <div className="absolute -inset-2.5 rounded-2xl sm:rounded-3xl border-2 border-[#34d399] animate-ping opacity-60 pointer-events-none" />
               )}
 
               {/* Node Card Box */}
               <div
                 className={`w-12 h-12 sm:w-16 sm:h-16 rounded-2xl sm:rounded-3xl border transition-all duration-300 backdrop-blur-xl flex flex-col items-center justify-center relative overflow-hidden shadow-xl ${
                   isSelected
-                    ? 'border-[#2997ff] bg-neutral-900 ring-2 ring-[#2997ff]/40 scale-105'
+                    ? 'border-[#34d399] bg-[#14231b] ring-2 ring-[#34d399]/40 scale-105 shadow-[0_0_20px_rgba(52,211,153,0.25)]'
                     : isHighlighted
-                    ? 'border-[#30d158] bg-neutral-900/90 ring-2 ring-[#30d158]/40'
-                    : 'border-white/10 bg-neutral-900/70 hover:border-neutral-600 hover:scale-105'
+                    ? 'border-[#34d399] bg-[#101713]/90 ring-2 ring-[#34d399]/40'
+                    : 'border-[#78b496]/20 bg-[#101713]/80 hover:border-[#34d399]/50 hover:scale-105'
                 }`}
               >
                 {/* Subtle highlight sheen */}
@@ -349,28 +347,28 @@ export function TopologyCanvas({
                 {/* Status indicator dot */}
                 <div className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2">
                   {dev.status === 'down' ? (
-                    <span className="w-2 h-2 rounded-full bg-[#ff453a] block shadow-[0_0_8px_#ff453a]" />
+                    <span className="w-2 h-2 rounded-full bg-[#f87171] block shadow-[0_0_8px_#f87171]" />
                   ) : dev.status === 'misconfigured' ? (
-                    <span className="w-2 h-2 rounded-full bg-[#ff9f0a] block shadow-[0_0_8px_#ff9f0a]" />
+                    <span className="w-2 h-2 rounded-full bg-[#c8b27a] block shadow-[0_0_8px_#c8b27a]" />
                   ) : (
-                    <span className="w-2 h-2 rounded-full bg-[#30d158] block shadow-[0_0_8px_#30d158]" />
+                    <span className="w-2 h-2 rounded-full bg-[#34d399] block shadow-[0_0_8px_#34d399]" />
                   )}
                 </div>
               </div>
 
-              {/* Node Label & IP */}
+              {/* Node Label & IP with Home Video font */}
               <div className="mt-1.5 flex flex-col items-center text-center pointer-events-none">
-                <span className="text-[10px] sm:text-xs font-bold text-white tracking-wider uppercase font-mono">
+                <span className="text-[11px] sm:text-xs font-display text-[#e8f2ec] tracking-wider uppercase">
                   {id}
                 </span>
                 {ipDisplay && (
                   <span
                     className={`text-[9px] sm:text-[10px] font-mono leading-tight ${
                       dev.status === 'misconfigured'
-                        ? 'text-[#ff9f0a] font-semibold'
+                        ? 'text-[#c8b27a] font-semibold'
                         : dev.status === 'down'
-                        ? 'text-[#ff453a]'
-                        : 'text-neutral-400'
+                        ? 'text-[#f87171]'
+                        : 'text-[#78b496]/80'
                     }`}
                   >
                     {ipDisplay}

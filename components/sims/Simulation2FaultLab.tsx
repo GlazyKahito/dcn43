@@ -20,10 +20,8 @@ import {
   Wrench,
   Stethoscope,
   RotateCcw,
-  Sparkles,
   Award,
   Clock,
-  Terminal as TerminalIcon,
   ChevronRight,
   ShieldAlert,
 } from 'lucide-react';
@@ -214,40 +212,40 @@ export function Simulation2FaultLab() {
   return (
     <div className="w-full flex flex-col gap-6">
       {/* Simulation Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 sm:p-6 rounded-[2rem] bg-[#161617] border border-neutral-800 shadow-2xl">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 sm:p-6 rounded-[2rem] bg-[#0a0f0d] border border-[#78b496]/20 shadow-2xl">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-[11px] font-mono uppercase tracking-widest text-[#ff9f0a] font-semibold">
-              Simulation 02 • Core Lab Exercise
+            <span className="text-[11px] font-display uppercase tracking-widest text-[#c8b27a] font-bold">
+              SIMULATION 02 // CORE EXERCISE
             </span>
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#ff9f0a]/10 text-[#ff9f0a] border border-[#ff9f0a]/30">
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#c8b27a]/10 text-[#c8b27a] border border-[#c8b27a]/30">
               Interactive Triage
             </span>
           </div>
-          <h3 className="text-xl sm:text-2xl font-semibold tracking-tight text-white mt-1">
+          <h3 className="text-xl sm:text-2xl font-sans font-semibold tracking-tight text-[#e8f2ec] mt-1">
             Fault Injection & Root Cause Analysis
           </h3>
-          <p className="text-xs sm:text-sm text-neutral-400 mt-1 max-w-2xl">
+          <p className="text-xs sm:text-sm text-[#78b496]/80 mt-1 max-w-2xl font-sans">
             A network fault has silently disrupted communication. Review the user complaint, run diagnostic utilities from the terminal, formulate your theory, and deploy a fix.
           </p>
         </div>
 
         {/* Scorecard pill */}
-        <div className="flex items-center gap-4 bg-neutral-900/90 border border-neutral-800 p-3 sm:p-4 rounded-2xl shrink-0 self-start md:self-auto">
+        <div className="flex items-center gap-4 bg-[#101713] border border-[#78b496]/20 p-3 sm:p-4 rounded-2xl shrink-0 self-start md:self-auto">
           <div className="flex items-center gap-2">
-            <Award className="w-5 h-5 text-[#30d158]" />
+            <Award className="w-5 h-5 text-[#34d399]" />
             <div>
-              <span className="text-[10px] uppercase font-bold text-neutral-500 block">Solved</span>
+              <span className="text-[10px] uppercase font-display text-[#78b496]/70 block">Solved</span>
               <span className="text-base sm:text-lg font-bold text-white font-mono">
                 {totalSolved} / {FAULT_SCENARIOS.length}
               </span>
             </div>
           </div>
-          <div className="h-8 w-px bg-neutral-800" />
+          <div className="h-8 w-px bg-[#78b496]/20" />
           <div className="flex items-center gap-2">
-            <Clock className="w-5 h-5 text-[#2997ff]" />
+            <Clock className="w-5 h-5 text-[#34d399]" />
             <div>
-              <span className="text-[10px] uppercase font-bold text-neutral-500 block">Time</span>
+              <span className="text-[10px] uppercase font-display text-[#78b496]/70 block">Time</span>
               <span className="text-base sm:text-lg font-bold text-white font-mono">
                 {formatTime(secondsElapsed)}
               </span>
@@ -266,18 +264,18 @@ export function Simulation2FaultLab() {
             <button
               key={scen.id}
               onClick={() => selectScenario(idx)}
-              className={`px-4 py-2.5 rounded-2xl text-xs font-medium whitespace-nowrap transition-all flex items-center gap-2 border cursor-pointer ${
+              className={`px-4 py-2.5 rounded-2xl text-xs font-sans whitespace-nowrap transition-all flex items-center gap-2 border cursor-pointer ${
                 isActive
-                  ? 'bg-white text-black border-white shadow-lg scale-[1.02]'
+                  ? 'bg-[#1f7a4d] text-white border-[#34d399] shadow-[0_0_15px_rgba(52,211,153,0.25)] scale-[1.02]'
                   : isSolved
-                  ? 'bg-[#30d158]/10 border-[#30d158]/40 text-[#30d158] hover:bg-[#30d158]/20'
-                  : 'bg-[#161617] border-neutral-800 text-neutral-400 hover:text-white hover:border-neutral-700'
+                  ? 'bg-[#1f7a4d]/20 border-[#34d399]/40 text-[#34d399] hover:bg-[#1f7a4d]/30'
+                  : 'bg-[#101713] border-[#78b496]/15 text-[#78b496]/70 hover:text-white hover:border-[#78b496]/35'
               }`}
             >
               {isSolved ? (
-                <CheckCircle2 className="w-3.5 h-3.5" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#34d399]" />
               ) : (
-                <span className="font-mono text-[10px] font-bold">0{scen.number}</span>
+                <span className="font-display text-[10px] font-bold">0{scen.number}</span>
               )}
               <span>Fault 0{scen.number}</span>
             </button>
@@ -286,16 +284,16 @@ export function Simulation2FaultLab() {
       </div>
 
       {/* User Complaint Alert Card (NEVER reveals the cause!) */}
-      <div className="p-5 rounded-[1.75rem] border border-[#ff9f0a]/30 bg-[#ff9f0a]/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="p-5 rounded-[1.75rem] border border-[#c8b27a]/30 bg-[#c8b27a]/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-start gap-3.5">
-          <div className="w-9 h-9 rounded-2xl bg-[#ff9f0a]/10 border border-[#ff9f0a]/30 flex items-center justify-center text-[#ff9f0a] shrink-0 mt-0.5">
+          <div className="w-9 h-9 rounded-2xl bg-[#c8b27a]/20 border border-[#c8b27a]/40 flex items-center justify-center text-[#c8b27a] shrink-0 mt-0.5">
             <ShieldAlert className="w-5 h-5" />
           </div>
           <div>
-            <div className="text-[10px] font-mono uppercase tracking-widest text-[#ff9f0a] font-bold">
-              User Trouble Ticket • Complaint #{currentScenario.number}
+            <div className="text-[10px] font-display uppercase tracking-widest text-[#c8b27a] font-bold">
+              Trouble Ticket // Incident #{currentScenario.number}
             </div>
-            <p className="text-sm sm:text-base text-zinc-100 font-medium mt-1 italic">
+            <p className="text-sm sm:text-base text-[#e8f2ec] font-sans font-medium mt-1 italic">
               &ldquo;{currentScenario.userComplaint}&rdquo;
             </p>
           </div>
@@ -304,10 +302,10 @@ export function Simulation2FaultLab() {
         <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
           <button
             onClick={() => handleCommandExecuted(currentScenario.recommendedCommand)}
-            className="px-3.5 py-1.5 rounded-xl bg-neutral-900 border border-neutral-700 text-neutral-300 hover:text-white text-xs font-mono transition-colors cursor-pointer flex items-center gap-1.5"
+            className="px-3.5 py-1.5 rounded-xl bg-[#101713] border border-[#78b496]/20 text-[#c9dccf] hover:text-white text-xs font-mono transition-colors cursor-pointer flex items-center gap-1.5 hover:border-[#34d399]/40"
             title="Hint: Recommended first diagnostic command"
           >
-            <HelpCircle className="w-3.5 h-3.5 text-[#2997ff]" />
+            <HelpCircle className="w-3.5 h-3.5 text-[#34d399]" />
             <span>Hint: Run {currentScenario.recommendedCommand}</span>
           </button>
         </div>
@@ -332,9 +330,9 @@ export function Simulation2FaultLab() {
             className="flex-1"
           />
 
-          <div className="text-[11px] font-mono text-neutral-400 bg-[#161617] border border-neutral-800 p-3.5 rounded-2xl flex items-center justify-between">
-            <span>Click any node to inspect/reconfigure. Click cables to disconnect/reconnect.</span>
-            <span className="text-[#2997ff] font-semibold">Editable Canvas</span>
+          <div className="text-[11px] font-mono text-[#78b496]/80 bg-[#0a0f0d] border border-[#78b496]/20 p-3.5 rounded-2xl flex items-center justify-between">
+            <span>Click any node to reconfigure. Click cables to disconnect/reconnect.</span>
+            <span className="text-[#34d399] font-display">EDITABLE_GRID</span>
           </div>
         </div>
 
@@ -353,16 +351,16 @@ export function Simulation2FaultLab() {
       {/* Triage & Resolution Split: Step A: Diagnose | Step B: Fix it */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Step A: Formulate Theory & Diagnose */}
-        <div className="lg:col-span-7 bg-[#161617] border border-neutral-800 rounded-[2rem] p-6 shadow-2xl flex flex-col gap-5">
-          <div className="flex items-center gap-2.5 pb-2 border-b border-neutral-800">
-            <span className="p-2 rounded-xl bg-[#2997ff]/10 text-[#2997ff]">
+        <div className="lg:col-span-7 bg-[#0a0f0d] border border-[#78b496]/20 rounded-[2rem] p-6 shadow-2xl flex flex-col gap-5">
+          <div className="flex items-center gap-2.5 pb-2 border-b border-[#78b496]/20">
+            <span className="p-2 rounded-xl bg-[#1f7a4d]/20 text-[#34d399] border border-[#34d399]/30">
               <Stethoscope className="w-5 h-5" />
             </span>
             <div>
-              <h4 className="text-base font-bold text-white tracking-tight">
+              <h4 className="text-base font-sans font-semibold text-white tracking-tight">
                 Step 1: Submit Your Formal Diagnosis
               </h4>
-              <p className="text-xs text-neutral-400">
+              <p className="text-xs text-[#78b496]/80">
                 Identify the layer, faulty device, and root cause based on command telemetry.
               </p>
             </div>
@@ -372,13 +370,13 @@ export function Simulation2FaultLab() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Faulty Layer Dropdown */}
               <div className="space-y-1.5">
-                <label className="text-[11px] font-mono uppercase tracking-wider text-neutral-400 font-semibold block">
+                <label className="text-[11px] font-display uppercase tracking-wider text-[#78b496] font-semibold block">
                   Faulty Layer
                 </label>
                 <select
                   value={selectedLayer}
                   onChange={(e) => setSelectedLayer(e.target.value)}
-                  className="w-full bg-neutral-900 border border-neutral-700/80 rounded-xl px-3 py-2.5 text-xs text-white font-mono focus:border-[#2997ff] focus:outline-none cursor-pointer"
+                  className="w-full bg-[#101713] border border-[#78b496]/25 rounded-xl px-3 py-2.5 text-xs text-white font-mono focus:border-[#34d399] focus:outline-none cursor-pointer"
                   required
                 >
                   <option value="">Select OSI Layer...</option>
@@ -392,13 +390,13 @@ export function Simulation2FaultLab() {
 
               {/* Faulty Device Dropdown */}
               <div className="space-y-1.5">
-                <label className="text-[11px] font-mono uppercase tracking-wider text-neutral-400 font-semibold block">
+                <label className="text-[11px] font-display uppercase tracking-wider text-[#78b496] font-semibold block">
                   Faulty Device / Link
                 </label>
                 <select
                   value={selectedDevice}
                   onChange={(e) => setSelectedDevice(e.target.value)}
-                  className="w-full bg-neutral-900 border border-neutral-700/80 rounded-xl px-3 py-2.5 text-xs text-white font-mono focus:border-[#2997ff] focus:outline-none cursor-pointer"
+                  className="w-full bg-[#101713] border border-[#78b496]/25 rounded-xl px-3 py-2.5 text-xs text-white font-mono focus:border-[#34d399] focus:outline-none cursor-pointer"
                   required
                 >
                   <option value="">Select Device...</option>
@@ -415,13 +413,13 @@ export function Simulation2FaultLab() {
 
             {/* Root Cause Dropdown */}
             <div className="space-y-1.5">
-              <label className="text-[11px] font-mono uppercase tracking-wider text-neutral-400 font-semibold block">
+              <label className="text-[11px] font-display uppercase tracking-wider text-[#78b496] font-semibold block">
                 Probable Root Cause
               </label>
               <select
                 value={selectedCause}
                 onChange={(e) => setSelectedCause(e.target.value)}
-                className="w-full bg-neutral-900 border border-neutral-700/80 rounded-xl px-3 py-2.5 text-xs text-white font-mono focus:border-[#2997ff] focus:outline-none cursor-pointer"
+                className="w-full bg-[#101713] border border-[#78b496]/25 rounded-xl px-3 py-2.5 text-xs text-white font-mono focus:border-[#34d399] focus:outline-none cursor-pointer"
                 required
               >
                 <option value="">Select Root Cause...</option>
@@ -435,7 +433,7 @@ export function Simulation2FaultLab() {
 
             <button
               type="submit"
-              className="w-full py-3 rounded-xl bg-white text-black font-semibold text-xs tracking-wider uppercase hover:bg-neutral-200 transition-all cursor-pointer flex items-center justify-center gap-2"
+              className="w-full py-3 rounded-xl bg-[#1f7a4d] text-white hover:bg-[#34d399] hover:text-[#050807] font-semibold text-xs tracking-wider uppercase transition-all cursor-pointer flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(52,211,153,0.2)]"
             >
               <span>Submit Diagnostic Verdict</span>
               <ChevronRight className="w-4 h-4" />
@@ -447,36 +445,36 @@ export function Simulation2FaultLab() {
             <div
               className={`p-4 rounded-2xl border text-xs space-y-3 animate-in fade-in duration-200 ${
                 diagnosisFeedback.isCorrect
-                  ? 'bg-[#30d158]/10 border-[#30d158]/30 text-zinc-200'
-                  : 'bg-[#ff453a]/10 border-[#ff453a]/30 text-zinc-200'
+                  ? 'bg-[#1f7a4d]/20 border-[#34d399]/40 text-[#e8f2ec]'
+                  : 'bg-[#f87171]/15 border-[#f87171]/40 text-[#e8f2ec]'
               }`}
             >
               <div className="flex items-center gap-2 font-bold text-sm">
                 {diagnosisFeedback.isCorrect ? (
                   <>
-                    <CheckCircle2 className="w-5 h-5 text-[#30d158]" />
-                    <span className="text-[#30d158]">Diagnosis Correct!</span>
+                    <CheckCircle2 className="w-5 h-5 text-[#34d399]" />
+                    <span className="text-[#34d399]">Diagnosis Correct!</span>
                   </>
                 ) : (
                   <>
-                    <XCircle className="w-5 h-5 text-[#ff453a]" />
-                    <span className="text-[#ff453a]">Diagnosis Needs Revision</span>
+                    <XCircle className="w-5 h-5 text-[#f87171]" />
+                    <span className="text-[#f87171]">Diagnosis Needs Revision</span>
                   </>
                 )}
               </div>
-              <p className="text-zinc-300">{diagnosisFeedback.message}</p>
+              <p className="text-[#c9dccf]">{diagnosisFeedback.message}</p>
 
               {/* Diagnostic Commands Evaluated */}
               {diagnosisFeedback.diagnosticCommandsUsed.length > 0 && (
                 <div className="pt-1">
-                  <span className="text-[10px] font-mono text-neutral-400 uppercase tracking-wider block mb-1">
-                    Diagnostic Telemetry Run by You:
+                  <span className="text-[10px] font-display text-[#78b496] uppercase tracking-wider block mb-1">
+                    Telemetry Invocations:
                   </span>
                   <div className="flex flex-wrap gap-1.5">
                     {diagnosisFeedback.diagnosticCommandsUsed.map((cmd, i) => (
                       <span
                         key={i}
-                        className="px-2 py-0.5 rounded bg-black/40 border border-neutral-700 font-mono text-[10px] text-[#2997ff]"
+                        className="px-2 py-0.5 rounded bg-[#101713] border border-[#78b496]/20 font-mono text-[10px] text-[#34d399]"
                       >
                         {cmd}
                       </span>
@@ -487,11 +485,11 @@ export function Simulation2FaultLab() {
 
               {/* Reveal Reasoning Chain */}
               {diagnosisFeedback.isCorrect && (
-                <div className="pt-2 border-t border-neutral-800 space-y-1.5">
-                  <span className="text-[10px] font-mono text-[#30d158] font-bold uppercase tracking-wider block">
+                <div className="pt-2 border-t border-[#78b496]/20 space-y-1.5">
+                  <span className="text-[10px] font-display text-[#34d399] font-bold uppercase tracking-wider block">
                     Diagnostic Reasoning Chain:
                   </span>
-                  <ul className="space-y-1 pl-4 list-disc text-zinc-300">
+                  <ul className="space-y-1 pl-4 list-disc text-[#c9dccf]">
                     {currentScenario.reasoningChain.map((step, i) => (
                       <li key={i}>{step}</li>
                     ))}
@@ -503,33 +501,33 @@ export function Simulation2FaultLab() {
         </div>
 
         {/* Step B: Implement Fix & Verify */}
-        <div className="lg:col-span-5 bg-[#161617] border border-neutral-800 rounded-[2rem] p-6 shadow-2xl flex flex-col justify-between gap-5">
+        <div className="lg:col-span-5 bg-[#0a0f0d] border border-[#78b496]/20 rounded-[2rem] p-6 shadow-2xl flex flex-col justify-between gap-5">
           <div className="space-y-4">
-            <div className="flex items-center gap-2.5 pb-2 border-b border-neutral-800">
-              <span className="p-2 rounded-xl bg-[#30d158]/10 text-[#30d158]">
+            <div className="flex items-center gap-2.5 pb-2 border-b border-[#78b496]/20">
+              <span className="p-2 rounded-xl bg-[#1f7a4d]/20 text-[#34d399] border border-[#34d399]/30">
                 <Wrench className="w-5 h-5" />
               </span>
               <div>
-                <h4 className="text-base font-bold text-white tracking-tight">
+                <h4 className="text-base font-sans font-semibold text-white tracking-tight">
                   Step 2: Deploy Fix & Verify
                 </h4>
-                <p className="text-xs text-neutral-400">
+                <p className="text-xs text-[#78b496]/80">
                   Adjust configuration or cabling, then re-test against the live model.
                 </p>
               </div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-neutral-900 border border-neutral-800 space-y-2 text-xs">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 block font-semibold">
+            <div className="p-4 rounded-2xl bg-[#101713] border border-[#78b496]/20 space-y-2 text-xs">
+              <span className="text-[10px] font-display uppercase tracking-wider text-[#78b496] block font-semibold">
                 Available Fix Actions:
               </span>
-              <ul className="space-y-1.5 text-neutral-300">
+              <ul className="space-y-1.5 text-[#c9dccf]">
                 <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#2997ff]"></span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#34d399]"></span>
                   <span>Click nodes on canvas to edit IP, mask, or gateway</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#2997ff]"></span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#34d399]"></span>
                   <span>Click cables on canvas to re-plug severed links</span>
                 </li>
               </ul>
@@ -539,14 +537,14 @@ export function Simulation2FaultLab() {
               <button
                 type="button"
                 onClick={handleQuickFix}
-                className="flex-1 py-2.5 rounded-xl bg-neutral-800/80 border border-neutral-700 text-neutral-300 hover:text-white text-xs font-mono transition-colors cursor-pointer"
+                className="flex-1 py-2.5 rounded-xl bg-[#101713] border border-[#78b496]/20 text-[#c9dccf] hover:text-white hover:border-[#34d399]/40 text-xs font-mono transition-colors cursor-pointer"
               >
                 Apply Standard Patch
               </button>
               <button
                 type="button"
                 onClick={() => setTopology(currentScenario.apply(createDefaultTopology()))}
-                className="px-3.5 py-2.5 rounded-xl bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-white text-xs font-mono transition-colors cursor-pointer"
+                className="px-3.5 py-2.5 rounded-xl bg-[#101713] border border-[#78b496]/20 text-[#78b496] hover:text-white text-xs font-mono transition-colors cursor-pointer"
                 title="Reset scenario state"
               >
                 <RotateCcw className="w-4 h-4" />
@@ -556,14 +554,14 @@ export function Simulation2FaultLab() {
 
           <div className="space-y-3">
             {verifyStatus === 'success' && (
-              <div className="p-3.5 rounded-xl bg-[#30d158]/10 border border-[#30d158]/30 text-[#30d158] flex items-center gap-2 text-xs font-bold">
+              <div className="p-3.5 rounded-xl bg-[#1f7a4d]/20 border border-[#34d399]/40 text-[#34d399] flex items-center gap-2 text-xs font-bold">
                 <CheckCircle2 className="w-4 h-4" />
                 <span>Verification Succeeded! Scenario {currentScenario.number} Solved.</span>
               </div>
             )}
 
             {verifyStatus === 'fail' && (
-              <div className="p-3.5 rounded-xl bg-[#ff453a]/10 border border-[#ff453a]/30 text-[#ff453a] flex items-center gap-2 text-xs font-bold">
+              <div className="p-3.5 rounded-xl bg-[#f87171]/20 border border-[#f87171]/40 text-[#f87171] flex items-center gap-2 text-xs font-bold">
                 <XCircle className="w-4 h-4" />
                 <span>Verification Failed! Fault condition still exists.</span>
               </div>
@@ -571,7 +569,7 @@ export function Simulation2FaultLab() {
 
             <button
               onClick={handleVerifyFix}
-              className="w-full py-3.5 rounded-xl bg-[#30d158] text-black font-bold text-xs tracking-wider uppercase hover:bg-[#30d158]/90 transition-all cursor-pointer flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(48,209,88,0.25)]"
+              className="w-full py-3.5 rounded-xl bg-[#1f7a4d] hover:bg-[#34d399] text-white hover:text-[#050807] font-bold text-xs tracking-wider uppercase transition-all cursor-pointer flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(52,211,153,0.25)]"
             >
               <CheckCircle2 className="w-4 h-4" />
               <span>Verify Fix & Test Path</span>
@@ -589,16 +587,16 @@ export function Simulation2FaultLab() {
 
       {/* Device Config Edit Modal */}
       {fixModalDevice && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="w-full max-w-md bg-[#161617] border border-neutral-800 rounded-[2rem] p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-neutral-800">
-              <h4 className="text-base font-bold text-white font-mono flex items-center gap-2">
-                <Wrench className="w-4 h-4 text-[#2997ff]" />
-                <span>Edit Configuration: {fixModalDevice.id}</span>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="w-full max-w-md bg-[#0a0f0d] border border-[#78b496]/30 rounded-[2rem] p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-[#78b496]/20">
+              <h4 className="text-base font-display text-white flex items-center gap-2">
+                <Wrench className="w-4 h-4 text-[#34d399]" />
+                <span>EDIT NODE: {fixModalDevice.id}</span>
               </h4>
               <button
                 onClick={() => setFixModalDevice(null)}
-                className="text-neutral-400 hover:text-white p-1"
+                className="text-[#78b496]/70 hover:text-white p-1"
               >
                 &times;
               </button>
@@ -606,7 +604,7 @@ export function Simulation2FaultLab() {
 
             <div className="space-y-3 text-xs font-mono">
               <div className="space-y-1">
-                <label className="text-neutral-400">IPv4 Address:</label>
+                <label className="text-[#78b496]/80">IPv4 Address:</label>
                 <input
                   type="text"
                   value={fixModalDevice.interfaces[0]?.ip || ''}
@@ -615,12 +613,12 @@ export function Simulation2FaultLab() {
                     if (next.interfaces[0]) next.interfaces[0].ip = e.target.value;
                     setFixModalDevice(next);
                   }}
-                  className="w-full bg-neutral-900 border border-neutral-700 rounded-xl px-3 py-2 text-white font-mono"
+                  className="w-full bg-[#101713] border border-[#78b496]/20 rounded-xl px-3 py-2 text-white font-mono focus:border-[#34d399]"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-neutral-400">Subnet Mask:</label>
+                <label className="text-[#78b496]/80">Subnet Mask:</label>
                 <input
                   type="text"
                   value={fixModalDevice.interfaces[0]?.mask || ''}
@@ -629,12 +627,12 @@ export function Simulation2FaultLab() {
                     if (next.interfaces[0]) next.interfaces[0].mask = e.target.value;
                     setFixModalDevice(next);
                   }}
-                  className="w-full bg-neutral-900 border border-neutral-700 rounded-xl px-3 py-2 text-white font-mono"
+                  className="w-full bg-[#101713] border border-[#78b496]/20 rounded-xl px-3 py-2 text-white font-mono focus:border-[#34d399]"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-neutral-400">Default Gateway:</label>
+                <label className="text-[#78b496]/80">Default Gateway:</label>
                 <input
                   type="text"
                   value={fixModalDevice.defaultGateway || ''}
@@ -644,12 +642,12 @@ export function Simulation2FaultLab() {
                       defaultGateway: e.target.value,
                     });
                   }}
-                  className="w-full bg-neutral-900 border border-neutral-700 rounded-xl px-3 py-2 text-white font-mono"
+                  className="w-full bg-[#101713] border border-[#78b496]/20 rounded-xl px-3 py-2 text-white font-mono focus:border-[#34d399]"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-neutral-400">DNS Server:</label>
+                <label className="text-[#78b496]/80">DNS Server:</label>
                 <input
                   type="text"
                   value={fixModalDevice.dnsServer || ''}
@@ -659,23 +657,23 @@ export function Simulation2FaultLab() {
                       dnsServer: e.target.value,
                     });
                   }}
-                  className="w-full bg-neutral-900 border border-neutral-700 rounded-xl px-3 py-2 text-white font-mono"
+                  className="w-full bg-[#101713] border border-[#78b496]/20 rounded-xl px-3 py-2 text-white font-mono focus:border-[#34d399]"
                 />
               </div>
             </div>
 
-            <div className="pt-3 flex justify-end gap-2 border-t border-neutral-800">
+            <div className="pt-3 flex justify-end gap-2 border-t border-[#78b496]/20">
               <button
                 type="button"
                 onClick={() => setFixModalDevice(null)}
-                className="px-4 py-2 rounded-xl bg-neutral-800 text-neutral-300 text-xs font-bold hover:bg-neutral-700"
+                className="px-4 py-2 rounded-xl bg-[#101713] text-[#78b496] text-xs font-bold hover:bg-[#13231a] hover:text-white"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={() => handleSaveDeviceEdit(fixModalDevice)}
-                className="px-5 py-2 rounded-xl bg-[#2997ff] text-white text-xs font-bold hover:bg-[#2997ff]/90"
+                className="px-5 py-2 rounded-xl bg-[#1f7a4d] text-white text-xs font-bold hover:bg-[#34d399] hover:text-[#050807] transition-colors"
               >
                 Save Changes
               </button>

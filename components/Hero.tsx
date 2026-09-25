@@ -1,244 +1,217 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
+import { SilkRibbon } from './site/SilkRibbon';
+import { RollText } from './site/RollText';
+import { LAB_CONFIG } from '../lib/config';
 import {
-  AlertTriangle,
+  ArrowRight,
   ArrowDown,
-  Layers,
-  Terminal,
   Activity,
-  CheckCircle2,
-  XCircle,
+  Terminal,
   WifiOff,
+  AlertTriangle,
+  CheckCircle2,
+  Layers,
 } from 'lucide-react';
 
 export function Hero() {
-  const [bootPhase, setBootPhase] = useState<'booting' | 'beat1' | 'beat2'>('booting');
-  const [linkFailing, setLinkFailing] = useState<boolean>(false);
+  const [linkBroken, setLinkBroken] = useState(false);
 
   useEffect(() => {
-    // 1. Initial boot up sequence
-    const t1 = setTimeout(() => {
-      setBootPhase('beat1');
-    }, 1200);
-
-    // 2. Link fails and packets start dropping
-    const t2 = setTimeout(() => {
-      setLinkFailing(true);
-    }, 3200);
-
-    return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-    };
+    // Break the link after 2.8s to show packet drop
+    const timer = setTimeout(() => {
+      setLinkBroken(true);
+    }, 2800);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
-    <div id="hero-section" className="relative w-full min-h-[95vh] bg-[#030305] flex flex-col items-center justify-center overflow-hidden px-4 py-16 sm:py-24">
-      {/* Background radial glow & grid */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(41,151,255,0.08)_0%,transparent_70%)] pointer-events-none" />
-      <div
-        className="absolute inset-0 opacity-[0.03] pointer-events-none"
-        style={{
-          backgroundImage:
-            'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
-        }}
-      />
+    <section className="relative w-full min-h-[92vh] flex items-center overflow-hidden px-4 sm:px-6 lg:px-8 pt-10 pb-16">
+      {/* Background Radial Glow */}
+      <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-emerald-glow/5 rounded-full blur-[140px] pointer-events-none" />
 
-      {/* Booting Phase Screen */}
-      <AnimatePresence>
-        {bootPhase === 'booting' && (
-          <motion.div
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center space-y-4"
-          >
-            <div className="flex items-center gap-3">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#2997ff] animate-ping" />
-              <span className="font-mono text-xs sm:text-sm uppercase tracking-[0.25em] text-neutral-400">
-                Bringing up interfaces & topology...
-              </span>
-            </div>
-            <div className="w-48 h-1 bg-neutral-900 rounded-full overflow-hidden">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: '100%' }}
-                transition={{ duration: 1.1, ease: 'easeInOut' }}
-                className="h-full bg-[#2997ff]"
+      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center z-10">
+        {/* Left Column: Headline, Pill, Subhead, CTAs */}
+        <div className="lg:col-span-7 flex flex-col items-start text-left space-y-6 max-w-2xl">
+          {/* Institutional Pill Badge */}
+          <div className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-[#0d1410] border border-hairline-bright shadow-sm">
+            <div className="w-5 h-5 rounded-full bg-white flex items-center justify-center p-0.5 overflow-hidden shrink-0">
+              <Image
+                src="/somaiya-logo.png"
+                alt="Somaiya Emblem"
+                width={20}
+                height={20}
+                className="w-full h-full object-contain"
               />
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <div className="relative z-10 max-w-5xl mx-auto w-full flex flex-col items-center text-center space-y-10">
-        {/* Network Mini-Topology Canvas */}
-        <div className="relative w-full max-w-xl mx-auto h-40 sm:h-48 bg-[#161617]/80 border border-neutral-800 rounded-[2rem] p-6 shadow-2xl backdrop-blur-xl flex items-center justify-between px-8 sm:px-14 overflow-hidden">
-          {/* Subtle grid in topology card */}
-          <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]" />
-
-          {/* Node 1: Workstation */}
-          <div className="flex flex-col items-center gap-2 z-10">
-            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-neutral-900 border border-white/10 flex items-center justify-center text-[#2997ff] shadow-lg">
-              <Terminal className="w-6 h-6" />
-            </div>
-            <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-400">
-              Host PC1
+            <span className="text-[11px] font-homevideo text-[#34d399] tracking-wider uppercase">
+              {LAB_CONFIG.institutionShort} &bull; EXP {LAB_CONFIG.experimentNumber}
             </span>
           </div>
 
-          {/* Link 1: PC1 to Router R1 */}
-          <div className="flex-1 h-0.5 relative mx-2 sm:mx-4 bg-neutral-800 overflow-visible">
-            <div className="absolute inset-0 bg-[#2997ff]/40" />
-            {/* Packet animation */}
-            <motion.div
-              animate={{ left: ['0%', '100%'] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
-              className="absolute top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#2997ff] shadow-[0_0_8px_#2997ff]"
-            />
+          {/* Large Two-Tone Headline */}
+          <div className="space-y-1">
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[1.08]">
+              The network is down.
+            </h1>
+            <h2 className="text-3xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-neutral-400 leading-[1.1]">
+              Know what you&apos;re looking at.
+            </h2>
           </div>
 
-          {/* Node 2: Core Router */}
-          <div className="flex flex-col items-center gap-2 z-10">
-            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-neutral-900 border border-white/10 flex items-center justify-center text-white shadow-lg">
-              <Activity className="w-6 h-6 text-neutral-300" />
-            </div>
-            <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-400">
-              Router R1
-            </span>
+          {/* Muted Descriptive Paragraph */}
+          <p className="text-sm sm:text-base text-neutral-300 font-normal leading-relaxed max-w-xl">
+            Troubleshooting is a method, not a guess. Step systematically through physical link carrier status, Layer 2 ARP resolution, Layer 3 gateway routing, and Transport firewalls in a live in-memory simulator.
+          </p>
+
+          {/* Action CTAs */}
+          <div className="flex flex-wrap items-center gap-4 pt-2">
+            <a
+              href="#simulation"
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-emerald-solid hover:bg-emerald-hover text-white text-xs sm:text-sm font-semibold tracking-wide border border-emerald-glow/40 shadow-[0_0_25px_rgba(52,211,153,0.3)] transition-all active:scale-95 group cursor-pointer"
+            >
+              <RollText text="Start the simulation" />
+              <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
+            </a>
+
+            <a
+              href="#theory"
+              className="inline-flex items-center gap-1.5 px-4 py-3 text-xs sm:text-sm font-medium text-neutral-400 hover:text-white transition-colors cursor-pointer group"
+            >
+              <span>Read the theory</span>
+              <ArrowDown className="w-4 h-4 text-[#34d399] transition-transform duration-200 group-hover:translate-y-0.5" />
+            </a>
           </div>
 
-          {/* Link 2: R1 to Web Server (FAILS AND GOES RED!) */}
-          <div className="flex-1 h-0.5 relative mx-2 sm:mx-4 bg-neutral-800 overflow-visible">
-            <div
-              className={`absolute inset-0 transition-colors duration-700 ${
-                linkFailing ? 'bg-[#ff453a]' : 'bg-[#2997ff]/40'
-              }`}
-            />
-            {/* Packet dropping effect */}
-            {!linkFailing ? (
-              <motion.div
-                animate={{ left: ['0%', '100%'] }}
-                transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
-                className="absolute top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#2997ff] shadow-[0_0_8px_#2997ff]"
-              />
-            ) : (
-              <motion.div
-                animate={{ left: ['0%', '50%'], opacity: [1, 0], scale: [1, 0.4] }}
-                transition={{ duration: 0.9, repeat: Infinity, ease: 'easeOut' }}
-                className="absolute top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-[#ff453a] shadow-[0_0_10px_#ff453a]"
-              />
-            )}
+          {/* Trust Specs Strip */}
+          <ul className="pt-6 border-t border-hairline flex flex-wrap gap-4 text-[10px] font-homevideo tracking-widest text-neutral-500 uppercase">
+            <li className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#34d399]" />
+              <span>OSI L1-L7 METHOD</span>
+            </li>
+            <li className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#34d399]" />
+              <span>DIAGNOSTIC TOOLBOX</span>
+            </li>
+            <li className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#34d399]" />
+              <span>ZERO REAL NETWORKING</span>
+            </li>
+          </ul>
+        </div>
 
-            {linkFailing && (
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
-                <span className="px-2 py-0.5 rounded bg-[#ff453a] text-black font-mono text-[8px] font-bold tracking-wider animate-bounce">
-                  PACKET LOSS
+        {/* Right Column: Luminous Silk Ribbon + Mini Live Telemetry Triage Card */}
+        <div className="lg:col-span-5 relative w-full flex items-center justify-center min-h-[380px] sm:min-h-[440px]">
+          {/* Silk Ribbon flowing in the background */}
+          <SilkRibbon className="absolute inset-0" />
+
+          {/* Interactive Mini-Topology Card */}
+          <div className="relative z-10 w-full max-w-md p-6 rounded-[2rem] bg-[#0c120f]/85 border border-hairline-bright shadow-[0_20px_60px_rgba(0,0,0,0.8)] backdrop-blur-xl space-y-5">
+            {/* Window Top Bar with Traffic Light Dots */}
+            <div className="flex items-center justify-between pb-3 border-b border-hairline">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
+                <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
+                <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
+                <span className="text-[10px] font-homevideo text-neutral-400 ml-2 tracking-wider">
+                  TELEMETRY / LIVE RUN
                 </span>
               </div>
-            )}
-          </div>
-
-          {/* Node 3: Target Web Server */}
-          <div className="flex flex-col items-center gap-2 z-10">
-            <div
-              className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-neutral-900 border transition-all duration-700 flex items-center justify-center shadow-lg ${
-                linkFailing
-                  ? 'border-[#ff453a]/60 text-[#ff453a]'
-                  : 'border-white/10 text-neutral-300'
-              }`}
-            >
-              {linkFailing ? <WifiOff className="w-6 h-6 animate-pulse" /> : <Terminal className="w-6 h-6" />}
+              <span className="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-emerald-tint border border-emerald-glow/30 text-[#34d399] uppercase tracking-wider">
+                {linkBroken ? 'LINK OFFLINE' : 'TRAFFIC NOMINAL'}
+              </span>
             </div>
-            <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-400">
-              Web Server
-            </span>
-          </div>
-        </div>
 
-        {/* Beat 1: "The network is down. Now what?" */}
-        <div className="space-y-4 max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#ff453a]/10 border border-[#ff453a]/30 text-[#ff453a] font-mono text-xs font-semibold uppercase tracking-widest">
-            <AlertTriangle className="w-3.5 h-3.5" />
-            <span>Incident Report: Link Offline</span>
-          </div>
+            {/* Visual Node Link Simulation */}
+            <div className="h-28 bg-[#050807]/90 rounded-2xl border border-hairline p-4 flex items-center justify-between relative overflow-hidden">
+              {/* Node PC1 */}
+              <div className="flex flex-col items-center gap-1 z-10">
+                <div className="w-10 h-10 rounded-xl bg-neutral-900 border border-hairline-bright flex items-center justify-center text-[#34d399]">
+                  <Terminal className="w-5 h-5" />
+                </div>
+                <span className="font-homevideo text-[8px] text-neutral-400">PC1 (10)</span>
+              </div>
 
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-white leading-tight">
-            The network is down. <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-amber-300 to-white">
-              Now what?
-            </span>
-          </h1>
+              {/* Cable 1 */}
+              <div className="flex-1 h-0.5 mx-2 bg-neutral-800 relative">
+                <div className="absolute inset-0 bg-[#34d399]/40" />
+                <motion.div
+                  animate={{ left: ['0%', '100%'] }}
+                  transition={{ duration: 1.4, repeat: Infinity, ease: 'linear' }}
+                  className="absolute top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#34d399] shadow-[0_0_8px_#34d399]"
+                />
+              </div>
 
-          <p className="text-lg sm:text-2xl text-neutral-300 max-w-2xl mx-auto font-light leading-relaxed">
-            Random rebooting is not a strategy. True network engineers isolate issues with precision.
-          </p>
-        </div>
+              {/* Node R1 Router */}
+              <div className="flex flex-col items-center gap-1 z-10">
+                <div className="w-10 h-10 rounded-xl bg-neutral-900 border border-hairline flex items-center justify-center text-white">
+                  <Activity className="w-5 h-5 text-neutral-300" />
+                </div>
+                <span className="font-homevideo text-[8px] text-neutral-400">R1 (GW)</span>
+              </div>
 
-        {/* Beat 2: "Troubleshooting is a method, not a guess." */}
-        <div className="w-full max-w-4xl p-6 sm:p-8 rounded-[2.5rem] bg-[#161617]/90 border border-neutral-800 shadow-2xl backdrop-blur-md grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-          {/* Column 1: The Layered Method */}
-          <div className="p-6 rounded-[2rem] bg-black/40 border border-neutral-800/80 space-y-3">
-            <div className="w-10 h-10 rounded-xl bg-[#2997ff]/10 border border-[#2997ff]/20 flex items-center justify-center text-[#2997ff]">
-              <Layers className="w-5 h-5" />
+              {/* Cable 2 (Breaks and drops packet) */}
+              <div className="flex-1 h-0.5 mx-2 bg-neutral-800 relative">
+                <div
+                  className={`absolute inset-0 transition-colors duration-500 ${
+                    linkBroken ? 'bg-[#f87171]' : 'bg-[#34d399]/40'
+                  }`}
+                />
+                {!linkBroken ? (
+                  <motion.div
+                    animate={{ left: ['0%', '100%'] }}
+                    transition={{ duration: 1.4, repeat: Infinity, ease: 'linear' }}
+                    className="absolute top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#34d399] shadow-[0_0_8px_#34d399]"
+                  />
+                ) : (
+                  <motion.div
+                    animate={{ left: ['0%', '50%'], opacity: [1, 0], scale: [1, 0.4] }}
+                    transition={{ duration: 0.8, repeat: Infinity, ease: 'easeOut' }}
+                    className="absolute top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#f87171] shadow-[0_0_8px_#f87171]"
+                  />
+                )}
+              </div>
+
+              {/* Node Server */}
+              <div className="flex flex-col items-center gap-1 z-10">
+                <div
+                  className={`w-10 h-10 rounded-xl bg-neutral-900 border transition-colors duration-500 flex items-center justify-center ${
+                    linkBroken
+                      ? 'border-[#f87171]/60 text-[#f87171]'
+                      : 'border-hairline text-neutral-300'
+                  }`}
+                >
+                  {linkBroken ? <WifiOff className="w-5 h-5 animate-pulse" /> : <Terminal className="w-5 h-5" />}
+                </div>
+                <span className="font-homevideo text-[8px] text-neutral-400">WEB (80)</span>
+              </div>
             </div>
-            <h3 className="text-lg font-bold text-white tracking-tight">
-              1. The Layered Method
-            </h3>
-            <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed">
-              Work up the OSI stack systematically from Physical (L1) to Application (L7). A layer can only function if every single layer beneath it is operational.
-            </p>
-            <div className="pt-2 flex flex-wrap gap-1.5 font-mono text-[10px] text-zinc-300">
-              <span className="px-2 py-0.5 rounded bg-neutral-800 border border-neutral-700">Physical</span>
-              <span className="px-2 py-0.5 rounded bg-neutral-800 border border-neutral-700">Data Link</span>
-              <span className="px-2 py-0.5 rounded bg-neutral-800 border border-neutral-700">Network</span>
-              <span className="px-2 py-0.5 rounded bg-neutral-800 border border-neutral-700">Transport</span>
-              <span className="px-2 py-0.5 rounded bg-neutral-800 border border-neutral-700">Application</span>
+
+            {/* Telemetry rows */}
+            <div className="space-y-2 font-mono text-[11px]">
+              <div className="flex justify-between p-2 rounded-xl bg-[#080d0b] border border-hairline">
+                <span className="text-neutral-400">Target Address:</span>
+                <span className="text-white font-medium">www.lab.local [172.16.0.80]</span>
+              </div>
+              <div className="flex justify-between p-2 rounded-xl bg-[#080d0b] border border-hairline">
+                <span className="text-neutral-400">Active Diagnosis:</span>
+                <span
+                  className={
+                    linkBroken
+                      ? 'text-[#f87171] font-bold font-homevideo'
+                      : 'text-[#34d399] font-bold font-homevideo'
+                  }
+                >
+                  {linkBroken ? 'PHYSICAL / L1 LINK DOWN' : 'BIDIRECTIONAL RTT 14ms'}
+                </span>
+              </div>
             </div>
           </div>
-
-          {/* Column 2: The Diagnostic Toolbox */}
-          <div className="p-6 rounded-[2rem] bg-black/40 border border-neutral-800/80 space-y-3">
-            <div className="w-10 h-10 rounded-xl bg-[#30d158]/10 border border-[#30d158]/20 flex items-center justify-center text-[#30d158]">
-              <Terminal className="w-5 h-5" />
-            </div>
-            <h3 className="text-lg font-bold text-white tracking-tight">
-              2. The Diagnostic Toolbox
-            </h3>
-            <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed">
-              Every utility answers one specific question. Master the exact syntax, healthy baselines, and fault signatures of standard tools.
-            </p>
-            <div className="pt-2 flex flex-wrap gap-1.5 font-mono text-[10px] text-zinc-300">
-              <span className="px-2 py-0.5 rounded bg-[#2997ff]/10 border border-[#2997ff]/30 text-[#2997ff]">ping</span>
-              <span className="px-2 py-0.5 rounded bg-[#2997ff]/10 border border-[#2997ff]/30 text-[#2997ff]">tracert</span>
-              <span className="px-2 py-0.5 rounded bg-[#2997ff]/10 border border-[#2997ff]/30 text-[#2997ff]">ipconfig</span>
-              <span className="px-2 py-0.5 rounded bg-[#2997ff]/10 border border-[#2997ff]/30 text-[#2997ff]">nslookup</span>
-              <span className="px-2 py-0.5 rounded bg-[#2997ff]/10 border border-[#2997ff]/30 text-[#2997ff]">arp -a</span>
-              <span className="px-2 py-0.5 rounded bg-[#2997ff]/10 border border-[#2997ff]/30 text-[#2997ff]">netstat</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Call to action anchor buttons */}
-        <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
-          <a
-            href="#simulation"
-            className="px-8 py-4 rounded-2xl bg-white text-black font-bold text-xs uppercase tracking-wider hover:bg-neutral-200 transition-all active:scale-95 shadow-[0_0_30px_rgba(255,255,255,0.2)] flex items-center gap-2 cursor-pointer"
-          >
-            <span>Launch Virtual Lab</span>
-            <ArrowDown className="w-4 h-4" />
-          </a>
-
-          <a
-            href="#theory"
-            className="px-8 py-4 rounded-2xl bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white hover:border-neutral-700 font-bold text-xs uppercase tracking-wider transition-all active:scale-95 cursor-pointer"
-          >
-            Read Theory Reference
-          </a>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

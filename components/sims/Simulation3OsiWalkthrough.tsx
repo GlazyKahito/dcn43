@@ -1,13 +1,12 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   createDefaultTopology,
   TopologyModel,
-  cloneTopology,
 } from '../../lib/net/topology';
 import { FAULT_SCENARIOS, FaultScenario } from '../../lib/net/faults';
-import { canReach, resolveName, portOpen, isPhysicalLinkUp } from '../../lib/net/engine';
+import { resolveName, portOpen } from '../../lib/net/engine';
 import { DiagnosticConsole, DiagnosticLog } from './DiagnosticConsole';
 import {
   Layers,
@@ -17,8 +16,6 @@ import {
   ChevronRight,
   CheckCircle2,
   XCircle,
-  AlertCircle,
-  Sliders,
   ShieldCheck,
   ShieldAlert,
 } from 'lucide-react';
@@ -119,79 +116,80 @@ export function Simulation3OsiWalkthrough() {
       commandTested: 'arp -a',
       description: 'Checks Address Resolution Protocol (ARP) table for IP-to-MAC mapping and duplicate hardware address conflicts.',
       runCheck: (topo) => {
-        const pc1 = topo.devices['PC1'];
-        const pc2 = topo.devices['PC2'];
-        const isDuplicate = pc1?.interfaces[0]?.ip === pc2?.interfaces[0]?.ip;
+        const devPC1 = topo.devices['PC1'];
+        const devPC2 = topo.devices['PC2'];
+        const isDuplicate = devPC1?.interfaces[0]?.ip === devPC2?.interfaces[0]?.ip;
 
         if (isDuplicate) {
           return {
             passed: false,
-            outputLine: `Duplicate IP MAC collision: Host 192.168.1.10 claimed by both PC1 and PC2. ARP table flapping.`,
-            rulesIn: 'Data Link / Layer 2 ARP collision and switch MAC table flapping.',
-            rulesOut: 'Physical cable is fine, but layer-2 framing is conflicting.',
+            outputLine: 'ARP Collision Detected: IP 192.168.1.10 claimed by conflicting MAC addresses 00:1A:2B:3C:4D:5E and 00:1A:2B:3C:4D:6F.',
+            rulesIn: 'Layer 2 ARP poisoning / Duplicate IP hardware address conflict.',
+            rulesOut: 'Routing tables and cables are fine; Layer 2 address binding is corrupted.',
           };
         }
 
         return {
           passed: true,
-          outputLine: 'ARP resolution healthy: Gateway 192.168.1.1 mapped to AA:BB:CC:01:00:01 (dynamic).',
-          rulesIn: 'Layer 2 Ethernet framing and switch MAC learning operational.',
-          rulesOut: 'Rules OUT switch port security drops and duplicate MAC/IP collisions on LAN.',
+          outputLine: 'ARP Table Valid: 192.168.1.1 mapped to 00:1A:2B:3C:4D:01 (Dynamic), no collisions.',
+          rulesIn: 'Layer 2 MAC framing and local broadcast domain operational.',
+          rulesOut: 'Rules OUT switch port security shutdowns and broadcast storms.',
         };
       },
     },
     {
       layerNumber: 3,
       layerName: 'Network Layer',
-      checkTitle: 'IP Addressing, Subnet Mask & Gateway Routing',
-      commandTested: 'ipconfig /all & ping 192.168.1.1 & ping 172.16.0.80',
-      description: 'Verifies IP configuration, subnet boundary correctness, default gateway reachability, and routing table paths.',
+      checkTitle: 'Subnet Masking, Gateway & IP Routing',
+      commandTested: 'ping 172.16.0.80',
+      description: 'Tests end-to-end ICMP Echo reachability, default gateway forwarding, and IP routing tables.',
       runCheck: (topo) => {
-        const pc1 = topo.devices['PC1'];
-        const iface = pc1?.interfaces[0];
+        const devPC1 = topo.devices['PC1'];
+        const iface = devPC1?.interfaces[0];
 
-        if (iface?.ip.startsWith('169.254.')) {
+        if (iface?.ip?.startsWith('169.254')) {
           return {
             passed: false,
-            outputLine: `APIPA Fallback Detected: PC1 holds ${iface.ip} with NO default gateway.`,
-            rulesIn: 'DHCP lease acquisition failure at Layer 3.',
-            rulesOut: 'Physical link is connected, but Layer 3 IP parameters failed to configure.',
-          };
-        }
-
-        if (pc1?.defaultGateway !== '192.168.1.1') {
-          return {
-            passed: false,
-            outputLine: `Invalid Default Gateway: ${pc1?.defaultGateway} is not the router interface 192.168.1.1.`,
-            rulesIn: 'Misconfigured Layer 3 IP routing table on client.',
-            rulesOut: 'LAN traffic works, but inter-network routing fails.',
+            outputLine: 'ICMP Failed: Host assigned APIPA address 169.254.11.4 (DHCP exhaustion / lease failure).',
+            rulesIn: 'DHCP unreachability forced host into self-assigned APIPA state.',
+            rulesOut: 'Default gateway and WAN routing cannot function without a valid LAN IP.',
           };
         }
 
         if (iface?.mask === '255.255.0.0') {
           return {
             passed: false,
-            outputLine: `Subnet Mask Mismatch: 255.255.0.0 (/16) incorrectly treats remote subnets as local.`,
-            rulesIn: 'Subnet mask misconfiguration prevents forwarding to gateway.',
-            rulesOut: 'Gateway IP is set, but packet routing logic is bypassed.',
+            outputLine: 'ICMP Routing Failed: Host subnet mask /16 (255.255.0.0) causes off-subnet traffic to skip gateway.',
+            rulesIn: 'Misconfigured subnet mask causes ARP broadcasts for remote IP subnets.',
+            rulesOut: 'Default gateway router is healthy; PC1 configuration is flawed.',
           };
         }
 
-        const reachWeb = canReach(topo, 'PC1', '172.16.0.80');
-        if (!reachWeb.reachable) {
+        if (devPC1?.defaultGateway !== '192.168.1.1') {
           return {
             passed: false,
-            outputLine: `End-to-End L3 Reachability Failed: ${reachWeb.failureDetail || 'Packets dropped in transit.'}`,
-            rulesIn: 'Intermediate routing failure or missing return path on router.',
-            rulesOut: 'Local client configuration is valid, but transit routing is broken.',
+            outputLine: `ICMP Failed: Host default gateway set to invalid IP ${devPC1?.defaultGateway || 'NONE'}.`,
+            rulesIn: 'Host lacks valid route to forward packets beyond local subnet.',
+            rulesOut: 'Local LAN is operational; transit routing is halted at first hop.',
+          };
+        }
+
+        const devR2 = topo.devices['R2'];
+        const hasReturnRoute = devR2?.routes.some((r) => r.destination === '192.168.1.0/24');
+        if (!hasReturnRoute) {
+          return {
+            passed: false,
+            outputLine: 'ICMP Timeout: Forward packet reached target, but R2 missing return route for 192.168.1.0/24.',
+            rulesIn: 'Asymmetric routing failure: return route blackholed at core router.',
+            rulesOut: 'Forward path from PC1 to WEB is completely functional.',
           };
         }
 
         return {
           passed: true,
-          outputLine: 'Layer 3 Verified: PC1 (192.168.1.10/24) -> Gateway 192.168.1.1 -> WAN 10.0.0.2 -> 172.16.0.80.',
-          rulesIn: 'Network Layer routing and bidirectional packet delivery verified.',
-          rulesOut: 'Rules OUT all IP misconfigurations, bad gateways, and missing routes.',
+          outputLine: 'ICMP Echo Reply: 4/4 packets received from 172.16.0.80, time=12ms, TTL=62.',
+          rulesIn: 'End-to-end bidirectional Layer 3 routing verified.',
+          rulesOut: 'Rules OUT bad gateways, IP conflicts, and routing table loops.',
         };
       },
     },
@@ -320,29 +318,29 @@ export function Simulation3OsiWalkthrough() {
   return (
     <div className="w-full flex flex-col gap-6">
       {/* Simulation Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 sm:p-6 rounded-[2rem] bg-[#161617] border border-neutral-800 shadow-2xl">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 sm:p-6 rounded-[2rem] bg-[#0a0f0d] border border-[#78b496]/20 shadow-2xl">
         <div>
-          <span className="text-[11px] font-mono uppercase tracking-widest text-[#bf5af2] font-semibold">
-            Simulation 03 • Systematic Diagnosis
+          <span className="text-[11px] font-display uppercase tracking-widest text-[#34d399] font-bold">
+            SIMULATION 03 // SYSTEMATIC TESTING
           </span>
-          <h3 className="text-xl sm:text-2xl font-semibold tracking-tight text-white mt-1">
+          <h3 className="text-xl sm:text-2xl font-sans font-semibold tracking-tight text-[#e8f2ec] mt-1">
             OSI Layer-by-Layer Bottom-Up Walkthrough
           </h3>
-          <p className="text-xs sm:text-sm text-neutral-400 mt-1 max-w-2xl">
+          <p className="text-xs sm:text-sm text-[#78b496]/80 mt-1 max-w-2xl font-sans">
             Step upward through the OSI stack from Physical Layer 1 to Application Layer 7. Observe how each layer check executes against the live network model and isolates the root cause.
           </p>
         </div>
 
         {/* Scenario Selector Dropdown */}
-        <div className="flex items-center gap-2 bg-neutral-900 border border-neutral-800 px-3 py-2 rounded-2xl shrink-0 self-start sm:self-auto">
-          <span className="text-[10px] uppercase font-bold text-neutral-500 font-mono">Test Scenario:</span>
+        <div className="flex items-center gap-2 bg-[#101713] border border-[#78b496]/20 px-3 py-2 rounded-2xl shrink-0 self-start sm:self-auto">
+          <span className="text-[10px] uppercase font-display text-[#78b496]/70">Scenario:</span>
           <select
             value={selectedScenarioIdx}
             onChange={(e) => handleScenarioChange(Number(e.target.value))}
-            className="bg-transparent text-white font-mono text-xs focus:outline-none cursor-pointer"
+            className="bg-transparent text-[#e8f2ec] font-mono text-xs focus:outline-none cursor-pointer"
           >
             {FAULT_SCENARIOS.map((s, i) => (
-              <option key={s.id} value={i} className="bg-[#161617] text-white">
+              <option key={s.id} value={i} className="bg-[#0a0f0d] text-[#e8f2ec]">
                 Fault 0{s.number}: {s.title.split(': ')[1] || s.title}
               </option>
             ))}
@@ -353,15 +351,15 @@ export function Simulation3OsiWalkthrough() {
       {/* Main Walkthrough Container */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left: Vertical OSI Stack Visualizer (rendered bottom-up!) */}
-        <div className="lg:col-span-5 bg-[#161617] border border-neutral-800 rounded-[2rem] p-6 shadow-2xl flex flex-col gap-4">
-          <div className="flex items-center justify-between pb-3 border-b border-neutral-800">
+        <div className="lg:col-span-5 bg-[#0a0f0d] border border-[#78b496]/20 rounded-[2rem] p-6 shadow-2xl flex flex-col gap-4">
+          <div className="flex items-center justify-between pb-3 border-b border-[#78b496]/20">
             <div className="flex items-center gap-2">
-              <Layers className="w-5 h-5 text-[#bf5af2]" />
-              <span className="text-xs font-mono font-bold tracking-wider text-white uppercase">
+              <Layers className="w-5 h-5 text-[#34d399]" />
+              <span className="text-xs font-display tracking-wider text-white uppercase">
                 OSI Stack (Bottom-Up)
               </span>
             </div>
-            <span className="text-[10px] font-mono text-neutral-500">
+            <span className="text-[10px] font-mono text-[#78b496]/70">
               Rule: Lower layer must pass first
             </span>
           </div>
@@ -378,34 +376,34 @@ export function Simulation3OsiWalkthrough() {
                   key={check.layerNumber}
                   className={`p-4 rounded-2xl border transition-all duration-300 relative overflow-hidden ${
                     isCurrent
-                      ? 'border-[#2997ff] bg-neutral-900 shadow-[0_0_20px_rgba(41,151,255,0.25)] scale-[1.02]'
+                      ? 'border-[#34d399] bg-[#14231b] shadow-[0_0_20px_rgba(52,211,153,0.25)] scale-[1.01]'
                       : isEvaluated
                       ? res.passed
-                        ? 'border-[#30d158]/50 bg-[#30d158]/5'
-                        : 'border-[#ff453a]/50 bg-[#ff453a]/5'
-                      : 'border-neutral-800/80 bg-neutral-900/40 opacity-70'
+                        ? 'border-[#34d399]/40 bg-[#1f7a4d]/10'
+                        : 'border-[#f87171]/40 bg-[#f87171]/10'
+                      : 'border-[#78b496]/15 bg-[#101713]/60 opacity-60'
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div
-                        className={`w-7 h-7 rounded-xl flex items-center justify-center font-mono text-xs font-bold ${
+                        className={`w-7 h-7 rounded-xl flex items-center justify-center font-display text-xs font-bold ${
                           isEvaluated
                             ? res.passed
-                              ? 'bg-[#30d158]/20 text-[#30d158]'
-                              : 'bg-[#ff453a]/20 text-[#ff453a]'
+                              ? 'bg-[#1f7a4d] text-white border border-[#34d399]/40'
+                              : 'bg-[#f87171]/20 text-[#f87171] border border-[#f87171]/40'
                             : isCurrent
-                            ? 'bg-[#2997ff]/20 text-[#2997ff]'
-                            : 'bg-neutral-800 text-neutral-400'
+                            ? 'bg-[#34d399] text-[#050807]'
+                            : 'bg-[#101713] text-[#78b496]'
                         }`}
                       >
                         L{check.layerNumber}
                       </div>
                       <div>
-                        <span className="text-xs font-bold text-white tracking-tight block">
+                        <span className="text-xs font-sans font-semibold text-white tracking-tight block">
                           {check.layerName}
                         </span>
-                        <span className="text-[10px] font-mono text-neutral-400">
+                        <span className="text-[10px] font-mono text-[#78b496]/70">
                           {check.commandTested}
                         </span>
                       </div>
@@ -415,22 +413,22 @@ export function Simulation3OsiWalkthrough() {
                     <div>
                       {isEvaluated ? (
                         res.passed ? (
-                          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#30d158]/20 text-[#30d158] font-mono text-[10px] font-bold">
+                          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#1f7a4d]/30 text-[#34d399] border border-[#34d399]/30 font-display text-[10px] font-bold">
                             <CheckCircle2 className="w-3.5 h-3.5" />
                             <span>PASS</span>
                           </div>
                         ) : (
-                          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#ff453a]/20 text-[#ff453a] font-mono text-[10px] font-bold">
+                          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#f87171]/20 text-[#f87171] border border-[#f87171]/30 font-display text-[10px] font-bold">
                             <XCircle className="w-3.5 h-3.5" />
                             <span>FAIL</span>
                           </div>
                         )
                       ) : isCurrent ? (
-                        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#2997ff]/20 text-[#2997ff] font-mono text-[10px] font-bold animate-pulse">
+                        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#1f7a4d]/20 text-[#34d399] font-display text-[10px] font-bold animate-pulse border border-[#34d399]/30">
                           <span>CHECKING</span>
                         </div>
                       ) : (
-                        <span className="text-[10px] font-mono text-neutral-600">PENDING</span>
+                        <span className="text-[10px] font-mono text-[#78b496]/40">PENDING</span>
                       )}
                     </div>
                   </div>
@@ -440,11 +438,11 @@ export function Simulation3OsiWalkthrough() {
           </div>
 
           {/* Stepper Controls Bar */}
-          <div className="pt-3 border-t border-neutral-800 flex flex-wrap items-center justify-between gap-3">
+          <div className="pt-3 border-t border-[#78b496]/20 flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2">
               <button
                 onClick={resetWalkthrough}
-                className="px-3.5 py-2 rounded-xl bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-white text-xs font-mono transition-colors cursor-pointer flex items-center gap-1.5"
+                className="px-3.5 py-2 rounded-xl bg-[#101713] border border-[#78b496]/20 text-[#78b496] hover:text-white text-xs font-mono transition-colors cursor-pointer flex items-center gap-1.5"
                 title="Reset walkthrough"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
@@ -454,7 +452,7 @@ export function Simulation3OsiWalkthrough() {
               <button
                 onClick={() => setIsPlaying(!isPlaying)}
                 disabled={haltedAtFailure || currentStepIndex >= osiChecks.length - 1}
-                className="px-4 py-2 rounded-xl bg-neutral-800 border border-neutral-700 text-white text-xs font-mono hover:bg-neutral-700 transition-colors disabled:opacity-40 cursor-pointer flex items-center gap-1.5"
+                className="px-4 py-2 rounded-xl bg-[#101713] border border-[#78b496]/20 text-white text-xs font-mono hover:bg-[#13231a] transition-colors disabled:opacity-40 cursor-pointer flex items-center gap-1.5"
               >
                 {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
                 <span>{isPlaying ? 'Pause' : 'Play'}</span>
@@ -464,7 +462,7 @@ export function Simulation3OsiWalkthrough() {
             <button
               onClick={stepForward}
               disabled={haltedAtFailure || currentStepIndex >= osiChecks.length - 1}
-              className="px-5 py-2 rounded-xl bg-white text-black text-xs font-bold hover:bg-neutral-200 transition-colors disabled:opacity-40 cursor-pointer flex items-center gap-1.5 shadow-sm"
+              className="px-5 py-2 rounded-xl bg-[#1f7a4d] hover:bg-[#34d399] text-white hover:text-[#050807] text-xs font-bold transition-all disabled:opacity-40 cursor-pointer flex items-center gap-1.5 shadow-[0_0_15px_rgba(52,211,153,0.25)]"
             >
               <span>Next Step</span>
               <ChevronRight className="w-4 h-4" />
@@ -472,24 +470,24 @@ export function Simulation3OsiWalkthrough() {
           </div>
 
           {/* Speed slider */}
-          <div className="flex items-center justify-between text-[10px] font-mono text-neutral-400 px-1">
+          <div className="flex items-center justify-between text-[10px] font-mono text-[#78b496]/70 px-1">
             <span>Playback Speed:</span>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setSpeedMs(2500)}
-                className={`px-2 py-0.5 rounded ${speedMs === 2500 ? 'bg-[#2997ff] text-white' : 'hover:text-white'}`}
+                className={`px-2 py-0.5 rounded ${speedMs === 2500 ? 'bg-[#1f7a4d] text-white' : 'hover:text-white'}`}
               >
                 0.5x
               </button>
               <button
                 onClick={() => setSpeedMs(1500)}
-                className={`px-2 py-0.5 rounded ${speedMs === 1500 ? 'bg-[#2997ff] text-white' : 'hover:text-white'}`}
+                className={`px-2 py-0.5 rounded ${speedMs === 1500 ? 'bg-[#1f7a4d] text-white' : 'hover:text-white'}`}
               >
                 1.0x
               </button>
               <button
                 onClick={() => setSpeedMs(800)}
-                className={`px-2 py-0.5 rounded ${speedMs === 800 ? 'bg-[#2997ff] text-white' : 'hover:text-white'}`}
+                className={`px-2 py-0.5 rounded ${speedMs === 800 ? 'bg-[#1f7a4d] text-white' : 'hover:text-white'}`}
               >
                 2.0x
               </button>
@@ -500,24 +498,24 @@ export function Simulation3OsiWalkthrough() {
         {/* Right: Active Layer Telemetry & Verdict */}
         <div className="lg:col-span-7 flex flex-col gap-6">
           {/* Active Layer Details Card */}
-          <div className="bg-[#161617] border border-neutral-800 rounded-[2rem] p-6 shadow-2xl flex-1 flex flex-col justify-between">
+          <div className="bg-[#0a0f0d] border border-[#78b496]/20 rounded-[2rem] p-6 shadow-2xl flex-1 flex flex-col justify-between">
             {activeCheck && activeResult ? (
               <div className="space-y-4">
-                <div className="flex items-center justify-between pb-3 border-b border-neutral-800">
+                <div className="flex items-center justify-between pb-3 border-b border-[#78b496]/20">
                   <div>
-                    <span className="text-[10px] font-mono uppercase tracking-widest text-[#2997ff] font-bold block">
-                      Active Evaluation • Layer 0{activeCheck.layerNumber}
+                    <span className="text-[10px] font-display uppercase tracking-widest text-[#34d399] font-bold block">
+                      Active Evaluation // Layer 0{activeCheck.layerNumber}
                     </span>
-                    <h4 className="text-lg font-bold text-white tracking-tight">
+                    <h4 className="text-lg font-sans font-semibold text-white tracking-tight">
                       {activeCheck.checkTitle}
                     </h4>
                   </div>
 
                   <span
-                    className={`px-3 py-1 rounded-full font-mono text-xs font-bold ${
+                    className={`px-3 py-1 rounded-full font-display text-xs font-bold ${
                       activeResult.passed
-                        ? 'bg-[#30d158]/20 text-[#30d158] border border-[#30d158]/40'
-                        : 'bg-[#ff453a]/20 text-[#ff453a] border border-[#ff453a]/40'
+                        ? 'bg-[#1f7a4d]/20 text-[#34d399] border border-[#34d399]/40'
+                        : 'bg-[#f87171]/20 text-[#f87171] border border-[#f87171]/40'
                     }`}
                   >
                     {activeResult.passed ? 'CHECK PASSED' : 'CHECK FAILED'}
@@ -525,13 +523,13 @@ export function Simulation3OsiWalkthrough() {
                 </div>
 
                 {/* Simulated Diagnostic Output */}
-                <div className="p-4 rounded-2xl bg-black/60 border border-neutral-800 font-mono text-xs space-y-1">
-                  <div className="text-[10px] text-neutral-500 uppercase tracking-wider">
+                <div className="p-4 rounded-2xl bg-[#070c09] border border-[#78b496]/20 font-mono text-xs space-y-1">
+                  <div className="text-[10px] text-[#78b496]/70 uppercase tracking-wider font-display">
                     Diagnostic Command Telemetry
                   </div>
                   <div
                     className={
-                      activeResult.passed ? 'text-[#30d158]' : 'text-[#ff453a]'
+                      activeResult.passed ? 'text-[#34d399]' : 'text-[#f87171]'
                     }
                   >
                     {activeResult.outputLine}
@@ -540,19 +538,19 @@ export function Simulation3OsiWalkthrough() {
 
                 {/* Deductions: Rules In vs Rules Out */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                  <div className="p-4 rounded-2xl bg-neutral-900/80 border border-neutral-800 space-y-1">
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-[#30d158] font-bold block">
+                  <div className="p-4 rounded-2xl bg-[#101713] border border-[#78b496]/20 space-y-1">
+                    <span className="text-[10px] font-display uppercase tracking-wider text-[#34d399] font-bold block">
                       Rules In (Confirmed):
                     </span>
-                    <p className="text-xs text-zinc-300 leading-relaxed">
+                    <p className="text-xs text-[#c9dccf] leading-relaxed font-sans">
                       {activeResult.rulesIn}
                     </p>
                   </div>
-                  <div className="p-4 rounded-2xl bg-neutral-900/80 border border-neutral-800 space-y-1">
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-[#ff9f0a] font-bold block">
+                  <div className="p-4 rounded-2xl bg-[#101713] border border-[#78b496]/20 space-y-1">
+                    <span className="text-[10px] font-display uppercase tracking-wider text-[#c8b27a] font-bold block">
                       Rules Out (Eliminated):
                     </span>
-                    <p className="text-xs text-zinc-300 leading-relaxed">
+                    <p className="text-xs text-[#c9dccf] leading-relaxed font-sans">
                       {activeResult.rulesOut}
                     </p>
                   </div>
@@ -560,12 +558,12 @@ export function Simulation3OsiWalkthrough() {
               </div>
             ) : (
               <div className="h-full flex flex-col items-center justify-center text-center p-8 text-neutral-500 space-y-3">
-                <Layers className="w-12 h-12 text-neutral-700 stroke-[1.5]" />
+                <Layers className="w-12 h-12 text-[#78b496]/40 stroke-[1.5]" />
                 <div className="space-y-1">
-                  <h4 className="text-base font-semibold text-white">
+                  <h4 className="text-base font-sans font-semibold text-white">
                     Walkthrough Ready
                   </h4>
-                  <p className="text-xs text-neutral-400 max-w-sm">
+                  <p className="text-xs text-[#78b496]/80 max-w-sm font-sans">
                     Click <span className="text-white font-bold">&quot;Next Step&quot;</span> or <span className="text-white font-bold">&quot;Play&quot;</span> to begin testing the OSI stack bottom-up starting at Physical Layer 1.
                   </p>
                 </div>
@@ -574,42 +572,42 @@ export function Simulation3OsiWalkthrough() {
 
             {/* Final Diagnostic Verdict Card (Shows when halted at failure or complete) */}
             {haltedAtFailure && (
-              <div className="mt-6 p-5 rounded-2xl border border-[#ff453a]/40 bg-[#ff453a]/10 space-y-3 animate-in fade-in duration-300">
+              <div className="mt-6 p-5 rounded-2xl border border-[#f87171]/40 bg-[#f87171]/10 space-y-3 animate-in fade-in duration-300">
                 <div className="flex items-center gap-2">
-                  <ShieldAlert className="w-5 h-5 text-[#ff453a]" />
-                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#ff453a]">
+                  <ShieldAlert className="w-5 h-5 text-[#f87171]" />
+                  <span className="text-xs font-display font-bold uppercase tracking-wider text-[#f87171]">
                     Root Cause Verdict Identified
                   </span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
                   <div>
-                    <span className="text-[10px] text-neutral-400 uppercase font-mono block">Faulty Layer</span>
+                    <span className="text-[10px] text-[#78b496]/80 uppercase font-display block">Faulty Layer</span>
                     <span className="font-bold text-white">{currentScenario.faultyLayer}</span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-neutral-400 uppercase font-mono block">Faulty Node</span>
+                    <span className="text-[10px] text-[#78b496]/80 uppercase font-display block">Faulty Node</span>
                     <span className="font-bold text-white">{currentScenario.faultyDevice}</span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-neutral-400 uppercase font-mono block">Recommended Fix</span>
-                    <span className="font-bold text-[#30d158]">{currentScenario.title.split(': ')[1] || 'Apply patch'}</span>
+                    <span className="text-[10px] text-[#78b496]/80 uppercase font-display block">Recommended Fix</span>
+                    <span className="font-bold text-[#34d399]">{currentScenario.title.split(': ')[1] || 'Apply patch'}</span>
                   </div>
                 </div>
 
-                <p className="text-xs text-zinc-300 pt-1 border-t border-[#ff453a]/20">
+                <p className="text-xs text-[#c9dccf] pt-1 border-t border-[#f87171]/20 font-sans">
                   {currentScenario.causeDescription}
                 </p>
               </div>
             )}
 
             {currentStepIndex === osiChecks.length - 1 && !haltedAtFailure && (
-              <div className="mt-6 p-5 rounded-2xl border border-[#30d158]/40 bg-[#30d158]/10 space-y-2 animate-in fade-in duration-300">
-                <div className="flex items-center gap-2 text-[#30d158] font-bold text-xs">
+              <div className="mt-6 p-5 rounded-2xl border border-[#34d399]/40 bg-[#1f7a4d]/20 space-y-2 animate-in fade-in duration-300">
+                <div className="flex items-center gap-2 text-[#34d399] font-bold text-xs font-display">
                   <ShieldCheck className="w-5 h-5" />
                   <span>All Layers Operational (100% Stack Verified)</span>
                 </div>
-                <p className="text-xs text-zinc-300">
+                <p className="text-xs text-[#c9dccf] font-sans">
                   All layers from Physical (Layer 1) to Application (Layer 7) have returned valid responses.
                 </p>
               </div>

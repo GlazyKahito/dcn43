@@ -4,28 +4,25 @@ import { LAB_CONFIG } from '../lib/config';
 
 export function Aim() {
   return (
-    <section id="aim" className="scroll-mt-24 max-w-5xl mx-auto px-4 sm:px-6 pt-12 pb-2">
-      <div className="border border-neutral-800 bg-[#161617] rounded-[2rem] p-6 sm:p-8 space-y-4 shadow-2xl relative overflow-hidden">
-        {/* Glow backdrop */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-[#2997ff]/5 rounded-full blur-3xl pointer-events-none -mr-16 -mt-16" />
+    <section id="aim" className="scroll-mt-28 max-w-5xl mx-auto px-4 sm:px-6 py-12">
+      {/* Centered statement block with hairline dividers above and below (lab0.ai style) */}
+      <div className="border-y border-hairline py-12 px-6 sm:px-12 flex flex-col items-center text-center space-y-5 relative">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(52,211,153,0.06)_0%,transparent_70%)] pointer-events-none" />
 
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-[#2997ff]/10 border border-[#2997ff]/20 flex items-center justify-center text-[#2997ff]">
-            <Target className="w-5 h-5" />
-          </div>
-          <div>
-            <span className="text-[10px] font-mono uppercase tracking-widest text-[#2997ff] font-semibold">
-              Experiment Objective
-            </span>
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
-              Aim
-            </h2>
-          </div>
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-tint border border-emerald-glow/30">
+          <Target className="w-3.5 h-3.5 text-[#34d399]" />
+          <span className="text-[11px] font-homevideo uppercase tracking-widest text-[#34d399]">
+            EXPERIMENT AIM
+          </span>
         </div>
 
-        <div className="p-4 sm:p-5 rounded-2xl border-l-4 border-[#2997ff] bg-black/40 text-base sm:text-lg text-white font-medium leading-relaxed tracking-tight">
-          {LAB_CONFIG.aim}
-        </div>
+        <p className="text-xl sm:text-2xl md:text-3xl text-white font-medium max-w-3xl leading-snug tracking-tight">
+          &ldquo;{LAB_CONFIG.aim}&rdquo;
+        </p>
+
+        <span className="text-xs font-mono text-neutral-400 tracking-wider">
+          {LAB_CONFIG.department} &bull; {LAB_CONFIG.institution}
+        </span>
       </div>
     </section>
   );

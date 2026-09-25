@@ -10,7 +10,7 @@ import { Conclusion } from '../components/Conclusion';
 
 export default function HomePage() {
   return (
-    <div className="relative min-h-screen bg-[#000000] text-zinc-100 selection:bg-[#2997ff]/25">
+    <div className="relative min-h-screen bg-transparent text-[#e8f2ec] selection:bg-emerald-500/25 selection:text-emerald-200">
       {/* 1. Animated Hero */}
       <Hero />
 
@@ -18,7 +18,7 @@ export default function HomePage() {
       <Header />
 
       {/* Main Content Flow */}
-      <main className="relative z-20 bg-[#000000] space-y-12">
+      <main className="relative z-20 space-y-16">
         {/* 3. Aim */}
         <Aim />
 

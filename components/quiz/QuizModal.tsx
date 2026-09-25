@@ -11,7 +11,6 @@ import {
   XCircle,
   Award,
   RotateCcw,
-  BookOpen,
 } from 'lucide-react';
 
 interface QuizModalProps {
@@ -92,36 +91,36 @@ export function QuizModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="w-full max-w-2xl bg-[#161617] border border-neutral-800 rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="w-full max-w-2xl bg-[#0a0f0d] border border-[#78b496]/30 rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Modal Header */}
-        <div className="px-6 py-5 border-b border-neutral-800/80 flex items-center justify-between bg-black/40">
+        <div className="px-6 py-5 border-b border-[#78b496]/20 flex items-center justify-between bg-[#101713]/80">
           <div>
-            <span className="text-[10px] font-mono uppercase tracking-widest text-[#2997ff] font-semibold">
+            <span className="text-[10px] font-display uppercase tracking-widest text-[#34d399] font-bold">
               {phaseLabel}
             </span>
-            <h3 className="text-lg font-bold text-white tracking-tight">{title}</h3>
+            <h3 className="text-lg font-sans font-semibold text-white tracking-tight">{title}</h3>
           </div>
           <button
             onClick={onClose}
-            className="text-neutral-400 hover:text-white p-2 rounded-xl hover:bg-neutral-800/60 transition-colors"
+            className="text-[#78b496]/70 hover:text-white p-2 rounded-xl hover:bg-[#101713] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Modal Body */}
-        <div className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 [scrollbar-width:thin] [scrollbar-color:#333_transparent]">
+        <div className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 [scrollbar-width:thin] [scrollbar-color:#1a2e22_transparent]">
           {!isFinished ? (
             <>
               {/* Progress Indicator */}
               <div className="space-y-2">
-                <div className="flex items-center justify-between text-xs font-mono text-neutral-400">
+                <div className="flex items-center justify-between text-xs font-mono text-[#78b496]/80">
                   <span>Question {currentIndex + 1} of {total}</span>
                   <span>{Math.round(((currentIndex + 1) / total) * 100)}% Completed</span>
                 </div>
-                <div className="w-full h-1.5 bg-neutral-800 rounded-full overflow-hidden">
+                <div className="w-full h-1.5 bg-[#101713] border border-[#78b496]/20 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-[#2997ff] transition-all duration-300"
+                    className="h-full bg-[#34d399] transition-all duration-300 shadow-[0_0_8px_#34d399]"
                     style={{ width: `${((currentIndex + 1) / total) * 100}%` }}
                   />
                 </div>
@@ -129,13 +128,13 @@ export function QuizModal({
 
               {/* Question Text */}
               <div className="space-y-3">
-                <h4 className="text-base sm:text-lg font-semibold text-white leading-relaxed tracking-tight">
+                <h4 className="text-base sm:text-lg font-sans font-semibold text-white leading-relaxed tracking-tight">
                   {currentQ.question}
                 </h4>
 
                 {/* Optional code snippet */}
                 {currentQ.codeSnippet && (
-                  <pre className="p-4 rounded-2xl bg-black border border-neutral-800 text-xs font-mono text-neutral-300 overflow-x-auto">
+                  <pre className="p-4 rounded-2xl bg-[#070c09] border border-[#78b496]/20 text-xs font-mono text-[#c9dccf] overflow-x-auto">
                     <code>{currentQ.codeSnippet}</code>
                   </pre>
                 )}
@@ -151,17 +150,17 @@ export function QuizModal({
                       key={optIdx}
                       type="button"
                       onClick={() => handleSelectOption(optIdx)}
-                      className={`w-full p-4 rounded-2xl border text-left text-xs sm:text-sm font-medium transition-all duration-200 flex items-start gap-3.5 cursor-pointer ${
+                      className={`w-full p-4 rounded-2xl border text-left text-xs sm:text-sm font-sans transition-all duration-200 flex items-start gap-3.5 cursor-pointer ${
                         isOptSelected
-                          ? 'border-[#2997ff] bg-[#2997ff]/10 text-white ring-1 ring-[#2997ff]/40 shadow-sm'
-                          : 'border-neutral-800 bg-neutral-900/60 text-zinc-300 hover:border-neutral-700 hover:bg-neutral-800/40'
+                          ? 'border-[#34d399] bg-[#1f7a4d]/20 text-white ring-1 ring-[#34d399]/40 shadow-sm'
+                          : 'border-[#78b496]/20 bg-[#101713]/70 text-[#c9dccf] hover:border-[#34d399]/40 hover:bg-[#13231a]'
                       }`}
                     >
                       <span
-                        className={`w-6 h-6 rounded-lg font-mono text-xs font-bold flex items-center justify-center shrink-0 border mt-0.5 ${
+                        className={`w-6 h-6 rounded-lg font-display text-xs font-bold flex items-center justify-center shrink-0 border mt-0.5 ${
                           isOptSelected
-                            ? 'border-[#2997ff] bg-[#2997ff] text-black'
-                            : 'border-neutral-700 bg-neutral-800 text-neutral-400'
+                            ? 'border-[#34d399] bg-[#34d399] text-[#050807]'
+                            : 'border-[#78b496]/30 bg-[#101713] text-[#78b496]'
                         }`}
                       >
                         {String.fromCharCode(65 + optIdx)}
@@ -175,20 +174,20 @@ export function QuizModal({
           ) : (
             /* Results Screen */
             <div className="space-y-6">
-              <div className="p-6 rounded-[2rem] bg-black/60 border border-neutral-800 text-center space-y-3">
-                <div className="w-14 h-14 rounded-full bg-[#2997ff]/10 border border-[#2997ff]/30 text-[#2997ff] flex items-center justify-center mx-auto">
+              <div className="p-6 rounded-[2rem] bg-[#101713] border border-[#78b496]/25 text-center space-y-3">
+                <div className="w-14 h-14 rounded-full bg-[#1f7a4d]/20 border border-[#34d399]/40 text-[#34d399] flex items-center justify-center mx-auto shadow-[0_0_20px_rgba(52,211,153,0.25)]">
                   <Award className="w-7 h-7" />
                 </div>
-                <h4 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+                <h4 className="text-xl sm:text-2xl font-sans font-semibold text-white tracking-tight">
                   Assessment Completed!
                 </h4>
-                <div className="text-3xl sm:text-4xl font-black font-mono text-white">
+                <div className="text-3xl sm:text-4xl font-display font-black text-[#34d399]">
                   {correctCount} / {total}
-                  <span className="text-lg text-neutral-500 font-normal ml-2">
+                  <span className="text-lg text-[#78b496]/70 font-normal ml-2">
                     ({percentScore}%)
                   </span>
                 </div>
-                <p className="text-xs text-neutral-400 max-w-md mx-auto">
+                <p className="text-xs text-[#78b496]/90 max-w-md mx-auto font-sans">
                   {percentScore >= 80
                     ? 'Excellent job! You have demonstrated strong mastery of diagnostic utilities and OSI methodology.'
                     : percentScore >= 50
@@ -199,7 +198,7 @@ export function QuizModal({
 
               {/* Question Review Breakdown with Explanations */}
               <div className="space-y-4">
-                <span className="text-[11px] font-mono uppercase tracking-wider text-neutral-400 font-bold block">
+                <span className="text-[11px] font-display uppercase tracking-wider text-[#78b496] font-bold block">
                   Question Explanations & Key Learnings
                 </span>
 
@@ -213,35 +212,35 @@ export function QuizModal({
                         key={q.id}
                         className={`p-4 sm:p-5 rounded-2xl border text-xs space-y-2 ${
                           isRight
-                            ? 'border-[#30d158]/30 bg-[#30d158]/5'
-                            : 'border-[#ff453a]/30 bg-[#ff453a]/5'
+                            ? 'border-[#34d399]/30 bg-[#1f7a4d]/10'
+                            : 'border-[#f87171]/30 bg-[#f87171]/10'
                         }`}
                       >
                         <div className="flex items-start justify-between gap-3">
-                          <span className="font-semibold text-white">
+                          <span className="font-semibold text-white font-sans">
                             {idx + 1}. {q.question}
                           </span>
                           {isRight ? (
-                            <span className="flex items-center gap-1 font-mono text-[#30d158] font-bold text-[10px] shrink-0">
+                            <span className="flex items-center gap-1 font-display text-[#34d399] font-bold text-[10px] shrink-0">
                               <CheckCircle2 className="w-4 h-4" /> Correct
                             </span>
                           ) : (
-                            <span className="flex items-center gap-1 font-mono text-[#ff453a] font-bold text-[10px] shrink-0">
+                            <span className="flex items-center gap-1 font-display text-[#f87171] font-bold text-[10px] shrink-0">
                               <XCircle className="w-4 h-4" /> Incorrect
                             </span>
                           )}
                         </div>
 
-                        <div className="text-neutral-400">
-                          <span className="text-neutral-500 font-mono">Correct Answer: </span>
+                        <div className="text-[#78b496]/80 font-sans">
+                          <span className="text-[#78b496]/50 font-mono">Correct Answer: </span>
                           <span className="text-white font-medium">
                             {q.options[q.correctIndex]}
                           </span>
                         </div>
 
-                        <div className="p-3 rounded-xl bg-black/40 border border-neutral-800 text-zinc-300 leading-relaxed">
-                          <span className="text-[#2997ff] font-mono font-bold block mb-1">
-                            Explanation:
+                        <div className="p-3 rounded-xl bg-[#070c09] border border-[#78b496]/20 text-[#c9dccf] leading-relaxed">
+                          <span className="text-[#34d399] font-display font-bold block mb-1">
+                            EXPLANATION:
                           </span>
                           {q.explanation}
                         </div>
@@ -255,14 +254,14 @@ export function QuizModal({
         </div>
 
         {/* Modal Footer Controls */}
-        <div className="px-6 py-4 border-t border-neutral-800 bg-black/40 flex items-center justify-between">
+        <div className="px-6 py-4 border-t border-[#78b496]/20 bg-[#101713]/80 flex items-center justify-between">
           {!isFinished ? (
             <>
               <button
                 type="button"
                 onClick={handlePrev}
                 disabled={currentIndex === 0}
-                className="px-4 py-2 rounded-xl bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-white text-xs font-mono transition-colors disabled:opacity-30 cursor-pointer flex items-center gap-1"
+                className="px-4 py-2 rounded-xl bg-[#101713] border border-[#78b496]/20 text-[#78b496] hover:text-white text-xs font-mono transition-colors disabled:opacity-30 cursor-pointer flex items-center gap-1"
               >
                 <ChevronLeft className="w-4 h-4" />
                 <span>Previous</span>
@@ -272,7 +271,7 @@ export function QuizModal({
                 type="button"
                 onClick={handleNext}
                 disabled={!isSelected}
-                className="px-6 py-2.5 rounded-xl bg-white text-black text-xs font-bold hover:bg-neutral-200 transition-colors disabled:opacity-40 cursor-pointer flex items-center gap-1.5 shadow-sm"
+                className="px-6 py-2.5 rounded-xl bg-[#1f7a4d] hover:bg-[#34d399] text-white hover:text-[#050807] text-xs font-bold transition-all disabled:opacity-40 cursor-pointer flex items-center gap-1.5 shadow-[0_0_15px_rgba(52,211,153,0.25)]"
               >
                 <span>{currentIndex === total - 1 ? 'Finish & Grade' : 'Next Question'}</span>
                 <ChevronRight className="w-4 h-4" />
@@ -283,7 +282,7 @@ export function QuizModal({
               <button
                 type="button"
                 onClick={handleRetake}
-                className="px-4 py-2 rounded-xl bg-neutral-800 text-neutral-300 hover:text-white text-xs font-mono transition-colors cursor-pointer flex items-center gap-1.5"
+                className="px-4 py-2 rounded-xl bg-[#101713] border border-[#78b496]/20 text-[#78b496] hover:text-white text-xs font-mono transition-colors cursor-pointer flex items-center gap-1.5"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>Retake Test</span>
@@ -292,7 +291,7 @@ export function QuizModal({
               <button
                 type="button"
                 onClick={onClose}
-                className="px-6 py-2.5 rounded-xl bg-white text-black text-xs font-bold hover:bg-neutral-200 transition-colors cursor-pointer"
+                className="px-6 py-2.5 rounded-xl bg-[#1f7a4d] hover:bg-[#34d399] text-white hover:text-[#050807] text-xs font-bold transition-colors cursor-pointer"
               >
                 Close Assessment
               </button>

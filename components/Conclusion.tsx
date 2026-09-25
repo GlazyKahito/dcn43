@@ -1,48 +1,143 @@
+'use client';
+
 import React from 'react';
-import { CheckCircle2, Check } from 'lucide-react';
+import { CheckCircle2, Check, ArrowUp, ExternalLink, ShieldCheck } from 'lucide-react';
+import { DotMatrixCube } from './site/DotMatrixCube';
+import { LAB_CONFIG } from '../lib/config';
 
 export function Conclusion() {
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
-    <section id="conclusion" className="scroll-mt-24 max-w-5xl mx-auto px-4 sm:px-6 py-12 space-y-12">
-      {/* Conclusion Card */}
-      <div className="border border-neutral-800 bg-[#161617] rounded-[2.25rem] p-6 sm:p-10 space-y-6 shadow-2xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-72 h-72 bg-[#30d158]/5 rounded-full blur-3xl pointer-events-none -mr-16 -mt-16" />
+    <section id="conclusion" className="relative scroll-mt-24 pt-16 pb-20 overflow-hidden">
+      {/* Background Gradient into Deep Emerald */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#071710] to-[#050e09] pointer-events-none" />
 
-        <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-2xl bg-[#30d158]/10 border border-[#30d158]/20 flex items-center justify-center text-[#30d158]">
-            <CheckCircle2 className="w-5 h-5" />
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 space-y-16">
+        {/* Conclusion Card */}
+        <div className="border border-[#78b496]/20 bg-[#0a0f0d]/90 backdrop-blur-xl rounded-[2.5rem] p-6 sm:p-12 space-y-8 shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-80 h-80 bg-[#34d399]/10 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
+
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-2xl bg-[#1f7a4d]/20 border border-[#34d399]/30 flex items-center justify-center text-[#34d399] shadow-[0_0_12px_rgba(52,211,153,0.25)]">
+              <CheckCircle2 className="w-5 h-5" />
+            </div>
+            <span className="text-[11px] font-display uppercase tracking-widest text-[#34d399] font-bold">
+              LAB OUTCOME // SYNTHESIS
+            </span>
           </div>
-          <span className="text-[11px] font-mono uppercase tracking-widest text-[#30d158] font-bold">
-            Lab Outcome & Synthesis
-          </span>
-        </div>
 
-        <div>
-          <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-white mb-4">
-            Conclusion
-          </h3>
-          <div className="p-5 sm:p-6 rounded-2xl border-l-4 border-[#30d158] bg-black/40 text-sm sm:text-base text-zinc-200 font-medium leading-relaxed space-y-3">
-            <p>
-              Systematic network troubleshooting replaces erratic guesswork with a disciplined, reproducible engineering methodology. By climbing the Open Systems Interconnection (OSI) stack from Physical Layer 1 through Application Layer 7, each diagnostic utility—<strong>ping</strong> for Layer 3 reachability, <strong>tracert</strong> for transit hop localization, <strong>ipconfig</strong> for interface parameters, <strong>arp -a</strong> for Layer 2 MAC resolution, <strong>telnet</strong> for Layer 4 port accessibility, and <strong>nslookup</strong> for Layer 7 DNS translation—rules in root causes while ruling out healthy subsystems.
-            </p>
-            <p className="text-xs sm:text-sm text-neutral-400">
-              Through the eight simulated fault conditions, students demonstrated that physical link carrier status, correct subnet mask calculation, default gateway validity, asymmetric routing return paths, and host firewall access control lists (ACLs) are each essential prerequisites for end-to-end network communication.
-            </p>
+          <div>
+            <h3 className="text-2xl sm:text-4xl font-sans font-semibold tracking-tight text-white mb-4">
+              Conclusion
+            </h3>
+            <div className="p-6 sm:p-8 rounded-2xl border-l-4 border-[#34d399] bg-[#070c09] text-sm sm:text-base text-[#c9dccf] font-sans font-normal leading-relaxed space-y-4 shadow-inner">
+              <p>
+                Systematic network troubleshooting replaces erratic guesswork with a disciplined, reproducible engineering methodology. By climbing the Open Systems Interconnection (OSI) stack from Physical Layer 1 through Application Layer 7, each diagnostic utility—<strong>ping</strong> for Layer 3 reachability, <strong>tracert</strong> for transit hop localization, <strong>ipconfig</strong> for interface parameters, <strong>arp -a</strong> for Layer 2 MAC resolution, <strong>telnet</strong> for Layer 4 port accessibility, and <strong>nslookup</strong> for Layer 7 DNS translation—rules in root causes while ruling out healthy subsystems.
+              </p>
+              <p className="text-xs sm:text-sm text-[#78b496]/90">
+                Through the eight simulated fault conditions, students demonstrated that physical link carrier status, correct subnet mask calculation, default gateway validity, asymmetric routing return paths, and host firewall access control lists (ACLs) are each essential prerequisites for end-to-end network communication.
+              </p>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Experiment Complete Badge */}
-      <div className="flex flex-col items-center justify-center text-center pt-2 pb-24">
-        <div className="w-12 h-12 rounded-full bg-[#30d158]/10 border border-[#30d158]/25 flex items-center justify-center mb-3 text-[#30d158] shadow-[0_0_20px_rgba(48,209,88,0.2)]">
-          <Check className="w-6 h-6 stroke-[2.5]" />
+        {/* 3D Rotating Dot Matrix Cube with Experiment Complete Status */}
+        <div className="flex flex-col items-center justify-center text-center space-y-4 pt-4">
+          <DotMatrixCube className="mx-auto" />
+
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1f7a4d]/20 border border-[#34d399]/40 text-[#34d399] text-xs font-display tracking-widest uppercase shadow-[0_0_20px_rgba(52,211,153,0.2)]">
+            <span className="w-2 h-2 rounded-full bg-[#34d399] animate-pulse shadow-[0_0_8px_#34d399]" />
+            EXPERIMENT 10 // VERIFIED COMPLETE
+          </div>
+          <h4 className="text-xl sm:text-2xl font-sans font-semibold text-white tracking-tight">
+            Network Diagnostic Session Concluded
+          </h4>
+          <p className="text-xs sm:text-sm text-[#78b496]/80 font-sans max-w-md">
+            All telemetry metrics, simulated packet captures, and fault triage verifications have been synthesized into client state.
+          </p>
         </div>
-        <p className="text-base font-semibold text-white tracking-tight">
-          Experiment Complete.
-        </p>
-        <p className="text-xs font-mono text-neutral-500 mt-1">
-          K J Somaiya School of Engineering &bull; Department of Computer Engineering
-        </p>
+
+        {/* 3-Column lab0-style Footer */}
+        <div className="pt-12 border-t border-[#78b496]/15">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pb-10">
+            {/* Col 1: LAB */}
+            <div className="space-y-3">
+              <span className="text-[11px] font-display uppercase tracking-widest text-[#34d399] block font-bold">
+                01 // VLAB SPECIFICATION
+              </span>
+              <h5 className="text-sm font-sans font-semibold text-white">
+                {LAB_CONFIG.experimentTitle}
+              </h5>
+              <p className="text-xs text-[#78b496]/70 leading-relaxed font-sans">
+                Interactive client-side simulation suite covering OSI Layer 1-7 diagnostic tools, fault injection scenarios, and live packet path tracing.
+              </p>
+              <div className="pt-1 font-mono text-[11px] text-[#78b496]/60">
+                COURSE: <span className="text-white font-medium">{LAB_CONFIG.courseCode} — {LAB_CONFIG.courseName}</span>
+              </div>
+            </div>
+
+            {/* Col 2: RESOURCES */}
+            <div className="space-y-3">
+              <span className="text-[11px] font-display uppercase tracking-widest text-[#34d399] block font-bold">
+                02 // REFERENCE STANDARDS
+              </span>
+              <ul className="space-y-2 text-xs font-mono text-[#c9dccf]">
+                <li className="flex items-center gap-1.5 hover:text-[#34d399] transition-colors">
+                  <span>&bull;</span>
+                  <span>RFC 792 — Internet Control Message Protocol (ICMP)</span>
+                </li>
+                <li className="flex items-center gap-1.5 hover:text-[#34d399] transition-colors">
+                  <span>&bull;</span>
+                  <span>RFC 826 — Ethernet Address Resolution Protocol (ARP)</span>
+                </li>
+                <li className="flex items-center gap-1.5 hover:text-[#34d399] transition-colors">
+                  <span>&bull;</span>
+                  <span>RFC 1035 — Domain Names: Implementation & Spec</span>
+                </li>
+                <li className="flex items-center gap-1.5 hover:text-[#34d399] transition-colors">
+                  <span>&bull;</span>
+                  <span>RFC 1122 — Requirements for Internet Hosts</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Col 3: INSTITUTE */}
+            <div className="space-y-3">
+              <span className="text-[11px] font-display uppercase tracking-widest text-[#34d399] block font-bold">
+                03 // INSTITUTION
+              </span>
+              <div className="text-xs text-[#c9dccf] space-y-1 font-sans">
+                <div className="font-semibold text-white">{LAB_CONFIG.institution}</div>
+                <div className="text-[#78b496]/80">{LAB_CONFIG.department}</div>
+                <div className="text-[#78b496]/60 text-[11px]">Vidyavihar (East), Mumbai - 400 077, India</div>
+              </div>
+              <div className="pt-2">
+                <button
+                  onClick={scrollToTop}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#101713] border border-[#78b496]/20 text-[#34d399] hover:text-white hover:border-[#34d399]/40 text-xs font-mono transition-colors cursor-pointer"
+                >
+                  <ArrowUp className="w-3.5 h-3.5" />
+                  <span>Back to Top</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Copyright Bar */}
+          <div className="pt-6 border-t border-[#78b496]/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#78b496]/60 font-mono">
+            <div>
+              &copy; {new Date().getFullYear()} {LAB_CONFIG.institutionShort}. Built for Virtual Lab curriculum.
+            </div>
+            <div className="flex items-center gap-4">
+              <span>ZERO_CONFIG_DEPLOY</span>
+              <span>&bull;</span>
+              <span>100% IN_MEMORY</span>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
