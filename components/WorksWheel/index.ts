@@ -1,4 +1,4 @@
 export * from './types';
 export * from './projectData';
-export * from './WorksWheel';
-export * from './WorksWheelHero';
+export { WorksWheel } from './WorksWheel';
+export { WorksWheelHero } from './WorksWheelHero';

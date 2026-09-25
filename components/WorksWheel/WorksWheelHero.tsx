@@ -20,7 +20,3 @@ export function WorksWheelHero() {
     </div>
   );
 }
-
-export * from './types';
-export * from './projectData';
-export { WorksWheel } from './WorksWheel';
