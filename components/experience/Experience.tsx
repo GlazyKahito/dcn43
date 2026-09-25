@@ -4,6 +4,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { MODULES, type LabModule, type SectionId } from '@/data/modules';
 import { assessHealth } from '@/lib/sim/health';
+import { detectFaults } from '@/lib/sim/faults';
+import { NetworkField } from '@/components/atmosphere/NetworkField';
 import { LabProvider, useLab } from '@/lib/sim/store';
 import { WorksWheel } from '@/components/landing/WorksWheel';
 import { BootSequence } from './BootSequence';
@@ -70,6 +72,7 @@ function Shell() {
   }, []);
 
   const health = useMemo(() => assessHealth(state.net), [state.net]);
+  const faultCount = useMemo(() => detectFaults(state.net).length, [state.net]);
   const status = useMemo(
     () => [
       {
@@ -85,6 +88,7 @@ function Shell() {
 
   return (
     <>
+      <NetworkField faults={faultCount} pulse={state.flight?.id ?? 0} dim={phase === 'site'} />
       {phase === 'boot' && <BootSequence onDone={bootDone} />}
       {phase === 'wheel' && <WorksWheel initialIndex={wheelIndex} onLaunch={launch} status={status} />}
       {phase === 'site' && <Site initialSection={section} onWorks={toWheel} />}
