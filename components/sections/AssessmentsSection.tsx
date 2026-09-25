@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Section } from '@/components/chrome/Section';
 import { Led } from '@/components/chrome/Led';
 import { QUESTIONS, type Question, type QuestionKind } from '@/data/assessment';
+import { useProgress } from '@/lib/progress';
 
 const KIND_LABEL: Record<QuestionKind, string> = { mcq: 'Concept', scenario: 'Scenario', diagnostic: 'Diagnostic' };
 const BEST_KEY = 'svl-exp10-assessment-best';
@@ -29,6 +30,7 @@ export function AssessmentsSection() {
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [best, setBest] = useState<number | null>(null);
+  const { quizProgress } = useProgress();
 
   useEffect(() => {
     try {
@@ -40,6 +42,11 @@ export function AssessmentsSection() {
   }, []);
 
   const done = items && index >= items.length;
+  const fullRun = items?.length === QUESTIONS.length;
+  const answeredCount = items ? items.filter((it) => answers[it.q.id] !== undefined).length : 0;
+  useEffect(() => {
+    if (items && fullRun) quizProgress(answeredCount, QUESTIONS.length, !!done);
+  }, [items, fullRun, answeredCount, done, quizProgress]);
   const score = items ? items.filter((it) => answers[it.q.id] === it.q.answer).length : 0;
 
   useEffect(() => {

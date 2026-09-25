@@ -6,15 +6,25 @@ import { setLinkUp } from '@/lib/sim/actions';
 import { detectFaults } from '@/lib/sim/faults';
 import { assessHealth } from '@/lib/sim/health';
 import { useLab } from '@/lib/sim/store';
+import { useProgress, type ModuleState } from '@/lib/progress';
 import type { Proto } from '@/lib/sim/types';
 import { Led, type LedTone } from '@/components/chrome/Led';
 import { TopologyView, type Selection } from '@/components/network/TopologyView';
 import { Glyph } from './Glyph';
 
 interface Props {
-  initialIndex: number;
+  /** False while the lamp intro is still on screen; the landing powers up when it turns true. */
+  revealed: boolean;
   onLaunch: (module: LabModule, rect: DOMRect) => void;
 }
+
+const STATE_LABEL: Record<ModuleState, string> = {
+  complete: '✓ Verified',
+  active: 'Active',
+  next: 'Next',
+  available: 'Anytime',
+  upcoming: 'Upcoming',
+};
 
 const CYCLE: { proto: Proto; target: string; label: string }[] = [
   { proto: 'icmp', target: '172.16.0.10', label: 'ICMP' },
@@ -29,10 +39,23 @@ interface Reading {
 }
 
 /** Landing: the live lab network as the hero, with the modules on a rack patch panel below. */
-export function LandingHero({ initialIndex, onLaunch }: Props) {
+export function LandingHero({ revealed, onLaunch }: Props) {
   const lab = useLab();
   const { state, apply, reset } = lab;
-  const [focus, setFocus] = useState(initialIndex);
+  const pg = useProgress();
+  const states = MODULES.map((m) => pg.stateOf(m.id));
+  const nextIdx = MODULES.findIndex((m) => m.id === pg.next);
+  const [focus, setFocus] = useState(() => Math.max(0, MODULES.findIndex((m) => m.id === pg.current)));
+  // Entrance stagger runs once as the intro dissolves; afterwards hovers respond immediately.
+  const [settled, setSettled] = useState(false);
+  useEffect(() => {
+    if (!revealed) return;
+    const t = window.setTimeout(() => setSettled(true), 1800);
+    return () => window.clearTimeout(t);
+  }, [revealed]);
+  const reveal = () =>
+    `transition-[opacity,transform,filter] duration-[900ms] ease-[cubic-bezier(0.2,0.7,0.2,1)] ${revealed ? 'translate-y-0 opacity-100 blur-0' : 'translate-y-3 opacity-0 blur-[3px]'}`;
+  const delay = (ms: number) => ({ transitionDelay: revealed && !settled ? `${ms}ms` : '0ms' });
   const [launching, setLaunching] = useState<number | null>(null);
   const [readings, setReadings] = useState<Reading[]>([]);
   const [selection, setSelection] = useState<Selection>(null);
@@ -46,7 +69,7 @@ export function LandingHero({ initialIndex, onLaunch }: Props) {
 
   // Ambient traffic: one probe from PC1 every 2.2 s, cycling ICMP, DNS and HTTP.
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!revealed || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     let i = 0;
     const tick = () => {
       const c = CYCLE[i++ % CYCLE.length];
@@ -60,7 +83,7 @@ export function LandingHero({ initialIndex, onLaunch }: Props) {
       window.clearTimeout(first);
       window.clearInterval(t);
     };
-  }, []);
+  }, [revealed]);
 
   const launch = useCallback(
     (i: number) => {
@@ -106,8 +129,8 @@ export function LandingHero({ initialIndex, onLaunch }: Props) {
   const current = MODULES[focus];
 
   return (
-    <section aria-label="Laboratory landing" className="wheel-enter relative flex min-h-[100svh] w-full flex-col px-4 pb-5 pt-4 sm:px-8 sm:pt-6">
-      <header className="flex items-start justify-between gap-4">
+    <section aria-label="Laboratory landing" className="relative flex min-h-[100svh] w-full flex-col px-4 pb-5 pt-4 sm:px-8 sm:pt-6">
+      <header className={`flex items-start justify-between gap-4 ${reveal()}`} style={delay(0)}>
         <div className="space-y-1">
           <p className="label text-muted">Somaiya Virtual Labs</p>
           <p className="label">K J Somaiya School of Engineering</p>
@@ -119,7 +142,7 @@ export function LandingHero({ initialIndex, onLaunch }: Props) {
       </header>
 
       <div className={`grid flex-1 items-center gap-8 py-8 transition-opacity duration-300 lg:grid-cols-12 lg:gap-10 ${launching !== null ? 'opacity-40' : ''}`}>
-        <div className="lg:col-span-5">
+        <div className={`lg:col-span-5 ${reveal()}`} style={delay(120)}>
           <p className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-label text-signal">
             <span className="h-px w-8 bg-signal/60" />
             Experiment 10
@@ -144,7 +167,7 @@ export function LandingHero({ initialIndex, onLaunch }: Props) {
           </div>
         </div>
 
-        <div className="lg:col-span-7">
+        <div className={`lg:col-span-7 ${reveal()}`} style={delay(240)}>
           <div className="panel overflow-hidden">
             <div className="flex items-center justify-between gap-3 border-b border-hair px-4 py-2.5">
               <p className="label flex items-center gap-2 text-muted">
@@ -194,47 +217,76 @@ export function LandingHero({ initialIndex, onLaunch }: Props) {
         </div>
       </div>
 
-      <nav aria-label="Laboratory modules">
-        <div className="mb-2 flex items-baseline justify-between gap-4">
-          <p className="label">Patch panel · 10 modules</p>
-          <p className="label hidden sm:block">
+      <nav aria-label="Laboratory modules" className={reveal()} style={delay(350)}>
+        <div className="mb-2 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+          <p className="label">
+            Patch panel · 10 modules <span className="text-muted">· {pg.completed}/10 verified</span>
+          </p>
+          <p className="label hidden lg:block">
             {current.no} · {current.title} — {current.line}
           </p>
+          {nextIdx >= 0 && (
+            <button type="button" className="btn-ghost text-signal hover:text-paper" onClick={() => launch(nextIdx)}>
+              {pg.completed === 0 && !pg.current ? 'Begin at 01' : `Continue · ${MODULES[nextIdx].no} ${MODULES[nextIdx].title}`} →
+            </button>
+          )}
         </div>
         <div className="panel p-2">
           <ul className="grid grid-cols-2 gap-1.5 sm:grid-cols-5 xl:grid-cols-10">
             {MODULES.map((m, i) => {
               const on = focus === i;
+              const st = states[i];
+              const lamps = Math.round(pg.progress[m.id].value * 5);
               return (
-                <li key={m.id}>
+                <li key={m.id} className={reveal()} style={delay(450 + i * 70)}>
                   <button
                     type="button"
                     ref={(n) => void (portRefs.current[i] = n)}
                     onClick={() => launch(i)}
                     onMouseEnter={() => setFocus(i)}
                     onFocus={() => setFocus(i)}
-                    aria-label={`${m.no} ${m.title}: ${m.line}`}
-                    className={`group relative flex h-full w-full flex-col rounded-[2px] border bg-ink/60 px-2.5 pb-2.5 pt-2 text-left transition-[border-color,background-color,transform] duration-200 hover:-translate-y-0.5 ${
-                      launching === i ? 'border-signal bg-signal-soft' : on ? 'border-silver/45 bg-gunmetal' : 'border-hair'
-                    }`}
+                    aria-label={`${m.no} ${m.title}: ${m.line} ${STATE_LABEL[st]}. ${pg.progress[m.id].detail}.`}
+                    className={`group relative flex h-full w-full flex-col rounded-[2px] border bg-ink/60 px-2.5 pb-2.5 pt-2 text-left transition-[border-color,background-color,transform,opacity] duration-200 hover:-translate-y-0.5 hover:opacity-100 ${
+                      launching === i ? 'border-signal bg-signal-soft' : on ? 'border-silver/45 bg-gunmetal' : st === 'complete' ? 'border-signal/30' : st === 'active' ? 'border-silver/35' : 'border-hair'
+                    } ${st === 'upcoming' && !on ? 'opacity-70' : ''}`}
                   >
+                    {st === 'active' && <span aria-hidden className="absolute inset-y-2 left-0 w-[2px] bg-signal" />}
                     <span className="flex items-center justify-between">
-                      <span className="font-mono text-[10px] text-dim">{m.no}</span>
-                      <Led tone={on || launching === i ? 'ok' : 'off'} />
+                      <span className={`font-mono text-[10px] ${st === 'complete' ? 'text-signal' : st === 'active' ? 'text-paper' : 'text-dim'}`}>{m.no}</span>
+                      <Led tone={st === 'complete' ? 'ok' : on || launching === i || st === 'active' ? 'ok' : 'off'} pulse={st === 'active'} />
                     </span>
-                    <span className={`mt-1.5 flex h-9 items-center justify-center transition-colors ${on ? 'text-silver' : 'text-dim'}`}>
+                    <span
+                      className={`mt-1.5 flex h-9 items-center justify-center transition-colors ${on || st === 'active' ? 'text-silver' : 'text-dim'}`}
+                      style={{ ['--glyph-accent' as string]: st === 'complete' || st === 'active' ? '#5fae8a' : '#8a8b86' }}
+                    >
                       <Glyph id={m.glyph} className="h-full" />
                     </span>
-                    <span className={`mt-1.5 font-display text-[12.5px] font-medium uppercase leading-tight tracking-wide ${on ? 'text-paper' : 'text-muted'}`}>{m.title}</span>
-                    <span aria-hidden className="absolute bottom-1 right-1.5 flex gap-[3px]">
-                      <span className="h-1 w-1 rounded-full bg-hair-strong" />
-                      <span className="h-1 w-1 rounded-full bg-hair-strong" />
+                    <span className={`mt-1.5 font-display text-[12.5px] font-medium uppercase leading-tight tracking-wide ${on || st === 'active' ? 'text-paper' : 'text-muted'}`}>{m.title}</span>
+                    <span className="mt-1.5 flex items-center justify-between gap-1">
+                      <span className={`font-mono text-[9px] uppercase tracking-[0.12em] ${st === 'complete' ? 'text-signal' : st === 'active' || st === 'next' ? 'text-silver' : 'text-dim'}`}>
+                        {STATE_LABEL[st]}
+                      </span>
+                      <span aria-hidden className="flex gap-[2px]">
+                        {Array.from({ length: 5 }, (_, k) => (
+                          <span key={k} className={`h-[4px] w-[6px] ${k < lamps ? (st === 'complete' ? 'bg-signal' : 'bg-silver/80') : 'bg-steel'}`} />
+                        ))}
+                      </span>
                     </span>
                   </button>
                 </li>
               );
             })}
           </ul>
+          {/* the recommended path, 01 → 10, as a trace under the ports */}
+          <div aria-hidden className="mt-2 hidden grid-cols-10 gap-1.5 xl:grid">
+            {MODULES.map((m, i) => (
+              <span key={m.id} className="relative flex h-2 items-center">
+                <span className={`h-px flex-1 ${states[i] === 'complete' ? 'bg-signal/70' : 'bg-hair-strong'}`} />
+                <span className={`h-1.5 w-1.5 rounded-full border ${states[i] === 'complete' ? 'border-signal bg-signal' : states[i] === 'active' ? 'border-paper bg-paper' : states[i] === 'next' ? 'border-silver/70' : 'border-hair-strong'}`} />
+                <span className={`h-px flex-1 ${states[i] === 'complete' ? 'bg-signal/70' : 'bg-hair-strong'}`} />
+              </span>
+            ))}
+          </div>
         </div>
       </nav>
     </section>

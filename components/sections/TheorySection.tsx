@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useProgress } from '@/lib/progress';
 import { Section } from '@/components/chrome/Section';
 import { Diagram } from '@/components/theory/Diagram';
 import { THEORY, type TheoryTopic } from '@/data/theory';
@@ -37,6 +38,10 @@ function TopicBody({ t }: { t: TheoryTopic }) {
 export function TheorySection() {
   const [open, setOpen] = useState(THEORY[0].id);
   const active = THEORY.find((t) => t.id === open) ?? THEORY[0];
+  const { openTopic } = useProgress();
+  useEffect(() => {
+    if (open) openTopic(open);
+  }, [open, openTopic]);
 
   return (
     <Section

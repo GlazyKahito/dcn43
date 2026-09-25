@@ -52,7 +52,7 @@ export function LampIntro({ onDone }: { onDone: () => void }) {
       className="fixed inset-0 z-[300] flex flex-col items-center overflow-hidden"
       style={{ background: INK }}
       initial={{ opacity: 1 }}
-      exit={{ opacity: 0, scale: 1.05, filter: 'blur(6px)', transition: { duration: 0.75, ease: [0.4, 0, 0.2, 1] } }}
+      exit={{ opacity: 0, scale: 1.03, filter: 'blur(4px)', transition: { duration: 1.2, ease: [0.45, 0, 0.15, 1] } }}
     >
       {/* lamp */}
       <div className="relative isolate flex h-[46vh] min-h-[300px] w-full scale-y-125 items-end justify-center">
