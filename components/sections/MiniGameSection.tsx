@@ -58,7 +58,7 @@ export function MiniGameSection() {
   return (
     <Section
       id="minigame"
-      no="07"
+      no="03"
       kicker="Mini-game · Network Incident"
       title={
         <>

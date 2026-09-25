@@ -187,9 +187,9 @@ export const INCIDENTS: Incident[] = [
 export type Difficulty = 'easy' | 'medium' | 'hard';
 
 export const DIFFICULTY: Record<Difficulty, { label: string; seconds: number; suspects: number; faults: number; freeActions: number; note: string }> = {
-  easy: { label: 'Easy', seconds: 300, suspects: 4, faults: 1, freeActions: 14, note: 'One fault · clear symptoms · objective hints' },
-  medium: { label: 'Medium', seconds: 300, suspects: 6, faults: 1, freeActions: 12, note: 'One hidden fault · several plausible causes' },
-  hard: { label: 'Hard', seconds: 360, suspects: 10, faults: 2, freeActions: 18, note: 'Two faults · misleading symptoms' },
+  easy: { label: 'Easy', seconds: 180, suspects: 4, faults: 1, freeActions: 14, note: '3:00 · one fault · clear symptoms · hints' },
+  medium: { label: 'Medium', seconds: 120, suspects: 6, faults: 1, freeActions: 12, note: '2:00 · one hidden fault · several plausible causes' },
+  hard: { label: 'Hard', seconds: 180, suspects: 10, faults: 2, freeActions: 18, note: '3:00 · two faults · misleading symptoms' },
 };
 
 /** Pairs that touch the same element cannot be combined on hard. */

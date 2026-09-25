@@ -6,30 +6,28 @@ import Lenis from 'lenis';
 import { MODULES, moduleById, type ModuleId, type SectionId } from '@/data/modules';
 import { useProgress } from '@/lib/progress';
 import { SiteNav } from '@/components/chrome/SiteNav';
-import { TroubleshootingSection } from '@/components/sections/TroubleshootingSection';
-import { AimSection } from '@/components/sections/AimSection';
 import { TheorySection } from '@/components/sections/TheorySection';
 import { SimulatorSection } from '@/components/sections/SimulatorSection';
 import { DiagnosticsSection } from '@/components/sections/DiagnosticsSection';
 import { AssessmentsSection } from '@/components/sections/AssessmentsSection';
 import { MiniGameSection } from '@/components/sections/MiniGameSection';
-import { ExperimentSection } from '@/components/sections/ExperimentSection';
 import { ConclusionSection } from '@/components/sections/ConclusionSection';
 
 const VIEWS: Record<SectionId, () => ReactNode> = {
-  troubleshooting: () => <TroubleshootingSection />,
-  aim: () => <AimSection />,
   theory: () => <TheorySection />,
-  simulator: () => <SimulatorSection />,
-  diagnostics: () => <DiagnosticsSection />,
-  assessments: () => <AssessmentsSection />,
+  simulator: () => (
+    <>
+      <SimulatorSection />
+      <DiagnosticsSection />
+    </>
+  ),
   minigame: () => <MiniGameSection />,
-  experiment: () => <ExperimentSection />,
+  assessments: () => <AssessmentsSection />,
   conclusion: () => <ConclusionSection />,
 };
 
 /** Modules that count as complete once read to the end. */
-const READ_TO_END: ModuleId[] = ['troubleshooting', 'aim', 'experiment', 'conclusion'];
+const READ_TO_END: ModuleId[] = ['conclusion'];
 
 interface SiteApi {
   /** Opens the module that owns a section (used by in-content links such as “Open the simulator”). */
@@ -38,8 +36,9 @@ interface SiteApi {
 const SiteContext = createContext<SiteApi>({ goTo: () => undefined });
 export const useSite = () => useContext(SiteContext);
 
-export function Site({ initialModule, onIndex }: { initialModule: ModuleId; onIndex: () => void }) {
+export function Site({ initialModule, initialAnchor, onIndex }: { initialModule: ModuleId; initialAnchor?: string; onIndex: () => void }) {
   const [current, setCurrent] = useState<ModuleId>(initialModule);
+  const anchor = useRef(initialAnchor);
   const lenis = useRef<Lenis | null>(null);
   const { visit, markRead } = useProgress();
   const reduced = useReducedMotion();
@@ -67,6 +66,17 @@ export function Site({ initialModule, onIndex }: { initialModule: ModuleId; onIn
     visit(current);
     if (lenis.current) lenis.current.scrollTo(0, { immediate: true });
     else window.scrollTo(0, 0);
+    // A launch can target a point inside the module (e.g. the troubleshooting tickets in Simulation).
+    const target = anchor.current;
+    anchor.current = undefined;
+    if (!target) return;
+    const t = window.setTimeout(() => {
+      const el = document.getElementById(target);
+      if (!el) return;
+      if (lenis.current) lenis.current.scrollTo(el, { offset: -96, duration: 1.2 });
+      else window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 96 });
+    }, 450);
+    return () => window.clearTimeout(t);
   }, [current, visit]);
 
   // Reading modules complete when their last line has been on screen.
@@ -141,7 +151,7 @@ export function Site({ initialModule, onIndex }: { initialModule: ModuleId; onIn
             )}
           </div>
         </div>
-        <p className="label mx-auto mt-8 max-w-[1320px]">Somaiya Virtual Labs · K J Somaiya School of Engineering · Experiment 10</p>
+        <p className="label mx-auto mt-8 max-w-[1320px]">Somaiya Virtual Labs · K J Somaiya School of Engineering · Experiment 8</p>
       </footer>
     </SiteContext.Provider>
   );

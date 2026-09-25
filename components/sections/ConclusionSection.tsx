@@ -35,7 +35,7 @@ export function ConclusionSection() {
   return (
     <Section
       id="conclusion"
-      no="09"
+      no="05"
       kicker="Conclusion"
       title={
         <>
@@ -57,6 +57,27 @@ export function ConclusionSection() {
           </Reveal>
         ))}
       </div>
+      <Reveal delay={0.08}>
+        <div className="panel mt-10 overflow-hidden">
+          <div className="flex flex-wrap items-baseline justify-between gap-3 border-b border-hair px-5 py-3">
+            <p className="font-display text-lg font-medium uppercase tracking-wide text-paper">Experiment 8 · Summary</p>
+            <p className="label">K J Somaiya School of Engineering · Somaiya Virtual Labs</p>
+          </div>
+          <dl className="grid gap-px bg-hair sm:grid-cols-2 xl:grid-cols-4">
+            {[
+              ['Objective', 'Diagnose and resolve faults in a routed network with host-based utilities, and verify end-to-end connectivity after each repair.'],
+              ['Scope', 'A /24 LAN with two workstations and a switch, a gateway router with DHCP, a /30 transit link, a stateful firewall and a DNS/HTTP server.'],
+              ['Tools', 'ping · tracert · traceroute · ipconfig · ifconfig · nslookup · arp · netstat · curl'],
+              ['Modules', 'Theory · Simulation · Mini-game · Test · Conclusion'],
+            ].map(([k, v]) => (
+              <div key={k} className="bg-graphite px-5 py-4">
+                <dt className="label">{k}</dt>
+                <dd className="mt-1.5 text-[13.5px] leading-relaxed text-muted">{v}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </Reveal>
       <Reveal delay={0.1}>
         <div className="mt-10 flex flex-col items-start justify-between gap-4 border-t border-hair pt-8 sm:flex-row sm:items-center">
           <p className="font-display text-2xl uppercase tracking-wide text-paper sm:text-3xl">Launch lab → enter interactive network environment</p>

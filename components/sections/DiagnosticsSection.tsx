@@ -94,8 +94,8 @@ export function DiagnosticsSection() {
   return (
     <Section
       id="diagnostics"
-      no="05"
-      kicker="Diagnostics · Troubleshooting console"
+      no="02·B"
+      kicker="Simulation · Troubleshooting tickets"
       title={
         <>
           From symptom

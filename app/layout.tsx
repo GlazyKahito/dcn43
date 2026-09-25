@@ -8,7 +8,7 @@ const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500'], variabl
 const display = IBM_Plex_Sans_Condensed({ subsets: ['latin'], weight: ['300', '500', '600', '700'], variable: '--font-display', display: 'swap' });
 
 export const metadata: Metadata = {
-  title: 'Network Troubleshooting & Simulator · Experiment 10 · Somaiya Virtual Labs',
+  title: 'Network Troubleshooting & Simulator · Experiment 8 · Somaiya Virtual Labs',
   description:
     'Interactive network laboratory: inject faults into a five-node topology, diagnose them with ping, tracert, ipconfig, nslookup, arp and netstat, repair the network and verify recovery.',
   icons: { icon: '/somaiya-logo.png', apple: '/somaiya-logo.png' },

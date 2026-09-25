@@ -5,10 +5,8 @@ import { MODULES, type ModuleId } from '@/data/modules';
 import { detectFaults } from '@/lib/sim/faults';
 import { useLab } from '@/lib/sim/store';
 
-const KEY = 'svl-exp10-progress-v1';
-const THEORY_TARGET = 8;
-const TICKET_TARGET = 3;
-const READING: ModuleId[] = ['troubleshooting', 'aim', 'experiment', 'conclusion'];
+const KEY = 'svl-exp10-progress-v2';
+const THEORY_CARDS = 5;
 
 interface Facts {
   current: ModuleId | null;
@@ -42,25 +40,19 @@ export type ModuleState = 'complete' | 'active' | 'next' | 'available' | 'upcomi
 
 function derive(f: Facts): Record<ModuleId, ModuleProgress> {
   const out = {} as Record<ModuleId, ModuleProgress>;
-  for (const id of READING) {
-    const complete = f.read.includes(id);
-    out[id] = { value: complete ? 1 : f.visited.includes(id) ? 0.4 : 0, complete, detail: complete ? 'Read' : f.visited.includes(id) ? 'In progress' : 'Not started' };
-  }
-  const t = Math.min(f.topics.length, THEORY_TARGET);
-  out.theory = { value: t / THEORY_TARGET, complete: t >= THEORY_TARGET, detail: `${f.topics.length}/16 cards` };
-  const simDone = Object.values(f.sim).filter(Boolean).length;
-  out.simulator = { value: simDone / 4, complete: simDone === 4, detail: `${simDone}/4 tasks` };
-  const k = Math.min(f.tickets.length, TICKET_TARGET);
-  out.diagnostics = { value: k / TICKET_TARGET, complete: k >= TICKET_TARGET, detail: `${f.tickets.length}/10 tickets` };
+  const t = Math.min(f.topics.length, THEORY_CARDS);
+  out.theory = { value: t / THEORY_CARDS, complete: t >= THEORY_CARDS, detail: `${t}/${THEORY_CARDS} cards` };
+  // Simulation: four lab tasks plus one troubleshooting ticket worked to verified recovery.
+  const simDone = Object.values(f.sim).filter(Boolean).length + (f.tickets.length > 0 ? 1 : 0);
+  out.simulator = { value: simDone / 5, complete: simDone === 5, detail: `${simDone}/5 tasks · ${f.tickets.length} ticket${f.tickets.length === 1 ? '' : 's'}` };
+  out.minigame = { value: f.game.finished ? 1 : 0, complete: f.game.finished, detail: f.game.finished ? 'Case resolved' : 'No case closed' };
   out.assessments = {
     value: f.quiz.finished ? 1 : f.quiz.answered / f.quiz.total,
     complete: f.quiz.finished,
     detail: f.quiz.finished ? 'Attempt scored' : `${f.quiz.answered}/${f.quiz.total} answered`,
   };
-  out.minigame = { value: f.game.finished ? 1 : 0, complete: f.game.finished, detail: f.game.finished ? 'Case resolved' : 'No case closed' };
-  const prior = MODULES.slice(0, 9).filter((m) => out[m.id].complete).length;
-  const launched = f.visited.includes('launch');
-  out.launch = { value: prior / 9, complete: launched && prior === 9, detail: `Capstone · ${prior}/9 modules` };
+  const read = f.read.includes('conclusion');
+  out.conclusion = { value: read ? 1 : f.visited.includes('conclusion') ? 0.4 : 0, complete: read, detail: read ? 'Read' : f.visited.includes('conclusion') ? 'In progress' : 'Not started' };
   return out;
 }
 

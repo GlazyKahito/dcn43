@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Led, type LedTone } from '@/components/chrome/Led';
+import { NumberTicker } from '@/components/fx/NumberTicker';
 import { applyRepair, faultCount, renew as renewLease, verificationFrom, type Repair, type World } from '@/lib/game/actions';
 import { CAUSE_LABEL, createCase, DIFFICULTY, scoreCase, type CaseFile, type CauseId, type Difficulty, type VerifyKey } from '@/lib/game/incidents';
 import type { Station, StationId } from '@/lib/game/world';
@@ -279,7 +280,7 @@ export function NetworkIncident({ difficulty, onExit }: Props) {
           </div>
           <div className="pointer-events-none absolute left-1/2 top-4 -translate-x-1/2 text-center sm:top-5">
             <p className="label">Time</p>
-            <p className={`font-mono text-[22px] tabular-nums ${time <= 60 ? 'text-alarm' : 'text-paper'}`}>{fmt(time)}</p>
+            <p className={`font-mono text-[22px] tabular-nums ${time <= 30 ? "text-alarm" : "text-paper"}`}>{fmt(time)}</p>
           </div>
           <div className="pointer-events-none absolute right-4 top-4 text-right sm:right-6 sm:top-5">
             <p className="label">Network status</p>
@@ -360,7 +361,7 @@ export function NetworkIncident({ difficulty, onExit }: Props) {
           <motion.div key="brief" className="absolute inset-0 grid place-items-center bg-ink/80 p-4 backdrop-blur-sm" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, transition: { duration: 0.5 } }}>
             <motion.div initial={{ y: 16, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.15, duration: 0.5 }} className="w-full max-w-lg border border-hair-strong bg-graphite/95 font-mono">
               <div className="flex items-center justify-between border-b border-hair px-5 py-3 text-[11px] uppercase tracking-[0.18em] text-muted">
-                <span>07 / Mini-game</span>
+                <span>03 / Mini-game</span>
                 <span className="flex items-center gap-2 text-alarm">
                   <Led tone="err" pulse /> Alert
                 </span>
@@ -457,7 +458,7 @@ export function NetworkIncident({ difficulty, onExit }: Props) {
                 </div>
                 <div className="flex justify-between text-[14px]">
                   <dt className="text-muted">Score</dt>
-                  <dd className="text-paper">{phase === 'result' ? score.total : 0}</dd>
+                  <dd className="text-paper">{phase === 'result' ? <NumberTicker value={score.total} duration={1.4} /> : 0}</dd>
                 </div>
               </dl>
               {phase === 'result' ? (

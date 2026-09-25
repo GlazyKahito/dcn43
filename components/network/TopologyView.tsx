@@ -37,7 +37,7 @@ export function TopologyView({ net, flight, selection, onSelect, concealed = fal
 
   useLayoutEffect(() => {
     const el = wrap.current!;
-    const read = () => setTall(el.clientWidth < 560);
+    const read = () => setTall(el.clientWidth < 440);
     read();
     const ro = new ResizeObserver(read);
     ro.observe(el);
