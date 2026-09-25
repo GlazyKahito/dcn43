@@ -183,7 +183,7 @@ export function LandingHero({ revealed, onLaunch }: Props) {
             <span className="h-px w-8 bg-signal/60" />
             Experiment 8
           </p>
-          <h1 className="mt-5 font-display text-[clamp(38px,4.3vw,74px)] font-extrabold uppercase leading-[0.84] tracking-[-0.015em] text-paper">
+          <h1 className="mt-5 font-display text-[clamp(30px,3.4vw,60px)] font-extrabold uppercase leading-[0.9] tracking-[-0.015em] text-paper">
             <TextEffect lines={['Network', 'Troubleshooting', '& Simulator']} lineClass={['', '', 'font-light text-silver']} play={revealed} delay={0.2} />
           </h1>
           <p className="mt-6 max-w-md text-[15.5px] leading-relaxed text-muted">
