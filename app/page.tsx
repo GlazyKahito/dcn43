@@ -6,6 +6,7 @@ import { Theory } from '../components/Theory';
 import { PreTestCallout } from '../components/PreTestCallout';
 import { InteractiveLab } from '../components/InteractiveLab';
 import { MiniGameSection } from '../components/MiniGameSection';
+import { DemoOne } from '../components/ui/demo';
 import { PostTestCallout } from '../components/PostTestCallout';
 import { Conclusion } from '../components/Conclusion';
 
@@ -35,10 +36,13 @@ export default function HomePage() {
         {/* 7. Featured Vintage Arcade Mini-Game Section (Packet X-Flow) */}
         <MiniGameSection />
 
-        {/* 8. Post-Test (10 Harder MCQs in modal) */}
+        {/* 8. UI Component Showcase (Liquid Glass & Metal Buttons) */}
+        <DemoOne />
+
+        {/* 9. Post-Test (10 Harder MCQs in modal) */}
         <PostTestCallout />
 
-        {/* 9. Conclusion */}
+        {/* 10. Conclusion */}
         <Conclusion />
       </main>
     </div>

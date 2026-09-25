@@ -313,6 +313,13 @@ export function Header() {
               </a>
 
               <a
+                href="#ui-showcase"
+                className="px-3 py-1.5 rounded-xl text-xs font-medium text-[#34d399] hover:text-white bg-[#1f7a4d]/20 hover:bg-[#1f7a4d]/40 border border-[#34d399]/30 transition-all flex items-center gap-1.5 cursor-pointer"
+              >
+                <span>UI Showcase</span>
+              </a>
+
+              <a
                 href="#conclusion"
                 className="px-3.5 py-1.5 rounded-xl text-xs font-medium text-neutral-300 hover:text-white hover:bg-white/[0.05] transition-all"
               >
@@ -378,6 +385,13 @@ export function Header() {
                 className="block py-2 text-xs font-medium text-[#c8b27a] font-bold"
               >
                 🎮 Packet X-Flow Mini-Game
+              </a>
+              <a
+                href="#ui-showcase"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block py-2 text-xs font-medium text-[#34d399]"
+              >
+                ✨ Liquid & Metal Buttons Showcase
               </a>
               <a
                 href="#post-test"
