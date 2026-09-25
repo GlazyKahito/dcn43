@@ -33,7 +33,7 @@ export function SiteNav({ active, onNavigate, onWorks }: Props) {
   return (
     <header className="fixed inset-x-0 top-0 z-[200] border-b border-hair bg-ink/80 backdrop-blur-md">
       <div className="mx-auto flex h-14 max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-6">
-        <button type="button" onClick={() => go('works')} className="flex min-w-0 items-center gap-3 text-left" aria-label="Return to Works Wheel">
+        <button type="button" onClick={() => go('works')} className="flex min-w-0 items-center gap-3 text-left" aria-label="Return to index">
           <span className="grid h-7 w-7 shrink-0 place-items-center border border-hair-strong font-mono text-[10px] text-silver">10</span>
           <span className="min-w-0 leading-tight">
             <span className="block truncate font-mono text-[10px] uppercase tracking-[0.18em] text-dim">Somaiya Virtual Labs</span>

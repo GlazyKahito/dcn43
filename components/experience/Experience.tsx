@@ -3,15 +3,14 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { MODULES, type LabModule, type SectionId } from '@/data/modules';
-import { assessHealth } from '@/lib/sim/health';
 import { detectFaults } from '@/lib/sim/faults';
 import { NetworkField } from '@/components/atmosphere/NetworkField';
 import { LabProvider, useLab } from '@/lib/sim/store';
-import { WorksWheel } from '@/components/landing/WorksWheel';
+import { LandingHero } from '@/components/landing/LandingHero';
 import { BootSequence } from './BootSequence';
 import { Site } from './Site';
 
-type Phase = 'boot' | 'wheel' | 'site';
+type Phase = 'boot' | 'landing' | 'site';
 
 interface Surface {
   module: LabModule;
@@ -31,7 +30,7 @@ function Shell() {
   const [phase, setPhase] = useState<Phase>('boot');
   const [surface, setSurface] = useState<Surface | null>(null);
   const [section, setSection] = useState<SectionId>('troubleshooting');
-  const [wheelIndex, setWheelIndex] = useState(0);
+  const [landingIndex, setLandingIndex] = useState(0);
 
   useEffect(() => {
     let seen = false;
@@ -40,7 +39,7 @@ function Shell() {
     } catch {
       /* storage unavailable: show the boot */
     }
-    if (seen) setPhase('wheel');
+    if (seen) setPhase('landing');
   }, []);
 
   useEffect(() => {
@@ -53,45 +52,32 @@ function Shell() {
     } catch {
       /* ignore */
     }
-    setPhase((p) => (p === 'boot' ? 'wheel' : p));
+    setPhase((p) => (p === 'boot' ? 'landing' : p));
   }, []);
 
   const launch = useCallback((module: LabModule, r: DOMRect) => {
-    setWheelIndex(MODULES.indexOf(module));
+    setLandingIndex(MODULES.indexOf(module));
     setSection(module.section);
     setSurface({ module, rect: { top: r.top, left: r.left, width: r.width, height: r.height } });
   }, []);
 
-  const toWheel = useCallback((from?: SectionId) => {
+  const toLanding = useCallback((from?: SectionId) => {
     if (from) {
       const idx = MODULES.findIndex((m) => m.section === from);
-      if (idx >= 0) setWheelIndex(idx);
+      if (idx >= 0) setLandingIndex(idx);
     }
     window.scrollTo(0, 0);
-    setPhase('wheel');
+    setPhase('landing');
   }, []);
 
-  const health = useMemo(() => assessHealth(state.net), [state.net]);
   const faultCount = useMemo(() => detectFaults(state.net).length, [state.net]);
-  const status = useMemo(
-    () => [
-      {
-        label: 'Network',
-        value: health.status === 'operational' ? 'Operational' : health.status === 'degraded' ? 'Degraded' : 'Down',
-        tone: (health.status === 'operational' ? 'ok' : health.status === 'degraded' ? 'warn' : 'err') as 'ok' | 'warn' | 'err',
-      },
-      { label: 'Packet engine', value: 'Online', tone: 'ok' as const },
-      { label: 'Diagnostics', value: 'Online', tone: 'ok' as const },
-    ],
-    [health.status],
-  );
 
   return (
     <>
       <NetworkField faults={faultCount} pulse={state.flight?.id ?? 0} dim={phase === 'site'} />
       {phase === 'boot' && <BootSequence onDone={bootDone} />}
-      {phase === 'wheel' && <WorksWheel initialIndex={wheelIndex} onLaunch={launch} status={status} />}
-      {phase === 'site' && <Site initialSection={section} onWorks={toWheel} />}
+      {phase === 'landing' && <LandingHero initialIndex={landingIndex} onLaunch={launch} />}
+      {phase === 'site' && <Site initialSection={section} onWorks={toLanding} />}
 
       <AnimatePresence>
         {surface && (

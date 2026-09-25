@@ -9,6 +9,8 @@ export interface Flight {
   back: DeviceId[];
   delivered: boolean;
   label: string;
+  /** Why the packet failed, in operator terms. */
+  reason?: string;
 }
 
 export interface CommandResult {
@@ -42,6 +44,34 @@ export const COMMAND_HELP: [string, string][] = [
   ['hostname · cls · help', 'Utilities'],
 ];
 
+/** Short operator-facing explanation of where and why a probe failed. */
+export function describeFailure(p: ProbeResult): string | undefined {
+  if (p.ok) return p.service === 'refused' || p.service === 'closed' ? `port closed on ${p.dst}` : undefined;
+  const at = p.forward.at;
+  switch (p.reason) {
+    case 'src-down':
+      return 'source powered off';
+    case 'no-carrier':
+      return `no carrier on ${at}`;
+    case 'no-address':
+      return `${at} has no IP address`;
+    case 'no-gateway':
+      return `${at} has no default gateway`;
+    case 'gateway-off-subnet':
+      return 'gateway not on local subnet';
+    case 'arp-fail':
+      return p.forward.path.length === 1 ? 'ARP for next hop failed' : `ARP failed at ${at}`;
+    case 'no-route':
+      return `no route at ${at}`;
+    case 'fw-deny':
+      return `filtered by ${at}`;
+    case 'reply-lost':
+      return 'reply lost on return path';
+    default:
+      return `dropped at ${at}`;
+  }
+}
+
 export function flightFrom(p: ProbeResult, proto: Proto, label: string): Flight {
   return {
     proto,
@@ -49,6 +79,7 @@ export function flightFrom(p: ProbeResult, proto: Proto, label: string): Flight 
     back: p.ok && p.reverse ? p.reverse.path : [],
     delivered: p.ok,
     label,
+    reason: describeFailure(p),
   };
 }
 
