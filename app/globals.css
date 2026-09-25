@@ -78,24 +78,7 @@ h1, h2, h3, h4, h5, h6, .font-display, .font-vintage, .font-homevideo, .font-san
   box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.8), 0 10px 40px rgba(0, 0, 0, 0.9);
 }
 
-/* Rolling character animation effect inspired by scamshield-olive */
-.motion_roll {
-  position: relative;
-  display: inline-block;
-  overflow: hidden;
-}
 
-.motion_rollChar {
-  display: inline-block;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  transition-delay: calc(var(--i) * 0.02s);
-}
-
-.group:hover .motion_rollChar,
-button:hover .motion_rollChar,
-a:hover .motion_rollChar {
-  transform: translateY(-100%);
-}
 
 /* Cut Reveal text animation */
 .cut-reveal-wrap {
