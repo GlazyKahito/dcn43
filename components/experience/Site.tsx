@@ -96,7 +96,7 @@ export function Site({ initialSection, onWorks }: { initialSection: SectionId; o
         <ExperimentSection />
         <ConclusionSection />
       </main>
-      <footer className="border-t border-hair px-4 py-10 sm:px-8">
+      <footer className="relative border-t border-hair px-4 py-10 sm:px-8">
         <div className="mx-auto flex max-w-[1320px] flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <p className="label">Somaiya Virtual Labs · K J Somaiya School of Engineering · Experiment 10</p>
           <button type="button" className="btn-ghost" onClick={() => onWorks(activeRef.current)}>

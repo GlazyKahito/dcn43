@@ -37,13 +37,13 @@ void main(){
   vec3 refl = reflect(normalize(vec3((uv - 0.5), 1.0)), n);
   float f = clamp(refl.y * 0.5 + 0.5, 0.0, 1.0);
 
-  vec3 graphite = vec3(0.028, 0.032, 0.032);
-  vec3 gunmetal = vec3(0.13, 0.145, 0.15);
-  vec3 silver = vec3(0.62, 0.64, 0.63);
-  vec3 col = mix(graphite, gunmetal, smoothstep(0.2, 0.7, f));
-  col = mix(col, silver, smoothstep(0.78, 1.0, f) * 0.55);
+  vec3 graphite = vec3(0.045, 0.05, 0.052);
+  vec3 gunmetal = vec3(0.2, 0.215, 0.22);
+  vec3 silver = vec3(0.78, 0.8, 0.79);
+  vec3 col = mix(graphite, gunmetal, smoothstep(0.15, 0.65, f));
+  col = mix(col, silver, smoothstep(0.7, 1.0, f) * 0.8);
   float spec = pow(max(dot(n, normalize(vec3(0.3, 0.8, 0.5))), 0.0), 40.0);
-  col += spec * vec3(0.75, 0.76, 0.74) * 0.45;
+  col += spec * vec3(0.85, 0.86, 0.84) * 0.7;
   col += pow(1.0 - n.z, 2.5) * vec3(0.05, 0.09, 0.075);
   // brushed grain
   col += (hash(vec2(uv.x * 900.0, uv.y * 3.0)) - 0.5) * 0.012;
