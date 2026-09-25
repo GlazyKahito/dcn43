@@ -1,10 +1,11 @@
 export interface WorksWheelItem {
   id: string;
+  navLabel?: string;
   title: string;
   category: string;
-  year: string;
+  year?: string;
   image: string;
-  href: string;
+  href?: string;
   description: string;
   badge?: string;
 }
@@ -15,5 +16,6 @@ export interface WorksWheelProps {
   sublabel?: string;
   action?: string;
   className?: string;
-  onSelectProject?: (item: WorksWheelItem, index: number) => void;
+  onEnterModule?: (moduleId: string) => void;
+  selectedModuleId?: string;
 }

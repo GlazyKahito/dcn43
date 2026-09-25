@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { ArrowDown, ArrowUpRight, ChevronRight, Eye } from 'lucide-react';
+import { ArrowDown, ArrowUpRight, ChevronRight, Play } from 'lucide-react';
 import { WorksWheelItem, WorksWheelProps } from './types';
 import { cn } from '@/lib/utils';
 
@@ -9,13 +9,13 @@ import { cn } from '@/lib/utils';
 const CARD_H = 0.38;
 const CARD_MAX_W = 0.34;
 const CARD_RATIO = 1.45;
-const STEP = 40;
+const STEP = 36;
 const DRUM = 2.22;
 const LENS = 2.7;
 const RING_R = 1.14;
 const BOW = 1.82;
 const TITLE = 0.11;
-const INDEX = 0.036;
+const INDEX = 0.032;
 const CULL = 1.6;
 
 const WHEEL_UNITS = 900;
@@ -45,11 +45,12 @@ function place(
 
 export function WorksWheel({
   items,
-  label = "WORKS",
-  sublabel = "'26",
-  action = "Explore",
+  label = "SOMAIYA VIRTUAL LABS",
+  sublabel = "NETWORK DIAGNOSTICS",
+  action = "Launch Module",
   className,
-  onSelectProject,
+  onEnterModule,
+  selectedModuleId,
 }: WorksWheelProps) {
   const stageRef = React.useRef<HTMLDivElement>(null);
   const wheelRef = React.useRef<HTMLDivElement>(null);
@@ -63,6 +64,7 @@ export function WorksWheel({
   const [stage, setStage] = React.useState({ w: 0, h: 0 });
   const [isHovered, setIsHovered] = React.useState(false);
   const [isDragging, setIsDragging] = React.useState(false);
+  const [zoomingId, setZoomingId] = React.useState<string | null>(null);
 
   const count = items.length;
   const last = Math.max(count - 1, 0);
@@ -110,13 +112,31 @@ export function WorksWheel({
       drumR,
       bow: cardH * (isMobile ? 1.2 : BOW),
       depth: cardH * (isMobile ? 2.2 : LENS),
-      title: Math.max(isMobile ? 28 : cardH * TITLE, 32),
-      index: Math.max(cardH * INDEX, 12),
+      title: Math.max(isMobile ? 24 : cardH * TITLE, 28),
+      index: Math.max(cardH * INDEX, 11),
       isMobile,
     };
   }, [stage, count]);
 
-  // Main rAF animation loop: smoothly interpolates turn -> target and writes 3D transforms
+  // Turn to a target index smoothly
+  const to = React.useCallback(
+    (next: number) => {
+      target.current = clamp(next, 0, last + 1);
+    },
+    [last]
+  );
+
+  // If a selectedModuleId prop changes from parent, turn to it
+  React.useEffect(() => {
+    if (selectedModuleId) {
+      const idx = items.findIndex((m) => m.id === selectedModuleId);
+      if (idx !== -1) {
+        to(idx + 1);
+      }
+    }
+  }, [selectedModuleId, items, to]);
+
+  // Main rAF animation loop
   React.useEffect(() => {
     if (!stage.h) return;
     let frame = 0;
@@ -183,14 +203,6 @@ export function WorksWheel({
     return () => cancelAnimationFrame(frame);
   }, [metrics, stage.h, count, last, reduced]);
 
-  // Turn to a target index smoothly
-  const to = React.useCallback(
-    (next: number) => {
-      target.current = clamp(next, 0, last + 1);
-    },
-    [last]
-  );
-
   // Wheel event listener for scrolling through items
   const settling = React.useRef(0);
   React.useEffect(() => {
@@ -198,7 +210,6 @@ export function WorksWheel({
     if (!el) return;
 
     const onWheel = (event: WheelEvent) => {
-      // Don't hijack if user is scrolling out of hero bounds
       const next = target.current + event.deltaY / WHEEL_UNITS;
       if (next > 0 && next < last + 1) {
         event.preventDefault();
@@ -224,7 +235,6 @@ export function WorksWheel({
   const lastVelocity = React.useRef(0);
 
   const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
-    // Only primary button
     if (event.button !== 0) return;
     dragStart.current = { x: event.clientX, y: event.clientY };
     dragPrev.current = { x: event.clientX, y: event.clientY };
@@ -236,7 +246,6 @@ export function WorksWheel({
     if (!dragStart.current || !dragPrev.current) return;
     const dy = dragPrev.current.y - event.clientY;
     const dx = dragPrev.current.x - event.clientX;
-    // Combine predominantly vertical + horizontal swipe
     const delta = Math.abs(dy) > Math.abs(dx) ? dy : dx;
     lastVelocity.current = delta;
 
@@ -246,7 +255,6 @@ export function WorksWheel({
 
   const handlePointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
     if (dragStart.current) {
-      // If minimal displacement, treat as click rather than drag
       const moved =
         Math.hypot(
           event.clientX - dragStart.current.x,
@@ -258,7 +266,6 @@ export function WorksWheel({
       setIsDragging(false);
 
       if (moved && target.current > 0.5) {
-        // Apply slight inertia then settle
         const momentum = clamp(lastVelocity.current * 0.05, -1, 1);
         to(Math.round(target.current + momentum));
       } else if (target.current > 0.5) {
@@ -277,23 +284,17 @@ export function WorksWheel({
       event.preventDefault();
     } else if (event.key === 'Enter') {
       const currentItem = items[active];
-      if (currentItem?.href) {
-        if (currentItem.href.startsWith('#')) {
-          const el = document.querySelector(currentItem.href);
-          if (el) el.scrollIntoView({ behavior: 'smooth' });
-        } else {
-          window.location.href = currentItem.href;
-        }
+      if (currentItem) {
+        triggerZoomTransition(currentItem.id);
       }
     }
   };
 
   // Subtle auto-rotation when idle
   React.useEffect(() => {
-    if (isHovered || isDragging) return;
+    if (isHovered || isDragging || zoomingId) return;
 
     const interval = setInterval(() => {
-      // Gentle idle advance: if at ring state, slowly open; if on drum, gently rotate
       if (target.current === 0) {
         // Stays at rest ring view until user interacts or scrolls
       } else if (target.current < last + 1) {
@@ -302,42 +303,33 @@ export function WorksWheel({
     }, 7000);
 
     return () => clearInterval(interval);
-  }, [isHovered, isDragging, last, to]);
+  }, [isHovered, isDragging, zoomingId, last, to]);
 
   const activeProject = items[active] || items[0];
 
-  const handleCardClick = (i: number, href?: string) => {
+  const triggerZoomTransition = (moduleId: string) => {
+    setZoomingId(moduleId);
+    setTimeout(() => {
+      onEnterModule?.(moduleId);
+      setZoomingId(null);
+    }, 550);
+  };
+
+  const handleCardClick = (i: number, item: WorksWheelItem) => {
     // If not in front, clicking brings it to front
     if (active !== i || turn.current < 0.8) {
       to(i + 1);
-      onSelectProject?.(items[i], i);
-    } else if (href) {
-      // If already active, follow link smoothly
-      if (href.startsWith('#')) {
-        const el = document.querySelector(href);
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth' });
-        }
-      } else {
-        window.location.href = href;
-      }
-    }
-  };
-
-  const handleScrollToExplore = () => {
-    const nextSection = document.getElementById('explore-anchor') || document.querySelector('main');
-    if (nextSection) {
-      nextSection.scrollIntoView({ behavior: 'smooth' });
     } else {
-      window.scrollBy({ top: window.innerHeight * 0.9, behavior: 'smooth' });
+      // If already active in front, launch cinematic zoom transition
+      triggerZoomTransition(item.id);
     }
   };
 
   return (
     <section
-      aria-label="Works Portfolio Wheel"
+      aria-label="Interactive Network Lab System Launcher"
       className={cn(
-        "relative w-full h-screen min-h-[640px] max-h-[1080px] overflow-hidden select-none bg-black/40 text-white",
+        "relative w-full h-screen min-h-[640px] max-h-[1080px] overflow-hidden select-none bg-transparent text-white",
         className
       )}
       onMouseEnter={() => setIsHovered(true)}
@@ -348,10 +340,11 @@ export function WorksWheel({
         ref={stageRef}
         tabIndex={0}
         role="region"
-        aria-label="Interactive 3D Portfolio Wheel"
+        aria-label="Interactive 3D Network Laboratory System Launcher"
         className={cn(
           "absolute inset-0 outline-none cursor-grab active:cursor-grabbing",
-          "focus-visible:ring-1 focus-visible:ring-emerald-400/40"
+          "focus-visible:ring-1 focus-visible:ring-emerald-400/40",
+          zoomingId && "pointer-events-none"
         )}
         style={{ perspective: `${metrics.depth}px` }}
         onPointerDown={handlePointerDown}
@@ -363,29 +356,35 @@ export function WorksWheel({
         {/* Center Pivot Point */}
         <div
           ref={wheelRef}
-          className="absolute top-1/2 left-1/2 [transform-style:preserve-3d] transition-transform duration-75"
+          className={cn(
+            "absolute top-1/2 left-1/2 [transform-style:preserve-3d] transition-transform duration-100",
+            zoomingId && "scale-[1.8] opacity-0 transition-all duration-500 ease-in"
+          )}
         >
           {items.map((item, i) => {
             const isFront = i === active && turn.current >= 0.8;
+            const isZoomingThis = zoomingId === item.id;
+
             return (
               <div
                 key={item.id || item.title}
                 role="button"
                 tabIndex={0}
-                aria-label={`Project: ${item.title}`}
+                aria-label={`Module: ${item.title}`}
                 ref={(node) => {
                   cardRefs.current[i] = node;
                 }}
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleCardClick(i, item.href);
+                  handleCardClick(i, item);
                 }}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter') handleCardClick(i, item.href);
+                  if (e.key === 'Enter') handleCardClick(i, item);
                 }}
                 className={cn(
-                  "group absolute [backface-visibility:hidden] cursor-pointer outline-none transition-[filter,box-shadow] duration-300",
-                  isFront && "hover:brightness-110"
+                  "group absolute [backface-visibility:hidden] cursor-pointer outline-none transition-[filter,box-shadow,transform] duration-300",
+                  isFront && "hover:brightness-110",
+                  isZoomingThis && "scale-[2.4] z-50 brightness-125 duration-500 ease-out"
                 )}
                 style={{
                   width: metrics.cardW,
@@ -395,8 +394,8 @@ export function WorksWheel({
                 }}
               >
                 {/* Card Face & Image Container */}
-                <div className="relative size-full rounded-2xl overflow-hidden border border-white/15 bg-[#0a0f0d]/80 backdrop-blur-xl shadow-[0_24px_60px_-12px_rgba(0,0,0,0.8),inset_0_1px_0_0_rgba(255,255,255,0.15)] transition-all duration-300 group-hover:border-emerald-400/50 group-hover:shadow-[0_24px_60px_-12px_rgba(52,211,153,0.25)]">
-                  {/* Image with fallback subtle gradient background */}
+                <div className="relative size-full rounded-2xl overflow-hidden border border-white/15 bg-[#0a0f0d]/85 backdrop-blur-2xl shadow-[0_24px_60px_-12px_rgba(0,0,0,0.85),inset_0_1px_0_0_rgba(255,255,255,0.15)] transition-all duration-300 group-hover:border-emerald-400/60 group-hover:shadow-[0_24px_60px_-12px_rgba(52,211,153,0.3)]">
+                  {/* Image */}
                   <img
                     src={item.image}
                     alt={item.title}
@@ -405,16 +404,16 @@ export function WorksWheel({
                     loading="eager"
                   />
 
-                  {/* Vignette & Contrast Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/10 pointer-events-none" />
+                  {/* Contrast Vignette Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/15 pointer-events-none" />
 
-                  {/* Card Header Tag */}
+                  {/* Card Header Badge */}
                   <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between pointer-events-none z-10">
-                    <span className="px-2.5 py-1 rounded-full text-[10px] font-mono tracking-wider uppercase bg-black/60 backdrop-blur-md text-emerald-300 border border-emerald-400/30">
+                    <span className="px-2.5 py-1 rounded-full text-[10px] font-mono tracking-wider uppercase bg-black/70 backdrop-blur-md text-emerald-300 border border-emerald-400/35">
                       {item.badge || `0${i + 1}`}
                     </span>
-                    <span className="text-[10px] font-mono text-white/70 bg-black/50 backdrop-blur-md px-2 py-0.5 rounded-full border border-white/10">
-                      {item.year}
+                    <span className="text-[10px] font-mono text-white/80 bg-black/60 backdrop-blur-md px-2 py-0.5 rounded-full border border-white/10">
+                      ET301 &bull; 2026
                     </span>
                   </div>
 
@@ -424,13 +423,13 @@ export function WorksWheel({
                       <span className="text-[10px] font-mono text-neutral-400 uppercase tracking-widest block">
                         {item.category}
                       </span>
-                      <h3 className="text-sm sm:text-base font-semibold text-white tracking-tight leading-snug line-clamp-1 drop-shadow-md">
+                      <h3 className="text-sm sm:text-base font-bold text-white tracking-tight leading-snug line-clamp-1 drop-shadow-md">
                         {item.title}
                       </h3>
                     </div>
 
                     {/* Action Pill on Card */}
-                    <div className="shrink-0 flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-200 border border-emerald-400/40 backdrop-blur-md shadow-sm opacity-90 transition-all duration-200 group-hover:bg-emerald-400 group-hover:text-black">
+                    <div className="shrink-0 flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-200 border border-emerald-400/40 backdrop-blur-md shadow-sm transition-all duration-200 group-hover:bg-emerald-400 group-hover:text-black">
                       <span>{action}</span>
                       <ArrowUpRight className="w-3.5 h-3.5" />
                     </div>
@@ -442,22 +441,29 @@ export function WorksWheel({
         </div>
       </div>
 
-      {/* Center Label at Rest: WORKS '26 */}
+      {/* Center Label at Rest: SOMAIYA VIRTUAL LABS / NETWORK DIAGNOSTICS */}
       <div
         ref={labelRef}
-        className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center tracking-tight transition-transform duration-300 z-10"
+        className={cn(
+          "pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center tracking-tight transition-all duration-300 z-10",
+          zoomingId && "opacity-0 scale-90"
+        )}
       >
-        <span className="text-xs sm:text-sm font-mono tracking-[0.25em] text-emerald-400/90 uppercase mb-2">
-          Diagnostic Portfolio
+        <span className="text-xs sm:text-sm font-mono tracking-[0.25em] text-emerald-400/90 uppercase mb-2 font-semibold">
+          K J Somaiya School of Engineering
         </span>
-        <div className="text-5xl sm:text-7xl md:text-8xl font-sans font-black text-white/95 tracking-tighter leading-none">
+        <div className="text-3xl sm:text-5xl md:text-6xl font-sans font-black text-white/95 tracking-tight leading-none uppercase">
           {label}
         </div>
-        <div className="text-4xl sm:text-6xl md:text-7xl font-sans font-light text-emerald-300/80 tracking-normal mt-1">
+        <div className="text-2xl sm:text-4xl md:text-5xl font-sans font-light text-emerald-300/80 tracking-wide mt-2 uppercase">
           {sublabel}
         </div>
+        <div className="inline-flex items-center gap-2 mt-3 px-3 py-1 rounded-full bg-black/50 border border-white/10 text-[11px] font-mono text-neutral-300">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_6px_#34d399]" />
+          <span>Experiment 10 &bull; Intelligent Network Fault Diagnosis</span>
+        </div>
         <p className="text-xs sm:text-sm text-neutral-400 font-mono mt-4 max-w-sm px-4">
-          Drag or scroll to cycle through laboratory modules and diagnostics
+          Drag or swipe to rotate the launcher &bull; Click to enter module
         </p>
       </div>
 
@@ -467,20 +473,20 @@ export function WorksWheel({
         className="pointer-events-none absolute top-14 sm:top-20 left-6 sm:left-12 max-w-md space-y-1 opacity-0 z-10"
       >
         <span className="text-[11px] font-mono uppercase tracking-widest text-emerald-400 block font-semibold">
-          {activeProject.category} &bull; {activeProject.year}
+          {activeProject.category} &bull; {activeProject.badge}
         </span>
         <h2 className="text-2xl sm:text-3xl font-sans font-bold text-white tracking-tight">
           {activeProject.title}
         </h2>
       </div>
 
-      {/* Right-Side Project Vertical Index List */}
+      {/* Right-Side Vertical Index List (All 10 Modules) */}
       <aside
-        aria-label="Project Index Navigation"
-        className="hidden md:flex absolute top-1/2 right-6 lg:right-10 -translate-y-1/2 flex-col items-end gap-1.5 z-20 pointer-events-auto"
+        aria-label="Laboratory Module Index"
+        className="hidden md:flex absolute top-1/2 right-6 lg:right-10 -translate-y-1/2 flex-col items-end gap-1 z-20 pointer-events-auto"
       >
-        <div className="text-[10px] font-mono uppercase tracking-widest text-neutral-400 mb-2 font-semibold">
-          Index ({count})
+        <div className="text-[10px] font-mono uppercase tracking-widest text-neutral-400 mb-1.5 font-semibold">
+          Module Launcher ({count})
         </div>
         <ol className="flex flex-col items-end gap-1 text-right">
           {items.map((item, i) => {
@@ -489,11 +495,13 @@ export function WorksWheel({
               <li key={item.id || item.title}>
                 <button
                   type="button"
-                  onClick={() => to(i + 1)}
+                  onClick={() => {
+                    to(i + 1);
+                  }}
                   className={cn(
-                    "group flex items-center gap-3 px-3 py-1.5 rounded-xl text-xs font-mono transition-all duration-200 cursor-pointer text-left",
+                    "group flex items-center gap-2.5 px-3 py-1 rounded-xl text-xs font-mono transition-all duration-200 cursor-pointer text-left",
                     isActive
-                      ? "text-white bg-white/[0.08] backdrop-blur-md border border-white/15 shadow-sm"
+                      ? "text-white bg-white/[0.08] backdrop-blur-md border border-white/15 shadow-sm font-semibold"
                       : "text-neutral-400 hover:text-white hover:bg-white/[0.03]"
                   )}
                 >
@@ -505,7 +513,7 @@ export function WorksWheel({
                   >
                     0{i + 1}
                   </span>
-                  <span className="font-sans font-medium">{item.title}</span>
+                  <span className="font-sans text-[11px]">{item.title}</span>
                   {isActive && (
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" />
                   )}
@@ -516,9 +524,9 @@ export function WorksWheel({
         </ol>
       </aside>
 
-      {/* Active Project Footer Detail Bar (Minimal & Clean) */}
+      {/* Active Module Footer Card */}
       <div className="absolute bottom-16 sm:bottom-12 left-4 sm:left-12 right-4 sm:right-auto max-w-xl z-20 pointer-events-auto">
-        <div className="p-4 sm:p-5 rounded-2xl bg-[#080d0b]/80 backdrop-blur-2xl border border-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.6),inset_0_1px_0_0_rgba(255,255,255,0.08)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="p-4 sm:p-5 rounded-2xl bg-[#080d0b]/85 backdrop-blur-2xl border border-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.6)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
@@ -533,30 +541,24 @@ export function WorksWheel({
             </p>
           </div>
 
-          <a
-            href={activeProject.href}
-            onClick={(e) => {
-              if (activeProject.href.startsWith('#')) {
-                e.preventDefault();
-                const el = document.querySelector(activeProject.href);
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-              }
-            }}
-            className="shrink-0 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-semibold font-sans transition-all shadow-[0_0_16px_rgba(52,211,153,0.3)] hover:shadow-[0_0_24px_rgba(52,211,153,0.5)] cursor-pointer"
+          <button
+            type="button"
+            onClick={() => triggerZoomTransition(activeProject.id)}
+            className="shrink-0 inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-bold font-sans transition-all shadow-[0_0_16px_rgba(52,211,153,0.3)] hover:shadow-[0_0_24px_rgba(52,211,153,0.5)] cursor-pointer"
           >
-            <span>Open Section</span>
+            <span>Enter Module</span>
             <ChevronRight className="w-3.5 h-3.5" />
-          </a>
+          </button>
         </div>
       </div>
 
-      {/* Scroll to Explore Cue at Bottom Center */}
+      {/* Quick Launch Direct Cue */}
       <button
         type="button"
-        onClick={handleScrollToExplore}
+        onClick={() => triggerZoomTransition(activeProject.id)}
         className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-1.5 rounded-full text-[11px] font-mono uppercase tracking-widest text-neutral-400 hover:text-white bg-black/40 hover:bg-black/60 border border-white/10 backdrop-blur-md transition-all cursor-pointer z-20 group"
       >
-        <span>SCROLL TO EXPLORE</span>
+        <span>ENTER LAB &bull; {activeProject.title}</span>
         <ArrowDown className="w-3.5 h-3.5 text-emerald-400 transition-transform group-hover:translate-y-0.5" />
       </button>
     </section>
