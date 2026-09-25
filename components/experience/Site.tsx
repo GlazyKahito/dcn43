@@ -100,7 +100,7 @@ export function Site({ initialSection, onWorks }: { initialSection: SectionId; o
         <div className="mx-auto flex max-w-[1320px] flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <p className="label">Somaiya Virtual Labs · K J Somaiya School of Engineering · Experiment 10</p>
           <button type="button" className="btn-ghost" onClick={() => onWorks(activeRef.current)}>
-            ← Return to Works Wheel <span className="chip">Esc</span>
+            ← Return to index <span className="chip">Esc</span>
           </button>
         </div>
       </footer>

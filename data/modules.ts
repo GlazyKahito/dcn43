@@ -30,7 +30,7 @@ export interface LabModule {
   glyph: GlyphId;
 }
 
-/** The ten launcher positions on the Works Wheel, in dial order. */
+/** The ten laboratory modules, in patch-panel order. */
 export const MODULES: LabModule[] = [
   { id: 'troubleshooting', no: '01', title: 'Network Troubleshooting', section: 'troubleshooting', glyph: 'scope', line: 'The lab loop: break the network, trace the fault, repair it, prove it works.' },
   { id: 'aim', no: '02', title: 'Aim', section: 'aim', glyph: 'reticle', line: 'Laboratory objective, methodology and learning outcomes.' },
@@ -46,7 +46,7 @@ export const MODULES: LabModule[] = [
 
 /** Persistent navigation, in the order specified for the site header. */
 export const NAV: { label: string; target: SectionId | 'works' }[] = [
-  { label: 'Works', target: 'works' },
+  { label: 'Index', target: 'works' },
   { label: 'Aim', target: 'aim' },
   { label: 'Theory', target: 'theory' },
   { label: 'Simulator', target: 'simulator' },

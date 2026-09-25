@@ -100,7 +100,8 @@ interface LabApi {
   reset: () => void;
   /** Runs a terminal command on the live network; output is appended to the shared terminal. */
   exec: (line: string, host?: DeviceId) => OutLine[];
-  send: (src: DeviceId, target: string, proto: Proto) => void;
+  /** Sends one packet and animates it. `silent` skips the event log and counters (ambient hero traffic). */
+  send: (src: DeviceId, target: string, proto: Proto, silent?: boolean) => { delivered: boolean; rtt: number; ttl: number; reason?: string };
   setHost: (host: DeviceId) => void;
   clearTerm: () => void;
 }
@@ -137,7 +138,7 @@ export function LabProvider({ children }: { children: ReactNode }) {
   );
 
   const send = useCallback(
-    (src: DeviceId, target: string, proto: Proto) => {
+    (src: DeviceId, target: string, proto: Proto, silent = false) => {
       const port = proto === 'udp' ? 53 : proto === 'tcp' ? 80 : undefined;
       const res = resolveName(state.net, src, target);
       const ip = res.ip ?? target;
@@ -146,13 +147,16 @@ export function LabProvider({ children }: { children: ReactNode }) {
       const label = proto === 'icmp' ? 'ICMP echo' : proto === 'udp' ? 'DNS query' : 'HTTP SYN';
       const flight = flightFrom(p, proto, `${label} → ${target}`);
       dispatch({ type: 'flight', flight: { ...flight, back: delivered ? flight.back : [], delivered } });
+      const outcome = { delivered, rtt: p.rtt, ttl: p.replyTtl, reason: flight.reason };
+      if (silent) return outcome;
       dispatch({ type: 'packets', sent: 1, delivered: delivered ? 1 : 0 });
-      const where = p.ok ? `port ${port} ${p.service} on ${p.dst}` : p.reason === 'reply-lost' ?`reply lost returning from ${p.dst}` : `dropped at ${p.forward.at}${p.reason ? ` (${p.reason})` : ''}`;
+      const where = p.ok ? `port ${port} ${p.service} on ${p.dst}` : p.reason === 'reply-lost' ? `reply lost returning from ${p.dst}` : `dropped at ${p.forward.at}${p.reason ? ` (${p.reason})` : ''}`;
       dispatch({
         type: 'log',
         text: delivered ? `${label} ${src} → ${target}: delivered, ${p.rtt < 1 ? '<1' : Math.round(p.rtt)} ms` : `${label} ${src} → ${target}: ${where}`,
         tone: 'packet',
       });
+      return outcome;
     },
     [state.net],
   );

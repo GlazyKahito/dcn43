@@ -45,7 +45,7 @@ export function TopologyView({ net, flight, selection, onSelect, concealed = fal
   }, []);
 
   const pktRef = useRef<SVGGElement>(null);
-  const [caption, setCaption] = useState<{ text: string; ok: boolean | null; at?: DeviceId } | null>(null);
+  const [caption, setCaption] = useState<{ text: string; ok: boolean | null; at?: DeviceId; reason?: string } | null>(null);
 
   // Packet animation: walk the forward path, then the return path, or stop where the packet died.
   useEffect(() => {
@@ -63,7 +63,7 @@ export function TopologyView({ net, flight, selection, onSelect, concealed = fal
     const start = performance.now();
     const finish = () => {
       g.style.opacity = '0';
-      setCaption({ text: flight.label, ok: flight.delivered, at: lastDev });
+      setCaption({ text: flight.label, ok: flight.delivered, at: lastDev, reason: flight.reason });
     };
     if (reduced || pts.length < 2) {
       finish();
@@ -208,7 +208,7 @@ export function TopologyView({ net, flight, selection, onSelect, concealed = fal
           >
             {caption.text}
             {caption.ok === true && ' · delivered'}
-            {caption.ok === false && ` · lost at ${caption.at}`}
+            {caption.ok === false && ` · ${caption.reason ?? `lost at ${caption.at}`}`}
           </span>
         )}
       </div>
