@@ -3,6 +3,7 @@ import './globals.css';
 import { LAB_CONFIG } from '../lib/config';
 import { SmoothScrollProvider } from '../components/site/SmoothScrollProvider';
 import { FluidParticlesBackground } from '../components/site/FluidParticlesBackground';
+import { RetroGrid21st } from '../components/site/RetroGrid21st';
 
 export const metadata: Metadata = {
   title: `${LAB_CONFIG.experimentTitle} — Virtual Lab | ${LAB_CONFIG.institutionShort}`,
@@ -14,13 +15,18 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+};
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark scroll-smooth">
+    <html lang="en" className="dark scroll-smooth w-full overflow-x-hidden">
       <head>
         <link rel="icon" type="image/png" href="/somaiya-logo.png" />
         <link rel="shortcut icon" href="/somaiya-logo.png" />
@@ -30,10 +36,11 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
         />
       </head>
-      <body className="min-h-screen bg-[#050807] text-[#e8f2ec] font-sans antialiased selection:bg-emerald-500/25 selection:text-emerald-200">
+      <body className="min-h-screen bg-[#050807] text-[#e8f2ec] font-sans antialiased selection:bg-emerald-500/25 selection:text-emerald-200 w-full overflow-x-hidden relative">
         <SmoothScrollProvider>
+          <RetroGrid21st />
           <FluidParticlesBackground />
-          <div className="relative z-10">
+          <div className="relative z-10 w-full">
             {children}
           </div>
         </SmoothScrollProvider>

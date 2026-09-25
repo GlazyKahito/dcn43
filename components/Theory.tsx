@@ -322,9 +322,11 @@ def parse_ping_output(raw_output: str) -> dict:
         </span>
       </div>
 
-      {/* Step 01: The Layered Approach (OSI-Based Diagnosis) */}
-      {activeStoryTab === 0 && (
-        <section id="module-01" className="space-y-8 animate-in fade-in duration-300">
+      {/* Theory Module Views - Stabilized Container */}
+      <div className="w-full min-h-[640px] relative">
+        {/* Step 01: The Layered Approach (OSI-Based Diagnosis) */}
+        {activeStoryTab === 0 && (
+          <section id="module-01" className="space-y-8 animate-in fade-in duration-200">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             <div className="lg:col-span-5 space-y-3">
               <span className="text-[10px] font-homevideo text-[#34d399] tracking-wider uppercase block">
@@ -740,6 +742,7 @@ def parse_ping_output(raw_output: str) -> dict:
           </div>
         </section>
       )}
+      </div>
     </div>
   );
 }

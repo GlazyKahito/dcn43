@@ -32,6 +32,17 @@ export function QuizModal({
   const [selectedAnswers, setSelectedAnswers] = useState<Record<number, number>>({});
   const [isFinished, setIsFinished] = useState<boolean>(false);
 
+  // Lock body scroll and prevent Lenis interference while modal is open
+  React.useEffect(() => {
+    if (isOpen) {
+      const prevOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = prevOverflow;
+      };
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const currentQ = questions[currentIndex];
@@ -90,8 +101,14 @@ export function QuizModal({
   const percentScore = Math.round((correctCount / total) * 100);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="w-full max-w-2xl bg-[#0a0f0d] border border-[#78b496]/30 rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div
+      data-lenis-prevent
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200"
+    >
+      <div
+        data-lenis-prevent
+        className="w-full max-w-2xl bg-[#0a0f0d] border border-[#78b496]/30 rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+      >
         {/* Modal Header */}
         <div className="px-6 py-5 border-b border-[#78b496]/20 flex items-center justify-between bg-[#101713]/80">
           <div>
@@ -109,7 +126,10 @@ export function QuizModal({
         </div>
 
         {/* Modal Body */}
-        <div className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 [scrollbar-width:thin] [scrollbar-color:#1a2e22_transparent]">
+        <div
+          data-lenis-prevent
+          className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 [scrollbar-width:thin] [scrollbar-color:#1a2e22_transparent]"
+        >
           {!isFinished ? (
             <>
               {/* Progress Indicator */}

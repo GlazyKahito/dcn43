@@ -44,6 +44,8 @@ const config: Config = {
       },
       fontFamily: {
         homevideo: ["HomeVideo", "monospace"],
+        display: ["HomeVideo", "monospace"],
+        vintage: ["HomeVideo", "monospace"],
         sans: ["'Space Grotesk'", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
         mono: [
           "'JetBrains Mono'",
@@ -55,6 +57,10 @@ const config: Config = {
         ],
       },
       keyframes: {
+        grid: {
+          "0%": { transform: "translateY(-50%)" },
+          "100%": { transform: "translateY(0)" },
+        },
         beamFlow: {
           "0%": { strokeDashoffset: "100" },
           "100%": { strokeDashoffset: "0" },
@@ -65,6 +71,7 @@ const config: Config = {
         },
       },
       animation: {
+        grid: "grid 20s linear infinite",
         "beam-flow": "beamFlow 2s linear infinite",
         "pulse-glow": "pulseGlow 3s ease-in-out infinite",
       },

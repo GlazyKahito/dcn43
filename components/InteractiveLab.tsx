@@ -4,11 +4,12 @@ import React, { useState } from 'react';
 import { Simulation1Terminal } from './sims/Simulation1Terminal';
 import { Simulation2FaultLab } from './sims/Simulation2FaultLab';
 import { Simulation3OsiWalkthrough } from './sims/Simulation3OsiWalkthrough';
-import { Terminal, ShieldAlert, Layers } from 'lucide-react';
+import { PacketXFlowGame } from './sims/PacketXFlowGame';
+import { Terminal, ShieldAlert, Layers, Gamepad2 } from 'lucide-react';
 import { RollText } from './site/RollText';
 
 export function InteractiveLab() {
-  const [activeTab, setActiveTab] = useState<'sim1' | 'sim2' | 'sim3'>('sim2');
+  const [activeTab, setActiveTab] = useState<'sim1' | 'sim2' | 'sim3' | 'sim4'>('sim2');
 
   const tabs = [
     {
@@ -32,6 +33,13 @@ export function InteractiveLab() {
       subtitle: 'Layer-by-Layer Bottom-Up Step Test',
       icon: Layers,
     },
+    {
+      id: 'sim4' as const,
+      number: '04',
+      title: 'Packet X-Flow',
+      subtitle: 'Vintage Arcade Net Defender Game',
+      icon: Gamepad2,
+    },
   ];
 
   return (
@@ -40,13 +48,13 @@ export function InteractiveLab() {
       <div className="text-center space-y-3 max-w-3xl mx-auto">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1f7a4d]/15 border border-[#34d399]/30 text-[#34d399] font-display text-xs uppercase tracking-widest">
           <span className="w-1.5 h-1.5 rounded-full bg-[#34d399] animate-pulse" />
-          SIMULATION ENVIRONMENT
+          SIMULATION ENVIRONMENT // 4 MODES
         </div>
         <h2 className="text-3xl sm:text-5xl font-sans font-semibold tracking-tight text-[#e8f2ec]">
           Network Troubleshooting Suite
         </h2>
         <p className="text-sm sm:text-base text-[#78b496]/80 leading-relaxed font-sans">
-          Toggle between free terminal diagnostic exploration, structured fault triage scenarios, and the layer-by-layer OSI bottom-up test engine.
+          Toggle between free terminal diagnostic exploration, structured fault triage scenarios, the layer-by-layer OSI bottom-up test engine, and the Packet X-Flow vintage arcade mini-game.
         </p>
       </div>
 
@@ -73,8 +81,8 @@ export function InteractiveLab() {
           </div>
         </div>
 
-        {/* Tab Switcher Pills */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        {/* Tab Switcher Pills (Responsive 2x2 or 4-column) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id;
             const Icon = tab.icon;
@@ -83,7 +91,7 @@ export function InteractiveLab() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`p-4 rounded-2xl border text-left transition-all duration-300 flex items-center gap-3.5 cursor-pointer relative overflow-hidden group ${
+                className={`p-3.5 sm:p-4 rounded-2xl border text-left transition-all duration-300 flex items-center gap-3.5 cursor-pointer relative overflow-hidden group ${
                   isActive
                     ? 'bg-[#101713] border-[#34d399]/60 text-white shadow-[0_0_25px_rgba(52,211,153,0.15)] scale-[1.01]'
                     : 'bg-[#0e1411]/60 border-[#78b496]/15 text-[#78b496]/70 hover:border-[#78b496]/35 hover:text-[#e8f2ec]'
@@ -102,7 +110,7 @@ export function InteractiveLab() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5">
                     <span className="font-display text-[10px] uppercase font-bold text-[#34d399]">
-                      SIM {tab.number}
+                      MODE {tab.number}
                     </span>
                   </div>
                   <div className="text-sm font-sans font-semibold tracking-tight text-[#e8f2ec] truncate">
@@ -121,11 +129,12 @@ export function InteractiveLab() {
           })}
         </div>
 
-        {/* Active Simulation View */}
-        <div className="w-full pt-2">
+        {/* Active Simulation View with stable minimum container height */}
+        <div className="w-full pt-2 min-h-[520px]">
           {activeTab === 'sim1' && <Simulation1Terminal />}
           {activeTab === 'sim2' && <Simulation2FaultLab />}
           {activeTab === 'sim3' && <Simulation3OsiWalkthrough />}
+          {activeTab === 'sim4' && <PacketXFlowGame />}
         </div>
       </div>
     </section>

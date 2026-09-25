@@ -16,6 +16,7 @@ import {
   HelpCircle,
   Activity,
   CheckCircle2,
+  Gamepad2,
 } from 'lucide-react';
 
 export function Header() {
@@ -221,13 +222,28 @@ export function Header() {
                       onClick={() => setActiveDropdown(null)}
                       className="p-2.5 rounded-xl hover:bg-white/[0.05] transition-all flex items-start gap-2.5 group"
                     >
-                      <Layers className="w-4 h-4 text-[#bf5af2] mt-0.5" />
+                      <Layers className="w-4 h-4 text-[#34d399] mt-0.5" />
                       <div>
-                        <div className="text-xs font-bold text-white group-hover:text-[#bf5af2]">
+                        <div className="text-xs font-bold text-white group-hover:text-[#34d399]">
                           Sim 03 • OSI Walkthrough
                         </div>
                         <div className="text-[10px] text-neutral-400">
                           Bottom-up layer step evaluator
+                        </div>
+                      </div>
+                    </a>
+                    <a
+                      href="#simulation"
+                      onClick={() => setActiveDropdown(null)}
+                      className="p-2.5 rounded-xl hover:bg-white/[0.05] transition-all flex items-start gap-2.5 group"
+                    >
+                      <Gamepad2 className="w-4 h-4 text-[#c8b27a] mt-0.5" />
+                      <div>
+                        <div className="text-xs font-bold text-white group-hover:text-[#c8b27a]">
+                          Sim 04 • Packet X-Flow (Mini-Game)
+                        </div>
+                        <div className="text-[10px] text-neutral-400">
+                          Vintage arcade net defender
                         </div>
                       </div>
                     </a>
