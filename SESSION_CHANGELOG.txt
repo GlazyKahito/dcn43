@@ -1,0 +1,215 @@
+================================================================================
+SOMAIYA VIRTUAL LABS — EXPERIMENT 10: NETWORK DIAGNOSTICS & SIMULATION
+SESSION CHANGELOG & ARCHITECTURE SUMMARY
+Date: September 25, 2026
+Repository: https://github.com/GlazyKahito/dcn43.git
+Branch: main
+================================================================================
+
+TABLE OF CONTENTS
+1. Overview & High-Level Architecture
+2. Works Wheel 3D System Launcher & Transitions
+3. Intelligent Network Diagnostics Console
+4. Interactive Network Topology & Simulation Suite
+5. Animated Steel Fluid / Liquid Metal WebGL2 Background
+6. Technical Boot Sequence & Navigation System
+7. Classic Academic Typography Overhaul
+8. Complete List of Created & Modified Files
+9. Build, Testing & Deployment Verification
+
+================================================================================
+1. OVERVIEW & HIGH-LEVEL ARCHITECTURE
+================================================================================
+The entire application has been redesigned around the Works Wheel as the primary
+system launcher for "Intelligent Network Design, Simulation & Fault Diagnosis System"
+(Course ET301 Computer Networks & Diagnostics, K J Somaiya School of Engineering).
+
+Application Flow:
+  [Initial Load]
+        ↓
+  [Technical Boot Sequence (~1.2s)]
+        ↓
+  [Full-Screen Interactive Works Wheel (3D System Launcher)]
+        ↓
+  [Drag / Rotate / Select Module]
+        ↓
+  [Cinematic Zoom-Through Card Transition]
+        ↓
+  [Active Website Module with Persistent Header Navigation]
+        ↓
+  [Click "WORKS" or "Return to Wheel (ESC)" to reconstruct 3D Launcher]
+
+================================================================================
+2. WORKS WHEEL 3D SYSTEM LAUNCHER & TRANSITIONS
+================================================================================
+File: components/WorksWheel/WorksWheel.tsx
+Data: components/WorksWheel/projectData.ts, data/labModules.ts
+
+- 3D Geometry:
+  * At rest (turn = 0): cards form a circular orbit around the central brand title.
+  * On scroll or drag (turn > 0): expands into a vertical 3D drum carousel.
+  * Perspective constants: CARD_H = 0.38, STEP = 36 deg, DRUM = 2.22, LENS = 2.7, BOW = 1.82.
+- Center Anchored Branding:
+  * SOMAIYA VIRTUAL LABS
+  * NETWORK DIAGNOSTICS
+  * Exp 10 — Intelligent Network Fault Diagnosis
+- The 10 Real Laboratory Modules on the Wheel:
+  01. NETWORK DIAGNOSTICS (id: 'diagnostics')
+  02. AIM (id: 'aim')
+  03. THEORY (id: 'theory')
+  04. SIMULATIONS (id: 'simulations')
+  05. ASSESSMENTS (id: 'assessments')
+  06. MINI-GAME (id: 'minigame')
+  07. CONCLUSION (id: 'conclusion')
+  08. LAUNCH LAB (id: 'launch-lab')
+  09. EXP 10 (id: 'exp10')
+  10. WORKS / HOME (id: 'works')
+- Interactions:
+  * Pointer drag (desktop mouse & mobile touch) with velocity tracking & inertia settling.
+  * Keyboard navigation: ArrowLeft/Up (prev), ArrowRight/Down (next), Enter (open), Esc (return).
+  * Subtle idle auto-rotation with auto-pause on hover/drag.
+  * Right-side module vertical index (01-10) with active indicators.
+  * Cinematic zoom-through transition: selected card scales to 2.4x while surrounding cards fade,
+    smoothly opening the website view and auto-scrolling to the selected module.
+
+================================================================================
+3. INTELLIGENT NETWORK DIAGNOSTICS CONSOLE
+================================================================================
+File: components/Diagnostics/NetworkDiagnosticsModule.tsx
+
+A dedicated diagnostic triage console where students select real-world failure scenarios:
+- 6 Interactive Scenarios:
+  1. No Internet / Default Gateway Unreachable (ARP reply drop)
+  2. DNS Hostname Resolution Failure (Port 53 daemon drop / SERVFAIL)
+  3. High Latency & Bufferbloat Along Transit Link (>500ms RTT)
+  4. Duplicate IP Address Conflict (MAC flapping & 50% packet loss)
+  5. DHCP Pool Exhaustion (APIPA 169.254.x.x RFC 3927)
+  6. Firewall ACL Dropping TCP Port 80 (HTTP 3-way handshake block)
+- Systematic Engineering Triage Flow:
+  Symptoms → Hypotheses → Simulated Terminal Probes (ping, tracert, ipconfig, nslookup, arp, telnet)
+  → Detected Root Cause → Apply Fix & Re-Probe → Verified Resolution.
+
+================================================================================
+4. INTERACTIVE NETWORK TOPOLOGY & SIMULATION SUITE
+================================================================================
+File: components/Simulation/NetworkTopologySimulator.tsx
+
+- Visual Topology Designer Canvas:
+  * Nodes: Workstation PC1, Switch SW1, Gateway Router R1, Edge Firewall, App Server (HTTP/DNS).
+  * Dynamic SVG link paths with status coloring (Emerald = Active, Rose = Cut/Severed).
+  * Interactive Link Cutting: click any link or toggle buttons to sever/restore connections.
+  * Animated Glowing Packet: simulates real ICMP echo packet movement from PC1 across the topology.
+- Embedded Simulation Sub-Tabs:
+  * Topology Designer
+  * 8 Pre-Built Fault Scenarios (Simulation2FaultLab)
+  * OSI Layer Walkthrough (Simulation3OsiWalkthrough)
+  * Virtual Terminal (Simulation1Terminal)
+
+================================================================================
+5. ANIMATED STEEL FLUID / LIQUID METAL WEBGL2 BACKGROUND
+================================================================================
+Files: components/SteelFluid/SteelFluidCanvas.tsx, components/SteelFluid/SteelFluidBackground.tsx
+
+- Pure Metallic Shader Design:
+  * Strict monochrome metallic palette: silver reflections, brushed steel midtones, gunmetal shadows,
+    and near-black graphite base. No neon or rainbow gradients.
+  * 4-octave Fractional Brownian Motion (FBM) with 2nd-order domain warping.
+  * Normal vector calculation via finite differences for physical 3D curvature.
+  * Dual specular highlights (primary directional spec^38.0 + secondary ambient spec^16.0).
+  * Fresnel rim lighting ((1.0 - n.z)^2.8) and micro-brushed grain texture.
+  * Hypnotic, slow fluid flow (uTime * 0.07).
+  * Damped pointer flow: global mouse movement subtly displaces the fluid field.
+- Layering & Contrast Protection:
+  * Base Graphite Canvas → WebGL Steel Fluid → Dark Veil & Radial Vignette → UI / Wheel.
+  * Fully pointer-events-none; zero interference with clicks, drags, or card selection.
+- Fallback & Optimization:
+  * CSS animated conic/radial gradient fallback for non-WebGL2 devices.
+  * DPR clamped to 1.0 on mobile devices for smooth 60fps execution.
+  * Respects prefers-reduced-motion.
+
+================================================================================
+6. TECHNICAL BOOT SEQUENCE & NAVIGATION SYSTEM
+================================================================================
+Files: components/Lab/LabBootSequence.tsx, components/Lab/LabNavigation.tsx, components/Lab/NetworkLabApp.tsx
+
+- Technical Boot Sequence:
+  * 1.2s futuristic sequence initializing core kernel, diagnostic matrix, and simulation engine.
+  * Click-to-skip option.
+- Persistent Top Navigation:
+  * [SOMAIYA VIRTUAL LABS | NETWORK DIAGNOSTICS • Exp 10]
+  * WORKS (returns to 3D wheel)
+  * AIM • THEORY • SIMULATIONS • ASSESSMENTS • MINI-GAME • CONCLUSION • EXP 10
+  * [LAUNCH LAB →] (direct entry into simulator)
+- Floating "Return to Wheel (Esc)" Button:
+  * Bottom-right floating pill that smoothly reconstructs the 3D Works Wheel launcher.
+  * Pressing Esc key also triggers instant return.
+
+================================================================================
+7. CLASSIC ACADEMIC TYPOGRAPHY OVERHAUL
+================================================================================
+Replaced all over-hyped vibecoded jargon with classic, dignified engineering terminology:
+- Header Brand: "Somaiya Virtual Labs | Network Diagnostics · Exp 10"
+- Aim Badge: "Laboratory Objective"
+- Telemetry HUD: "Live Telemetry Monitor" & "Carrier Dropped" / "Carrier Link Active"
+- Theory Header: "Theoretical Principles • Diagnostic Methodology"
+- Pre-Test Callout: "Assessment Phase I • Diagnostic Fundamentals"
+- Post-Test Callout: "Assessment Phase II • Advanced Verification"
+- Mini-Game Section: "Interactive Simulation • Packet Inspection"
+- Conclusion Badges: "Laboratory Findings • Synthesis", "Experiment 10 • Laboratory Complete"
+- Footer Columns: "01 • Laboratory Specification", "02 • Standards & RFCs", "03 • Academic Department"
+
+================================================================================
+8. COMPLETE LIST OF CREATED & MODIFIED FILES
+================================================================================
+NEW FILES CREATED:
+- components/WorksWheel/WorksWheel.tsx (Full 3D drum/ring Works Wheel launcher)
+- components/WorksWheel/types.ts (WorksWheel TypeScript definitions)
+- components/WorksWheel/projectData.ts (Centralized module data array)
+- components/WorksWheel/index.ts (Barrel exports)
+- components/SteelFluid/SteelFluidCanvas.tsx (WebGL2 molten chrome shader canvas)
+- components/SteelFluid/SteelFluidBackground.tsx (Layered background wrapper)
+- components/SteelFluid/index.ts (Barrel exports)
+- components/Lab/NetworkLabApp.tsx (Master application controller)
+- components/Lab/LabBootSequence.tsx (Futuristic initial boot terminal)
+- components/Lab/LabNavigation.tsx (Persistent top navigation bar)
+- components/Lab/index.ts (Barrel exports)
+- components/Diagnostics/NetworkDiagnosticsModule.tsx (Diagnostic triage console)
+- components/Diagnostics/index.ts (Barrel exports)
+- components/Simulation/NetworkTopologySimulator.tsx (Interactive topology designer)
+- components/Simulation/index.ts (Barrel exports)
+- components/Exp10/Exp10Section.tsx (Experiment 10 specification section)
+- components/Exp10/index.ts (Barrel exports)
+- data/labModules.ts (Centralized 10 laboratory modules metadata)
+
+MODIFIED FILES:
+- app/page.tsx (Updated to render NetworkLabApp master component)
+- app/layout.tsx (Mounted SteelFluidBackground and updated styling)
+- components/Header.tsx (Updated brand and added Works nav link)
+- components/Aim.tsx (Classic academic styling)
+- components/Hero.tsx (Classic telemetry HUD terminology)
+- components/Theory.tsx (Classic headers and glass styling)
+- components/PreTestCallout.tsx (Classic assessment copy)
+- components/PostTestCallout.tsx (Classic assessment copy)
+- components/MiniGameSection.tsx (Classic packet inspection copy)
+- components/Conclusion.tsx (Classic synthesis copy)
+
+================================================================================
+9. BUILD, TESTING & DEPLOYMENT VERIFICATION
+================================================================================
+- Next.js Production Build:
+  Command: npm run build
+  Result: Compiled successfully (Exit Code 0)
+  Static Routes:
+    ○ /           124 kB (First Load JS: 211 kB)
+    ○ /_not-found 873 B
+- Test Suite:
+  Command: npx vitest run
+  Result: 14 / 14 tests passed (tests/simulation.test.ts)
+- Local HTTP Server:
+  URL: http://localhost:3000
+  Status: HTTP 200 OK
+- Version Control & Deployment:
+  Remote: https://github.com/GlazyKahito/dcn43.git
+  Branch: main
+  Status: Up to date, commits pushed, Vercel automated deployment active.
+================================================================================
