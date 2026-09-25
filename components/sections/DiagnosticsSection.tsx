@@ -11,6 +11,7 @@ import { verificationSuite, type VerifyStep } from '@/lib/sim/health';
 import { interpretProbe, PROBES, type Verdict } from '@/lib/sim/interpret';
 import { CAUSES, loadScenario, REPAIRS, SCENARIOS, type CauseId, type RepairId, type Scenario } from '@/lib/sim/scenarios';
 import { useLab } from '@/lib/sim/store';
+import { useProgress } from '@/lib/progress';
 import type { OutLine } from '@/lib/sim/types';
 
 const STAGES = ['Symptoms', 'Hypotheses', 'Probes', 'Evidence', 'Root cause', 'Fix', 'Verification'];
@@ -39,6 +40,7 @@ const VERDICT_TONE: Record<Verdict, 'ok' | 'warn' | 'err'> = { pass: 'ok', warn:
 export function DiagnosticsSection() {
   const lab = useLab();
   const { goTo } = useSite();
+  const { solveTicket } = useProgress();
   const [solved, setSolved] = useState<Record<string, boolean>>({});
   const [work, setWork] = useState<Work>(fresh);
   const scenario = SCENARIOS.find((s) => s.id === lab.state.scenarioId) ?? null;
@@ -83,7 +85,10 @@ export function DiagnosticsSection() {
     const ok = all.every((s) => s.pass);
     lab.send('PC1', 'www.lab.local', 'tcp');
     setWork((w) => ({ ...w, verify: all, recovered: ok }));
-    if (ok && scenario) setSolved((s) => ({ ...s, [scenario.id]: true }));
+    if (ok && scenario) {
+      setSolved((s) => ({ ...s, [scenario.id]: true }));
+      solveTicket(scenario.id);
+    }
   };
 
   return (

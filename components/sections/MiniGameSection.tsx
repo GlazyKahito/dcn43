@@ -6,6 +6,7 @@ import { Section } from '@/components/chrome/Section';
 import { Led } from '@/components/chrome/Led';
 import { NetworkIncident } from '@/components/game/incident/NetworkIncident';
 import { DIFFICULTY, type Difficulty } from '@/lib/game/incidents';
+import { useProgress } from '@/lib/progress';
 
 const KEY = 'svl-exp10-incident';
 
@@ -18,6 +19,7 @@ export function MiniGameSection() {
   const [level, setLevel] = useState<Difficulty>('medium');
   const [playing, setPlaying] = useState(false);
   const [record, setRecord] = useState<GameRecord>({ best: {}, resolved: 0 });
+  const { gameProgress } = useProgress();
 
   useEffect(() => {
     try {
@@ -41,6 +43,7 @@ export function MiniGameSection() {
   const exit = ({ resolved, score }: { resolved: boolean; score: number }) => {
     setPlaying(false);
     if (!resolved) return;
+    gameProgress(1, true);
     setRecord((r) => {
       const next = { resolved: r.resolved + 1, best: { ...r.best, [level]: Math.max(r.best[level] ?? 0, score) } };
       try {
