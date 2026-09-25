@@ -39,7 +39,7 @@ export function SiteNav({ current, onOpen, onIndex }: Props) {
           <span className="grid h-7 w-7 shrink-0 place-items-center border border-hair-strong font-mono text-[10px] text-silver">08</span>
           <span className="min-w-0 leading-tight">
             <span className="block truncate font-mono text-[10px] uppercase tracking-[0.18em] text-dim">Somaiya Virtual Labs</span>
-            <span className="block truncate font-display text-[13px] font-medium uppercase tracking-wider text-paper">
+            <span className="block truncate font-display text-[13px] font-bold uppercase tracking-tight text-paper">
               Network Troubleshooting <span className="text-dim">· Exp 8</span>
             </span>
           </span>
@@ -90,7 +90,7 @@ export function SiteNav({ current, onOpen, onIndex }: Props) {
                 <button
                   type="button"
                   onClick={() => go(item.target)}
-                  className={`flex w-full items-center gap-4 border-b border-hair py-3 text-left font-display text-lg uppercase tracking-wide ${item.target === activeNav ? 'text-paper' : 'text-muted'}`}
+                  className={`flex w-full items-center gap-4 border-b border-hair py-3 text-left font-display text-lg uppercase tracking-tight ${item.target === activeNav ? 'text-paper' : 'text-muted'}`}
                 >
                   <span className="font-mono text-[10px] text-dim">{String(i).padStart(2, '0')}</span>
                   {item.label}

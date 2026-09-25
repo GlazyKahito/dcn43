@@ -129,7 +129,7 @@ export function Site({ initialModule, initialAnchor, onIndex }: { initialModule:
             {prev && (
               <button type="button" className="group text-left" onClick={() => setCurrent(prev.id)}>
                 <span className="label block">← Previous</span>
-                <span className="mt-1 block font-display text-lg uppercase tracking-wide text-muted transition-colors group-hover:text-paper">
+                <span className="mt-1 block font-display text-lg uppercase tracking-tight text-muted transition-colors group-hover:text-paper">
                   {prev.no} {prev.title}
                 </span>
               </button>
@@ -144,7 +144,7 @@ export function Site({ initialModule, initialAnchor, onIndex }: { initialModule:
             {next && (
               <button type="button" className="group sm:text-right" onClick={() => setCurrent(next.id)}>
                 <span className="label block">Next on the path →</span>
-                <span className="mt-1 block font-display text-lg uppercase tracking-wide text-muted transition-colors group-hover:text-paper">
+                <span className="mt-1 block font-display text-lg uppercase tracking-tight text-muted transition-colors group-hover:text-paper">
                   {next.no} {next.title}
                 </span>
               </button>

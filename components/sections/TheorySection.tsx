@@ -9,15 +9,15 @@ import { THEORY, type TheoryTopic } from '@/data/theory';
 function TopicBody({ t }: { t: TheoryTopic }) {
   return (
     <div className="space-y-5">
-      <p className="text-[15px] leading-relaxed text-paper">{t.summary}</p>
-      <ul className="space-y-1.5">
-        {t.points.map((p) => (
-          <li key={p} className="grid grid-cols-[14px_1fr] gap-2 text-[13.5px] leading-relaxed text-muted">
-            <span className="mt-[9px] h-px w-2.5 bg-silver/50" />
-            {p}
-          </li>
+      <p className="text-[16px] font-medium leading-snug text-paper">{t.summary}</p>
+      <dl className="grid grid-cols-2 gap-2 xl:grid-cols-4">
+        {t.facts.map((f) => (
+          <div key={f.k} className="rounded-[3px] border border-hair bg-ink/40 px-3 py-2.5">
+            <dt className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-dim">{f.k}</dt>
+            <dd className="mt-1 font-display text-[14px] font-bold leading-tight tracking-tight text-paper">{f.v}</dd>
+          </div>
         ))}
-      </ul>
+      </dl>
       <Diagram d={t.diagram} />
       {t.example && (
         <figure>
@@ -27,10 +27,6 @@ function TopicBody({ t }: { t: TheoryTopic }) {
           </pre>
         </figure>
       )}
-      <p className="flex gap-3 border-t border-hair pt-3 text-[13px] text-muted">
-        <span className="label shrink-0 pt-0.5 text-signal">In the lab</span>
-        {t.inLab}
-      </p>
     </div>
   );
 }
@@ -55,34 +51,26 @@ export function TheorySection() {
           behind the faults
         </>
       }
-      lede="Start with the aim, then five short cards. Each uses this lab’s own addresses and ends with a way to see it happen in the simulation."
+      lede="The aim, then five short cards."
     >
-      <div className="panel mb-10 grid gap-6 p-6 lg:grid-cols-[1fr_1fr] lg:gap-10">
-        <div>
+      <div className="mb-10 grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="panel p-4 sm:col-span-2 xl:col-span-1 xl:row-span-2">
           <p className="label text-signal">Aim</p>
-          <p className="mt-3 text-[16px] leading-relaxed text-paper">
-            To understand systematic network troubleshooting, use standard diagnostic utilities to isolate faults in a simulated network, and verify connectivity after each repair.
-          </p>
-          <p className="mt-3 text-[13.5px] leading-relaxed text-muted">
-            Faults are found from evidence only: carrier, addressing, gateway, path, name resolution and service state. A repair counts only when end-to-end tests pass again.
-          </p>
+          <p className="mt-2 font-display text-[18px] font-bold leading-snug tracking-tight text-paper">Find network faults from evidence, fix them, and prove the fix.</p>
         </div>
-        <div>
-          <p className="label">Learning outcomes</p>
-          <ol className="mt-3 space-y-2">
-            {[
-              'Relate a reported symptom to the layer most likely at fault.',
-              'Read the output of ping, tracert, ipconfig, nslookup, arp and netstat.',
-              'Tell link, addressing, routing, service and filtering faults apart.',
-              'Repair a fault and prove recovery with objective tests.',
-            ].map((o, i) => (
-              <li key={o} className="grid grid-cols-[34px_1fr] text-[14px] leading-snug text-paper">
-                <span className="font-mono text-[11px] text-signal">LO{i + 1}</span>
-                {o}
-              </li>
-            ))}
-          </ol>
-        </div>
+        {[
+          ['LO1', 'Symptom → layer'],
+          ['LO2', 'Read ping, tracert, ipconfig, nslookup, arp, netstat'],
+          ['LO3', 'Tell link, address, route, service and filter faults apart'],
+          ['LO4', 'Repair, then verify'],
+          ['Tools', '9 diagnostic commands'],
+          ['Network', '5 devices · 3 subnets'],
+        ].map(([k, v]) => (
+          <div key={k} className="panel px-4 py-3">
+            <p className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-dim">{k}</p>
+            <p className="mt-1 text-[13.5px] font-medium leading-snug text-paper">{v}</p>
+          </div>
+        ))}
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
@@ -98,7 +86,7 @@ export function TheorySection() {
                   className={`flex w-full items-center gap-3 py-2.5 text-left transition-colors ${on ? 'text-paper' : 'text-muted hover:text-paper'}`}
                 >
                   <span className="w-9 font-mono text-[10.5px] text-dim">{t.code}</span>
-                  <span className="flex-1 font-display text-[15px] uppercase tracking-wide">{t.title}</span>
+                  <span className="flex-1 font-display text-[15px] uppercase tracking-tight">{t.title}</span>
                   <span className="hidden font-mono text-[10px] text-dim sm:inline">{t.layer}</span>
                   <span aria-hidden className={`font-mono text-[12px] transition-transform lg:hidden ${on ? 'rotate-45' : ''}`}>
                     +
@@ -116,7 +104,7 @@ export function TheorySection() {
 
         <article className="panel hidden p-6 lg:block" aria-live="polite">
           <div className="mb-5 flex items-baseline justify-between gap-4 border-b border-hair pb-4">
-            <h3 className="font-display text-3xl font-medium uppercase tracking-wide text-paper">{active.title}</h3>
+            <h3 className="font-display text-3xl font-bold uppercase tracking-tight text-paper">{active.title}</h3>
             <span className="label">
               {active.code} · {active.layer}
             </span>

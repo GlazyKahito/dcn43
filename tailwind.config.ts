@@ -20,9 +20,9 @@ const config: Config = {
         alarm: { DEFAULT: '#d0584b', soft: 'rgba(208, 88, 75, 0.12)' },
       },
       fontFamily: {
-        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
         mono: ['var(--font-mono)', 'ui-monospace', 'Menlo', 'Consolas', 'monospace'],
-        display: ['var(--font-display)', 'var(--font-sans)', 'sans-serif'],
+        display: ['var(--font-display)', 'var(--font-geist-sans)', 'sans-serif'],
       },
       letterSpacing: {
         label: '0.18em',

@@ -103,7 +103,7 @@ export function DiagnosticsSection() {
           to verified repair
         </>
       }
-      lede="Open a trouble ticket. The fault is injected into the live network, so every probe you run here is a real command on PC1 and shows up in the simulator terminal. Collect evidence, name the root cause, apply a repair and re-test."
+      lede="Pick a ticket, probe the network, name the cause, fix it, re-test."
     >
       <div className="grid gap-4 lg:grid-cols-12">
         <Panel title="Trouble tickets" meta={<span className="label">{Object.keys(solved).length}/10 resolved</span>} className="lg:col-span-4" bodyClass="p-0">
@@ -145,7 +145,7 @@ export function DiagnosticsSection() {
           {!scenario ? (
             <div className="panel grid min-h-[320px] place-items-center p-8 text-center">
               <div className="max-w-md">
-                <p className="font-display text-2xl uppercase tracking-wide text-paper">Select a ticket</p>
+                <p className="font-display text-2xl uppercase tracking-tight text-paper">Select a ticket</p>
                 <p className="mt-2 text-[14px] text-muted">
                   Each ticket describes what a user reported. Loading one breaks the shared lab network in a specific way; the fault is not shown to you.
                 </p>
@@ -155,7 +155,7 @@ export function DiagnosticsSection() {
             <>
               <div className="grid gap-4 md:grid-cols-2">
                 <Panel title={`01 · Symptoms — ticket ${scenario.no}`}>
-                  <p className="font-display text-xl uppercase tracking-wide text-paper">{scenario.title}</p>
+                  <p className="font-display text-xl uppercase tracking-tight text-paper">{scenario.title}</p>
                   <blockquote className="mt-2 border-l border-hair-strong pl-3 text-[14px] leading-relaxed text-muted">“{scenario.ticket}”</blockquote>
                   <p className="mt-3 font-mono text-[11px] text-dim">Hint: {scenario.hint}</p>
                 </Panel>
@@ -303,7 +303,7 @@ export function DiagnosticsSection() {
                       ))}
                     </ul>
                     <div className={`mt-4 flex flex-wrap items-center justify-between gap-3 rounded-[2px] border px-4 py-3 ${work.recovered ? 'border-signal/50 bg-signal-soft' : 'border-alarm/40 bg-alarm-soft'}`}>
-                      <p className={`font-display text-xl uppercase tracking-wide ${work.recovered ? 'text-signal' : 'text-alarm'}`}>
+                      <p className={`font-display text-xl uppercase tracking-tight ${work.recovered ? 'text-signal' : 'text-alarm'}`}>
                         {work.recovered ? 'Network recovered' : 'Not recovered'}
                       </p>
                       {work.recovered ? (

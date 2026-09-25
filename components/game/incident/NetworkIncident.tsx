@@ -275,7 +275,7 @@ export function NetworkIncident({ difficulty, onExit }: Props) {
       {phase !== 'briefing' && (
         <>
           <div className="pointer-events-none absolute left-4 top-4 sm:left-6 sm:top-5">
-            <p className="font-display text-[15px] font-medium uppercase tracking-[0.12em] text-paper">Network Incident</p>
+            <p className="font-display text-[15px] font-bold uppercase tracking-[0.12em] text-paper">Network Incident</p>
             <p className="label">Case {String(caseNo).padStart(2, '0')} · {cfg.label}</p>
           </div>
           <div className="pointer-events-none absolute left-1/2 top-4 -translate-x-1/2 text-center sm:top-5">
@@ -338,7 +338,7 @@ export function NetworkIncident({ difficulty, onExit }: Props) {
           >
             <div className="flex items-start justify-between gap-3 border-b border-hair px-4 py-3">
               <div>
-                <p className="font-display text-lg font-medium uppercase tracking-wide text-paper">{PANEL_TITLE[open][0]}</p>
+                <p className="font-display text-lg font-bold uppercase tracking-tight text-paper">{PANEL_TITLE[open][0]}</p>
                 <p className="label">{PANEL_TITLE[open][1]}</p>
               </div>
               <button type="button" className="btn py-1" onClick={() => setOpen(null)}>
@@ -367,7 +367,7 @@ export function NetworkIncident({ difficulty, onExit }: Props) {
                 </span>
               </div>
               <div className="px-5 py-6">
-                <p className="font-display text-4xl font-semibold uppercase tracking-wide text-paper">Network Incident</p>
+                <p className="font-display text-4xl font-extrabold uppercase tracking-tight text-paper">Network Incident</p>
                 <p className="mt-1 text-[12px] uppercase tracking-[0.18em] text-dim">Incident #{String(caseNo).padStart(2, '0')} · {cfg.label}</p>
                 <p className="mt-6 text-[13px] uppercase tracking-[0.16em] text-alarm">Network failure detected</p>
                 <p className="mt-2 font-sans text-[15px] leading-relaxed text-paper">{file.incidents[0].report}</p>
@@ -401,7 +401,7 @@ export function NetworkIncident({ difficulty, onExit }: Props) {
       {phase === 'paused' && (
         <div className="absolute inset-0 grid place-items-center bg-ink/75 backdrop-blur-sm">
           <div className="w-[300px] space-y-2 border border-hair-strong bg-graphite/95 p-5">
-            <p className="font-display text-2xl uppercase tracking-wide text-paper">Paused</p>
+            <p className="font-display text-2xl uppercase tracking-tight text-paper">Paused</p>
             <p className="label">Case {String(caseNo).padStart(2, '0')} · {fmt(time)} left</p>
             <button type="button" className="btn-primary mt-3 w-full" onClick={() => setPhase('play')} autoFocus>
               Resume
@@ -423,7 +423,7 @@ export function NetworkIncident({ difficulty, onExit }: Props) {
       <AnimatePresence>
         {phase === 'restored' && (
           <motion.div key="restored" className="pointer-events-none absolute inset-x-0 top-1/3 text-center" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}>
-            <p className="font-display text-5xl font-semibold uppercase tracking-wide text-signal sm:text-6xl">Network restored</p>
+            <p className="font-display text-5xl font-extrabold uppercase tracking-tight text-signal sm:text-6xl">Network restored</p>
             <p className="label mt-2">All links carrying traffic</p>
           </motion.div>
         )}
@@ -433,7 +433,7 @@ export function NetworkIncident({ difficulty, onExit }: Props) {
         <div className="absolute inset-0 grid place-items-center overflow-y-auto bg-ink/80 p-4 backdrop-blur-sm">
           <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-lg border border-hair-strong bg-graphite/95 font-mono">
             <div className="border-b border-hair px-5 py-4">
-              <p className={`font-display text-3xl font-semibold uppercase tracking-wide ${phase === 'result' ? 'text-signal' : 'text-alarm'}`}>{phase === 'result' ? 'Network restored' : 'Time expired'}</p>
+              <p className={`font-display text-3xl font-extrabold uppercase tracking-tight ${phase === 'result' ? 'text-signal' : 'text-alarm'}`}>{phase === 'result' ? 'Network restored' : 'Time expired'}</p>
               <p className="text-[12px] uppercase tracking-[0.16em] text-muted">{phase === 'result' ? 'Case resolved' : 'Incident escalated'}</p>
             </div>
             <div className="grid gap-5 px-5 py-5 sm:grid-cols-2">

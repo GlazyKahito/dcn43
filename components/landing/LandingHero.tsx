@@ -183,7 +183,7 @@ export function LandingHero({ revealed, onLaunch }: Props) {
             <span className="h-px w-8 bg-signal/60" />
             Experiment 8
           </p>
-          <h1 className="mt-5 font-display text-[clamp(38px,4.3vw,74px)] font-semibold uppercase leading-[0.84] tracking-[-0.015em] text-paper">
+          <h1 className="mt-5 font-display text-[clamp(38px,4.3vw,74px)] font-extrabold uppercase leading-[0.84] tracking-[-0.015em] text-paper">
             <TextEffect lines={['Network', 'Troubleshooting', '& Simulator']} lineClass={['', '', 'font-light text-silver']} play={revealed} delay={0.2} />
           </h1>
           <p className="mt-6 max-w-md text-[15.5px] leading-relaxed text-muted">
@@ -325,7 +325,7 @@ export function LandingHero({ revealed, onLaunch }: Props) {
                       </span>
                     </span>
                     <span className="min-w-0">
-                      <span className={`block font-display text-[17px] font-medium uppercase leading-tight tracking-wide ${lit || on ? 'text-paper' : 'text-muted'}`}>{m.title}</span>
+                      <span className={`block font-display text-[17px] font-bold uppercase leading-tight tracking-tight ${lit || on ? 'text-paper' : 'text-muted'}`}>{m.title}</span>
                       <span className="mt-0.5 block font-mono text-[10px] uppercase tracking-[0.14em] text-dim">{m.role}</span>
                       <span className="mt-2 hidden text-[12.5px] leading-snug text-muted md:block">{m.line}</span>
                     </span>

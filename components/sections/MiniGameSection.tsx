@@ -67,7 +67,7 @@ export function MiniGameSection() {
           incident
         </>
       }
-      lede="Locate the fault. Diagnose the failure. Restore the network. Walk the laboratory floor, inspect the equipment, run diagnostics from the terminal and prove the repair before the clock runs out."
+      lede="Walk the lab. Find the fault. Restore the network before time runs out."
     >
       <div className="grid gap-4 lg:grid-cols-[1.25fr_1fr]">
         <div className="panel overflow-hidden">
@@ -78,7 +78,7 @@ export function MiniGameSection() {
             {['Investigate', 'Diagnose', 'Repair', 'Verify'].map((s, i) => (
               <div key={s} className="bg-graphite px-4 py-3">
                 <p className="font-mono text-[10px] text-signal">{String(i + 1).padStart(2, '0')}</p>
-                <p className="font-display text-[15px] uppercase tracking-wide text-paper">{s}</p>
+                <p className="font-display text-[15px] uppercase tracking-tight text-paper">{s}</p>
               </div>
             ))}
           </div>
@@ -109,7 +109,7 @@ export function MiniGameSection() {
                 className={`flex w-full items-center justify-between gap-3 rounded-[2px] border px-4 py-3 text-left transition-colors ${level === d ? 'border-silver/50 bg-steel/60' : 'border-hair hover:border-hair-strong'}`}
               >
                 <span>
-                  <span className="block font-display text-lg uppercase tracking-wide text-paper">{DIFFICULTY[d].label}</span>
+                  <span className="block font-display text-lg uppercase tracking-tight text-paper">{DIFFICULTY[d].label}</span>
                   <span className="font-mono text-[11px] text-muted">{DIFFICULTY[d].note}</span>
                 </span>
                 <span className="text-right font-mono text-[10.5px] text-dim">
