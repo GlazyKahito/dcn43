@@ -14,7 +14,7 @@ export function PostTestCallout() {
       <div id="post-test" className="scroll-mt-24 max-w-5xl mx-auto px-4 sm:px-6 py-12 pb-16">
         <div
           onClick={() => setModalOpen(true)}
-          className="w-full p-6 sm:p-8 rounded-[2.25rem] border border-[#78b496]/20 bg-[#0a0f0d] hover:border-[#34d399]/40 transition-all duration-300 flex flex-col sm:flex-row sm:items-center justify-between gap-5 cursor-pointer group shadow-2xl relative overflow-hidden"
+          className="w-full p-6 sm:p-8 rounded-[2.25rem] border border-white/10 bg-[#0a0f0d]/65 backdrop-blur-2xl hover:border-[#34d399]/40 transition-all duration-300 flex flex-col sm:flex-row sm:items-center justify-between gap-5 cursor-pointer group shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_0_rgba(255,255,255,0.08)] relative overflow-hidden"
         >
           <div className="absolute top-0 right-0 w-64 h-64 bg-[#34d399]/5 rounded-full blur-3xl pointer-events-none -mr-16 -mt-16" />
 

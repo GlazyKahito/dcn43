@@ -53,13 +53,13 @@ export function Header() {
         />
       )}
 
-      {/* Floating Inset Navbar */}
+      {/* Floating Inset Navbar (Glass UI) */}
       <div className="sticky top-0 z-50 w-full px-4 sm:px-6 pt-3 pointer-events-none">
         <header
           className={`pointer-events-auto max-w-5xl mx-auto rounded-2xl transition-all duration-300 border ${
             isScrolled || activeDropdown
-              ? 'bg-[#0a0f0d]/90 backdrop-blur-2xl border-hairline-bright shadow-[0_10px_35px_rgba(0,0,0,0.7)]'
-              : 'bg-[#080d0b]/80 backdrop-blur-xl border-hairline shadow-lg'
+              ? 'bg-[#0a0f0d]/80 backdrop-blur-3xl border-white/15 shadow-[0_12px_40px_rgba(0,0,0,0.7),inset_0_1px_0_0_rgba(255,255,255,0.12)]'
+              : 'bg-[#080d0b]/65 backdrop-blur-2xl border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5),inset_0_1px_0_0_rgba(255,255,255,0.08)]'
           }`}
         >
           <div className="px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-4">
@@ -115,11 +115,11 @@ export function Header() {
                 </button>
 
                 {activeDropdown === 'theory' && (
-                  <div className="absolute top-full left-0 mt-2 w-72 p-2 rounded-2xl bg-[#0c120f] border border-hairline shadow-2xl space-y-1 animate-in slide-in-from-top-2 duration-150">
+                  <div className="absolute top-full left-0 mt-2 w-72 p-2 rounded-2xl bg-[#0a0f0d]/85 backdrop-blur-2xl border border-white/10 shadow-[0_16px_48px_rgba(0,0,0,0.8),inset_0_1px_0_0_rgba(255,255,255,0.08)] space-y-1 animate-in slide-in-from-top-2 duration-150">
                     <a
                       href="#module-01"
                       onClick={() => setActiveDropdown(null)}
-                      className="p-2.5 rounded-xl hover:bg-white/[0.05] transition-all flex items-start gap-2.5 group"
+                      className="p-2.5 rounded-xl hover:bg-white/[0.08] backdrop-blur-md transition-all flex items-start gap-2.5 group"
                     >
                       <Layers className="w-4 h-4 text-[#34d399] mt-0.5" />
                       <div>
@@ -187,11 +187,11 @@ export function Header() {
                 </button>
 
                 {activeDropdown === 'sims' && (
-                  <div className="absolute top-full left-0 mt-2 w-72 p-2 rounded-2xl bg-[#0c120f] border border-hairline shadow-2xl space-y-1 animate-in slide-in-from-top-2 duration-150">
+                  <div className="absolute top-full left-0 mt-2 w-72 p-2 rounded-2xl bg-[#0a0f0d]/85 backdrop-blur-2xl border border-white/10 shadow-[0_16px_48px_rgba(0,0,0,0.8),inset_0_1px_0_0_rgba(255,255,255,0.08)] space-y-1 animate-in slide-in-from-top-2 duration-150">
                     <a
                       href="#simulation"
                       onClick={() => setActiveDropdown(null)}
-                      className="p-2.5 rounded-xl hover:bg-white/[0.05] transition-all flex items-start gap-2.5 group"
+                      className="p-2.5 rounded-xl hover:bg-white/[0.08] backdrop-blur-md transition-all flex items-start gap-2.5 group"
                     >
                       <Terminal className="w-4 h-4 text-[#34d399] mt-0.5" />
                       <div>
@@ -274,11 +274,11 @@ export function Header() {
                 </button>
 
                 {activeDropdown === 'tests' && (
-                  <div className="absolute top-full left-0 mt-2 w-64 p-2 rounded-2xl bg-[#0c120f] border border-hairline shadow-2xl space-y-1 animate-in slide-in-from-top-2 duration-150">
+                  <div className="absolute top-full left-0 mt-2 w-64 p-2 rounded-2xl bg-[#0a0f0d]/85 backdrop-blur-2xl border border-white/10 shadow-[0_16px_48px_rgba(0,0,0,0.8),inset_0_1px_0_0_rgba(255,255,255,0.08)] space-y-1 animate-in slide-in-from-top-2 duration-150">
                     <a
                       href="#pre-test"
                       onClick={() => setActiveDropdown(null)}
-                      className="p-2.5 rounded-xl hover:bg-white/[0.05] transition-all flex items-start gap-2.5 group"
+                      className="p-2.5 rounded-xl hover:bg-white/[0.08] backdrop-blur-md transition-all flex items-start gap-2.5 group"
                     >
                       <HelpCircle className="w-4 h-4 text-[#38bdf8] mt-0.5" />
                       <div>
@@ -349,9 +349,9 @@ export function Header() {
             </div>
           </div>
 
-          {/* Mobile Drawer */}
+          {/* Mobile Drawer (Glass UI) */}
           {mobileMenuOpen && (
-            <div className="lg:hidden border-t border-hairline px-6 py-4 space-y-2 bg-[#0a0f0d] rounded-b-2xl">
+            <div className="lg:hidden border-t border-white/10 px-6 py-4 space-y-2 bg-[#0a0f0d]/90 backdrop-blur-3xl rounded-b-2xl">
               <a
                 href="#aim"
                 onClick={() => setMobileMenuOpen(false)}

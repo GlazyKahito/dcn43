@@ -18,7 +18,7 @@ export function Conclusion() {
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 space-y-16">
         {/* Conclusion Card */}
-        <div className="border border-[#78b496]/20 bg-[#0a0f0d]/90 backdrop-blur-xl rounded-[2.5rem] p-6 sm:p-12 space-y-8 shadow-2xl relative overflow-hidden">
+        <div className="border border-white/10 bg-[#0a0f0d]/65 backdrop-blur-2xl rounded-[2.5rem] p-6 sm:p-12 space-y-8 shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_0_rgba(255,255,255,0.08)] relative overflow-hidden">
           <div className="absolute top-0 right-0 w-80 h-80 bg-[#34d399]/10 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
 
           <div className="flex items-center gap-2.5">
@@ -34,7 +34,7 @@ export function Conclusion() {
             <h3 className="text-2xl sm:text-4xl font-sans font-semibold tracking-tight text-white mb-4">
               Conclusion
             </h3>
-            <div className="p-6 sm:p-8 rounded-2xl border-l-4 border-[#34d399] bg-[#070c09] text-sm sm:text-base text-[#c9dccf] font-sans font-normal leading-relaxed space-y-4 shadow-inner">
+            <div className="p-6 sm:p-8 rounded-2xl border-l-4 border-[#34d399] bg-[#070c09]/70 backdrop-blur-xl text-sm sm:text-base text-[#c9dccf] font-sans font-normal leading-relaxed space-y-4 shadow-inner">
               <p>
                 Systematic network troubleshooting replaces erratic guesswork with a disciplined, reproducible engineering methodology. By climbing the Open Systems Interconnection (OSI) stack from Physical Layer 1 through Application Layer 7, each diagnostic utility—<strong>ping</strong> for Layer 3 reachability, <strong>tracert</strong> for transit hop localization, <strong>ipconfig</strong> for interface parameters, <strong>arp -a</strong> for Layer 2 MAC resolution, <strong>telnet</strong> for Layer 4 port accessibility, and <strong>nslookup</strong> for Layer 7 DNS translation—rules in root causes while ruling out healthy subsystems.
               </p>

@@ -98,6 +98,9 @@ const config: Config = {
         "beam-flow": "beamFlow 2s linear infinite",
         "pulse-glow": "pulseGlow 3s ease-in-out infinite",
       },
+      backgroundImage: {
+        "gradient-conic": "conic-gradient(var(--conic-position, from 180deg at 50% 50%), var(--tw-gradient-stops))",
+      },
     },
   },
   plugins: [],

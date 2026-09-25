@@ -342,7 +342,7 @@ def parse_ping_output(raw_output: str) -> dict:
             </div>
 
             {/* Visual Illustration: Source Telemetry Cards -> Flowing Curved Beams -> Pale Sage Paper Card */}
-            <div className="lg:col-span-7 bg-[#0c120f] border border-hairline rounded-[2rem] p-6 shadow-2xl relative overflow-hidden flex flex-col gap-6">
+            <div className="lg:col-span-7 bg-[#0c120f]/65 backdrop-blur-2xl border border-white/10 rounded-[2rem] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_0_rgba(255,255,255,0.08)] relative overflow-hidden flex flex-col gap-6">
               <div className="flex items-center justify-between pb-3 border-b border-hairline">
                 <span className="text-[10px] font-homevideo text-neutral-400 tracking-wider">
                   OSI STACK EVALUATOR
@@ -444,7 +444,7 @@ def parse_ping_output(raw_output: str) -> dict:
           </div>
 
           {/* Collapsible Full Theory Accordion for Module 01 */}
-          <div className="border border-hairline rounded-2xl bg-[#0c120f]/60 overflow-hidden">
+          <div className="border border-white/10 rounded-2xl bg-[#0c120f]/60 backdrop-blur-xl overflow-hidden">
             <button
               onClick={() => toggleAccordion('mod1-full')}
               className="w-full p-4 flex items-center justify-between text-xs font-semibold text-white hover:bg-white/[0.02] cursor-pointer"
@@ -545,7 +545,7 @@ def parse_ping_output(raw_output: str) -> dict:
                   { cmd: 'arp -a', layer: 'L2 MAC Map', question: 'Are IP-to-MAC hardware translations valid and dynamic?' },
                   { cmd: 'telnet <host> <port>', layer: 'L4 TCP', question: 'Can a TCP 3-way handshake complete to that port?' },
                 ].map((t, i) => (
-                  <div key={i} className="p-3.5 rounded-xl bg-[#0c120f] border border-hairline space-y-1">
+                  <div key={i} className="p-3.5 rounded-xl bg-[#0c120f]/65 backdrop-blur-xl border border-white/10 space-y-1">
                     <div className="flex justify-between items-center">
                       <span className="font-mono font-bold text-[#34d399]">{t.cmd}</span>
                       <span className="text-[9px] font-homevideo px-1.5 py-0.5 rounded bg-black/40 text-neutral-400">
@@ -577,7 +577,7 @@ def parse_ping_output(raw_output: str) -> dict:
           </div>
 
           {/* Fault Matrix Table with Hairline Borders */}
-          <div className="overflow-x-auto rounded-2xl border border-hairline bg-[#0c120f]">
+          <div className="overflow-x-auto rounded-2xl border border-white/10 bg-[#0c120f]/65 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_0_rgba(255,255,255,0.08)]">
             <table className="w-full text-left font-mono text-xs min-w-[700px]">
               <thead className="bg-[#050807] text-neutral-400 border-b border-hairline uppercase text-[10px] tracking-wider font-homevideo">
                 <tr>
@@ -658,7 +658,7 @@ def parse_ping_output(raw_output: str) -> dict:
           </div>
 
           {/* Product Window Code Viewer */}
-          <div className="rounded-[2rem] bg-[#0c120f] border border-hairline overflow-hidden shadow-2xl">
+          <div className="rounded-[2rem] bg-[#0c120f]/65 backdrop-blur-2xl border border-white/10 overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_0_rgba(255,255,255,0.08)]">
             {/* Window Top Bar */}
             <div className="px-5 py-3.5 bg-[#050807] border-b border-hairline flex items-center justify-between">
               <div className="flex items-center gap-2">

@@ -3,7 +3,7 @@ import './globals.css';
 import { LAB_CONFIG } from '../lib/config';
 import { SmoothScrollProvider } from '../components/site/SmoothScrollProvider';
 import { FluidParticlesBackground } from '../components/site/FluidParticlesBackground';
-import { Lab0SilkBackground } from '../components/site/Lab0SilkBackground';
+import { GlobalLiquidMetal } from '../components/site/GlobalLiquidMetal';
 
 export const metadata: Metadata = {
   title: `${LAB_CONFIG.experimentTitle} — Virtual Lab | ${LAB_CONFIG.institutionShort}`,
@@ -38,7 +38,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen bg-[#050807] text-[#e8f2ec] font-sans antialiased selection:bg-emerald-500/25 selection:text-emerald-200 w-full overflow-x-hidden relative">
         <SmoothScrollProvider>
-          <Lab0SilkBackground />
+          <GlobalLiquidMetal />
           <FluidParticlesBackground />
           <div className="relative z-10 w-full">
             {children}

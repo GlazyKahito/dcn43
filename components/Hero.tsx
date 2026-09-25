@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { SilkRibbon } from './site/SilkRibbon';
 import { RollText } from './site/RollText';
 import { LiquidButton, MetalButton, Button } from './ui/liquid-glass-button';
+import { LampContainer } from './ui/lamp';
 import { LAB_CONFIG } from '../lib/config';
 import {
   ArrowRight,
@@ -75,16 +76,21 @@ export function Hero() {
 
   return (
     <section className="relative w-full min-h-[96vh] flex items-center overflow-hidden px-4 sm:px-6 lg:px-8 pt-8 pb-20">
+      {/* 1. Aceternity UI Lamp Hero Lighting Effect (Directly layered between Liquid Metal and Hero Glass) */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[450px] sm:h-[550px] pointer-events-none z-0 overflow-hidden">
+        <LampContainer />
+      </div>
+
       {/* Dynamic Ambient Background Glows */}
       <div className="absolute top-1/4 left-1/4 w-[650px] h-[650px] bg-[#1f7a4d]/10 rounded-full blur-[160px] pointer-events-none" />
       <div className="absolute top-1/2 right-1/4 w-[500px] h-[500px] bg-[#34d399]/08 rounded-full blur-[140px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center z-10">
-        {/* Left Column: Eyebrow, Shimmer Headline, Subhead, Interactive CLI Pill, CTAs */}
-        <div className="lg:col-span-7 flex flex-col items-start text-left space-y-6 max-w-2xl">
+      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-10 items-center z-10 pt-4 sm:pt-8">
+        {/* Left Column: Glass Container with Eyebrow, Headline, Subhead, Interactive CLI Pill, CTAs */}
+        <div className="lg:col-span-7 flex flex-col items-start text-left space-y-6 max-w-2xl bg-[#0a0f0d]/65 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 sm:p-8 shadow-[0_12px_40px_rgba(0,0,0,0.5),inset_0_1px_0_0_rgba(255,255,255,0.08)] relative z-10">
           {/* Institutional Pill Badge with Live Kernel Status */}
           <div className="flex flex-wrap items-center gap-2">
-            <div className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-[#0a0f0d] border border-[#78b496]/20 shadow-sm">
+            <div className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/10 shadow-sm backdrop-blur-md">
               <div className="w-5 h-5 rounded-full bg-white flex items-center justify-center p-0.5 overflow-hidden shrink-0">
                 <Image
                   src="/somaiya-logo.png"
@@ -216,8 +222,8 @@ export function Hero() {
           {/* Flowing Emerald Silk Ribbon behind HUD */}
           <SilkRibbon className="absolute inset-0" />
 
-          {/* Interactive Live Diagnostic Cockpit HUD */}
-          <div className="relative z-10 w-full max-w-md p-6 rounded-[2.25rem] bg-[#0a0f0d]/90 border border-[#78b496]/30 shadow-[0_25px_70px_rgba(0,0,0,0.85)] backdrop-blur-2xl space-y-5">
+          {/* Interactive Live Diagnostic Cockpit HUD (Dark Glass Surface) */}
+          <div className="relative z-10 w-full max-w-md p-6 rounded-[2.25rem] bg-[#0a0f0d]/75 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.7),inset_0_1px_0_0_rgba(255,255,255,0.08)] backdrop-blur-2xl space-y-5">
             {/* Cyber HUD Corner Brackets */}
             <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-[#34d399]/60 pointer-events-none rounded-tl-sm" />
             <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-[#34d399]/60 pointer-events-none rounded-tr-sm" />
@@ -225,7 +231,7 @@ export function Hero() {
             <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-[#34d399]/60 pointer-events-none rounded-br-sm" />
 
             {/* Window Top Bar with Traffic Light Dots & Status */}
-            <div className="flex items-center justify-between pb-3 border-b border-[#78b496]/15">
+            <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]/90 border border-[#ff5f56]" />
                 <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]/90 border border-[#ffbd2e]" />
@@ -245,8 +251,8 @@ export function Hero() {
               </span>
             </div>
 
-            {/* Visual 3-Node Transmission Track */}
-            <div className="h-28 bg-[#070c09] rounded-2xl border border-[#78b496]/20 p-4 flex items-center justify-between relative overflow-hidden">
+            {/* Visual 3-Node Transmission Track (Glass Surface) */}
+            <div className="h-28 bg-[#050807]/75 rounded-2xl border border-white/10 p-4 flex items-center justify-between relative overflow-hidden backdrop-blur-md">
               {/* Node PC1 */}
               <div className="flex flex-col items-center gap-1 z-10">
                 <div className="w-10 h-10 rounded-xl bg-[#101713] border border-[#34d399]/40 flex items-center justify-center text-[#34d399] shadow-[0_0_12px_rgba(52,211,153,0.2)]">
@@ -314,8 +320,8 @@ export function Hero() {
               </div>
             </div>
 
-            {/* Interactive Fault Injection Trigger Toggle */}
-            <div className="flex items-center justify-between p-3 rounded-2xl bg-[#070c09] border border-[#78b496]/20">
+            {/* Interactive Fault Injection Trigger Toggle (Glass Surface) */}
+            <div className="flex items-center justify-between p-3 rounded-2xl bg-[#050807]/75 border border-white/10 backdrop-blur-md">
               <div className="space-y-0.5">
                 <span className="text-[10px] font-display uppercase tracking-wider text-[#78b496] block">
                   Simulate Cable State
@@ -355,7 +361,7 @@ export function Hero() {
                 {packetStream.map((p) => (
                   <div
                     key={p.id}
-                    className="flex items-center justify-between p-1.5 rounded-lg bg-[#070c09] border border-[#78b496]/15 truncate"
+                    className="flex items-center justify-between p-1.5 rounded-lg bg-white/[0.03] border border-white/10 backdrop-blur-sm truncate"
                   >
                     <span className="text-[#34d399] font-bold">[{p.proto}]</span>
                     <span className="text-[#c9dccf] truncate flex-1 mx-2">{p.detail}</span>

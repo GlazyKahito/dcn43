@@ -107,10 +107,10 @@ export function QuizModal({
     >
       <div
         data-lenis-prevent
-        className="w-full max-w-2xl bg-[#0a0f0d] border border-[#78b496]/30 rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+        className="w-full max-w-2xl bg-[#0a0f0d]/75 backdrop-blur-2xl border border-white/12 rounded-[2.5rem] shadow-[0_16px_64px_rgba(0,0,0,0.5),inset_0_1px_0_0_rgba(255,255,255,0.08)] overflow-hidden flex flex-col max-h-[90vh]"
       >
         {/* Modal Header */}
-        <div className="px-6 py-5 border-b border-[#78b496]/20 flex items-center justify-between bg-[#101713]/80">
+        <div className="px-6 py-5 border-b border-white/10 flex items-center justify-between bg-[#101713]/60 backdrop-blur-xl">
           <div>
             <span className="text-[10px] font-display uppercase tracking-widest text-[#34d399] font-bold">
               {phaseLabel}
@@ -274,7 +274,7 @@ export function QuizModal({
         </div>
 
         {/* Modal Footer Controls */}
-        <div className="px-6 py-4 border-t border-[#78b496]/20 bg-[#101713]/80 flex items-center justify-between">
+        <div className="px-6 py-4 border-t border-white/10 bg-[#101713]/60 backdrop-blur-xl flex items-center justify-between">
           {!isFinished ? (
             <>
               <button
